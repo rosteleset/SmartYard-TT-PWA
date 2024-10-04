@@ -17,9 +17,8 @@ export const useAuthStore = defineStore('auth', () => {
 
         api.POST('/authentication/login', { login, password, rememberMe, did: did.value })
             .then(response => {
-                console.log(response);
                 token.value = response.token;
-                Preferences.set({ 'key': 'token', value: response.token });
+                Preferences.set({ key: 'token', value: response.token });
                 router.push('/');
                 api.GET('/user/whoAmI')
                     .then(userResponse => user.value = userResponse.user);
@@ -33,7 +32,7 @@ export const useAuthStore = defineStore('auth', () => {
     const logout = () => {
         user.value = null;
         token.value = null;
-        localStorage.removeItem('token');
+        Preferences.remove({ key: 'token' });
         router.push('/login');
     };
 
@@ -44,7 +43,7 @@ export const useAuthStore = defineStore('auth', () => {
 
         if (!storedDid)
             (storedDid = crypto.randomUUID())
-                && Preferences.set({ 'key': 'did', value: storedDid });
+                && Preferences.set({ key: 'did', value: storedDid });
 
         did.value = storedDid;
 

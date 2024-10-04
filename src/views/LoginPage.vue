@@ -9,12 +9,12 @@ const login = ref('');
 const password = ref('');
 const rememberMe = ref(false);
 
-const handleLogin = async () => {
+const handleLogin = () => {
   authStore.login(login.value, password.value);
 };
 
-const loading = computed(()=>authStore.loading);
-const error = computed(()=>authStore.error);
+const loading = computed(() => authStore.loading);
+const error = computed(() => authStore.error);
 
 // Инициализация токена при монтировании компонента
 onMounted(() => {

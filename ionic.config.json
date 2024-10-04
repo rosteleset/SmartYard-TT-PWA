@@ -1,0 +1,8 @@
+{
+  "name": "tt",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite",
+  "id": "13ff7fcd"
+}

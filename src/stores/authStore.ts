@@ -54,7 +54,7 @@ export const useAuthStore = defineStore('auth', () => {
             loading.value = true;
             api.GET('/user/whoAmI')
                 .then(user => user.value = user.user)
-                .catch(e => logout())
+                .catch(_error => error.value = _error.message)
                 .finally(() => loading.value = false)
         }
     };

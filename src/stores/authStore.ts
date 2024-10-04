@@ -4,7 +4,6 @@ import { defineStore } from 'pinia';
 import router from '@/router';
 import api from '@/utils/api';
 
-
 export const useAuthStore = defineStore('auth', () => {
     const user = ref<User | null>(null);
     const token = ref<string | null>(null);

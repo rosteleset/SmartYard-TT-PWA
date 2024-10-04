@@ -1,10 +1,9 @@
 import { useAuthStore } from "@/stores/authStore"
 
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+
 const request = async (url: string, method?: string, body?: any) => {
     const auth = useAuthStore()
-
-    // try {
-    const SERVER_URL = import.meta.env.VITE_SERVER_URL
 
     const headers = new Headers({
         authorization: `Bearer ${auth.token}`

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeader from '@/components/PageHeader.vue';
 import { useTtStore } from '@/stores/ttStore';
 import api from '@/utils/api';
 import { IonContent, IonHeader, IonItem, IonLabel, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
@@ -11,11 +12,7 @@ const tt = useTtStore()
 
 <template>
     <IonPage>
-        <IonHeader>
-            <IonToolbar>
-                <IonTitle>issues</IonTitle>
-            </IonToolbar>
-        </IonHeader>
+        <PageHeader label="issues" default-href="/tt/" />
 
         <IonContent>
         </IonContent>

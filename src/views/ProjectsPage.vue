@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeader from '@/components/PageHeader.vue';
 import { useTtStore } from '@/stores/ttStore';
 import api from '@/utils/api';
 import { IonContent, IonHeader, IonItem, IonLabel, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
@@ -8,7 +9,7 @@ import { useRouter } from 'vue-router';
 const tt = useTtStore()
 const router = useRouter()
 
-const handler = (project:Project) => {
+const handler = (project: Project) => {
     router.push({ name: 'filters', query: { project: project.acronym } })
 }
 
@@ -16,11 +17,7 @@ const handler = (project:Project) => {
 
 <template>
     <IonPage>
-        <IonHeader>
-            <IonToolbar>
-                <IonTitle>Projects</IonTitle>
-            </IonToolbar>
-        </IonHeader>
+        <PageHeader label="projects" />
 
         <IonContent>
             <IonList>

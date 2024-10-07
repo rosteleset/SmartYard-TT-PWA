@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import NestedFilterGroup from '@/components/NestedFilterGroup.vue';
+import PageHeader from '@/components/PageHeader.vue';
 import { useTtStore } from '@/stores/ttStore';
 import api from '@/utils/api';
 import { IonContent, IonHeader, IonItem, IonItemDivider, IonItemGroup, IonLabel, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
@@ -64,11 +65,7 @@ function buildNestedGroups(filters: GroupedFilter[]): GroupedFilters {
 
 <template>
     <IonPage>
-        <IonHeader>
-            <IonToolbar>
-                <IonTitle>filters</IonTitle>
-            </IonToolbar>
-        </IonHeader>
+        <PageHeader label="filters" default-href="/tt/" />
 
         <IonContent>
             <NestedFilterGroup :group="grouped" :project="project" />

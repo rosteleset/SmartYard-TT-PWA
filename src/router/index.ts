@@ -10,6 +10,7 @@ import FiltersPage from '@/views/FiltersPage.vue';
 import IssuesPage from '@/views/IssuesPage.vue';
 import IssuePage from '@/views/IssuePage.vue';
 import SimplePage from '@/views/SimplePage.vue';
+import TabWrapper from '@/views/TabWrapper.vue';
 
 
 const routes = [
@@ -19,7 +20,7 @@ const routes = [
   },
   {
     path: '/',
-    component: SimplePage,
+    component: TabWrapper,
     meta: { requiresAuth: true },
     children: [
       {
@@ -56,6 +57,13 @@ const routes = [
           }
         ]
       },
+      {
+        path: 'settings',
+        name: 'settings',
+        component: HomePage,
+        children: [
+        ]
+    }
     ]
   },
 ];

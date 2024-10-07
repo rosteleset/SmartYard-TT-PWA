@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import PageHeader from '@/components/PageHeader.vue';
 import { useTtStore } from '@/stores/ttStore';
-import api from '@/utils/api';
-import { IonContent, IonHeader, IonItem, IonLabel, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
-import { onMounted } from 'vue';
+import { IonContent, IonPage } from '@ionic/vue';
 
 const tt = useTtStore()
 

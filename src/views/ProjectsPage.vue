@@ -8,6 +8,10 @@ import { useRouter } from 'vue-router';
 const tt = useTtStore()
 const router = useRouter()
 
+const handler = (project:Project) => {
+    router.push({ name: 'filters', query: { project: project.acronym } })
+}
+
 </script>
 
 <template>
@@ -18,10 +22,9 @@ const router = useRouter()
             </IonToolbar>
         </IonHeader>
 
-        <IonContent class="ion-padding">
+        <IonContent>
             <IonList>
-                <IonItem v-for="project in tt.meta?.projects"
-                    @click="router.push({ name: 'filters', query: { project: project.acronym } })" button>
+                <IonItem v-for="project in tt.meta?.projects" @click="handler(project)" button detail>
                     <IonLabel>{{ project.acronym }}</IonLabel>
                 </IonItem>
             </IonList>

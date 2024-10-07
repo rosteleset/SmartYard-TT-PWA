@@ -9,6 +9,7 @@ import { useTtStore } from '@/stores/ttStore';
 import FiltersPage from '@/views/FiltersPage.vue';
 import IssuesPage from '@/views/IssuesPage.vue';
 import IssuePage from '@/views/IssuePage.vue';
+import SimplePage from '@/views/SimplePage.vue';
 
 
 const routes = [
@@ -18,7 +19,7 @@ const routes = [
   },
   {
     path: '/',
-    component: IonRouterOutlet, // Главная страница (пример)
+    component: SimplePage,
     meta: { requiresAuth: true },
     children: [
       {
@@ -27,7 +28,7 @@ const routes = [
       },
       {
         path: 'tt',
-        component: IonRouterOutlet,
+        component: SimplePage,
         children: [
           {
             path: '',

@@ -6,15 +6,6 @@ import { onMounted } from 'vue';
 
 const tt = useTtStore()
 
-onMounted(() => {
-    api.GET('/tt/issues', {
-        project: tt.meta?.projects[0].acronym || '',
-        // filter: tt.meta?.filters[0] || '12'
-    })
-        .then(res => {
-            console.log(res);
-        })
-})
 
 </script>
 
@@ -26,12 +17,7 @@ onMounted(() => {
             </IonToolbar>
         </IonHeader>
 
-        <IonContent class="ion-padding">
-            <IonList>
-                <IonItem v-for="project in tt.meta?.projects" button>
-                    <IonLabel>{{ project.acronym }}</IonLabel>
-                </IonItem>
-            </IonList>
+        <IonContent>
         </IonContent>
     </IonPage>
 </template>

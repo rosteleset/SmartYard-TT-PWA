@@ -3,6 +3,7 @@ import {
     IonBackButton,
     IonButton,
     IonButtons,
+    IonContent,
     IonHeader,
     IonIcon,
     IonSearchbar,
@@ -33,7 +34,7 @@ const isActions = computed(() => thisInstance?.vnode.props && Object.keys(thisIn
 <template>
     <IonHeader>
         <IonToolbar>
-            <IonButtons slot="start">
+            <IonButtons slot="start" :collapse="true">
                 <IonBackButton :defaultHref="defaultHref" />
             </IonButtons>
             <IonButtons slot="end" v-if="isActions">

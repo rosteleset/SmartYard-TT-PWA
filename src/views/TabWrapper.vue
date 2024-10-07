@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { IonIcon, IonLabel, IonPage, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs } from '@ionic/vue';
-import { business, cog, list } from "ionicons/icons";
-import { useRouter } from 'vue-router';
+import { cog, list } from "ionicons/icons";
 
 const tabs = [
     {

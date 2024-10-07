@@ -1,9 +1,9 @@
-interface GroupedFilter extends ProjectFilter {
+interface FilterWithLabel extends ProjectFilter {
     label: string
 }
 
 interface GroupedFilters {
     label: string;
-    filters: GroupedFilter[];
+    filters: FilterWithLabel[];
     children: GroupedFilters[];
 }

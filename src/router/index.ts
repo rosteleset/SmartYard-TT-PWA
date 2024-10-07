@@ -51,7 +51,7 @@ const routes = [
             component: IssuesPage,
           },
           {
-            path: 'issue:id',
+            path: 'issue/:id',
             name: 'issue',
             component: IssuePage,
           }
@@ -63,7 +63,7 @@ const routes = [
         component: HomePage,
         children: [
         ]
-    }
+      }
     ]
   },
 ];
@@ -88,6 +88,9 @@ router.beforeEach(async (to, from, next) => {
 
   if (to.path.startsWith('/tt') && !ttStore.meta)
     await ttStore.load();
+
+  if (to.query['project'])
+    ttStore.project = ttStore.meta?.projects.find(p => p.acronym === to.query['project'])
 
   next();
 })

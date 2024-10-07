@@ -2,12 +2,12 @@
 import { IonAccordion, IonAccordionGroup, IonItem, IonLabel, IonList } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 
-const { group, project } = defineProps<{ group: GroupedFilters, project: string }>()
+const { group, project } = defineProps<{ group: GroupedFilters, project: Project }>()
 
 const router = useRouter()
 
-const handler = (filter: GroupedFilter) => {
-    router.push({ name: 'issues', query: { project: project, filter: filter.filter } })
+const handler = (filter: FilterWithLabel) => {
+    router.push({ name: 'issues', query: { project: project.acronym, filter: filter.filter } })
 }
 
 </script>

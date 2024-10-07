@@ -9,16 +9,15 @@ import { useRouter } from 'vue-router';
 
 
 const tt = useTtStore()
-const router = useRouter()
+const { currentRoute } = useRouter()
 
-const project = router.currentRoute.value.query['project'] as string
+const project = tt.getProjectByAcronym(currentRoute.value.query['project'] as string)
 
-const grouped = computed(() => buildNestedGroups(tt.meta?.projects
-    .find(p => p.acronym === project)?.filters
-    .map(filter => ({ label: tt.meta?.filters[filter.filter] || '', ...filter })) || [])
+const grouped = computed(() =>
+    buildNestedGroups(project.filters.map(filter => tt.getFilterWithLabel(filter.filter, project)))
 )
 
-function buildNestedGroups(filters: GroupedFilter[]): GroupedFilters {
+function buildNestedGroups(filters: FilterWithLabel[]): GroupedFilters {
     let res: GroupedFilters = {
         label: 'root',
         children: [],
@@ -65,7 +64,7 @@ function buildNestedGroups(filters: GroupedFilter[]): GroupedFilters {
 
 <template>
     <IonPage>
-        <PageHeader label="filters" default-href="/tt/" />
+        <PageHeader :label="`${project?.acronym}: filters`" default-href="/tt/" />
 
         <IonContent>
             <NestedFilterGroup :group="grouped" :project="project" />

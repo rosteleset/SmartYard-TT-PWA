@@ -98,7 +98,6 @@ export const useTtStore = defineStore('tt', () => {
     }
 
     const addAttachment = (attachment: any) => {
-
         return api.POST('tt/file', { issueId: issue.value?.issue.issueId, attachments: [attachment] })
     }
 

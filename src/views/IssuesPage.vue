@@ -1,14 +1,18 @@
 <script setup lang="ts">
+import IssueCreate from '@/components/IssueCreate.vue';
 import IssuesFilters from '@/components/IssuesFilters.vue';
 import useAlert from '@/hooks/useAlert';
+import useModal from '@/hooks/useModal';
 import { useTtStore } from '@/stores/ttStore';
-import { InfiniteScrollCustomEvent, IonButtons, IonContent, IonHeader, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonMenu, IonMenuButton, IonPage, IonRefresher, IonRefresherContent, IonSearchbar, IonTitle, IonToolbar, RefresherCustomEvent } from '@ionic/vue';
+import { InfiniteScrollCustomEvent, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonMenu, IonMenuButton, IonPage, IonRefresher, IonRefresherContent, IonSearchbar, IonTitle, IonToolbar, RefresherCustomEvent } from '@ionic/vue';
+import { add, addCircle, addCircleOutline } from 'ionicons/icons';
 import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 const tt = useTtStore()
 const { currentRoute, push } = useRouter()
 const { presentAlert } = useAlert()
+const { openModal } = useModal()
 
 const issues = ref<Issue[]>([])
 const count = ref<number>(0)
@@ -56,6 +60,10 @@ const handleSearch = () => {
 
 }
 
+const handleCreate = () => {
+    openModal(IssueCreate)
+}
+
 watch([() => tt.project, () => tt.filter], () => handleRefresh())
 
 onMounted(load)
@@ -73,6 +81,11 @@ onMounted(load)
                         <IonMenuButton />
                     </IonButtons>
                     <IonTitle>{{ tt.filter?.label }}</IonTitle>
+                    <IonButtons slot="end" :collapse="true">
+                        <IonButton @click="handleCreate">
+                            <IonIcon :icon="add"></IonIcon>
+                        </IonButton>
+                    </IonButtons>
                 </IonToolbar>
                 <IonToolbar>
                     <IonSearchbar v-model="search" :debounce="1000" @ionInput="handleSearch" />

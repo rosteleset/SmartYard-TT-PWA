@@ -36,6 +36,7 @@ import './theme/variables.css';
 import { createPinia } from 'pinia';
 import { addIcons } from 'ionicons';
 import { chatbubbles, happy, home, notifications, notificationsOff, sad, time } from 'ionicons/icons';
+import i18n from '@/i18n';
 
 const pinia = createPinia();
 
@@ -51,6 +52,7 @@ addIcons({
 
 const app = createApp(App)
   .use(IonicVue)
+  .use(i18n)
   .use(pinia)
   .use(router);
 

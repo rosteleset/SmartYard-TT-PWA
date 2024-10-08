@@ -36,4 +36,12 @@ const POST = async (url: string, params?: object) => {
     return await request(url, 'POST', body)
 }
 
-export default { GET, POST }
+const PUT = async (url: string, params: object) => {
+    return await request(url, 'PUT', JSON.stringify(params))
+}
+
+const DELETE = async (url: string, params?: object) => {
+    return await request(url, 'DELETE', JSON.stringify(params))
+}
+
+export default { GET, POST, PUT, DELETE }

@@ -17,7 +17,7 @@ const tt = useTtStore()
 const text = ref<string | undefined>()
 const component = shallowRef<any>()
 const field = computed(() => _field[0] === '*' ? _field.slice(1) : _field)
-const viewers = inject<UseViewers>('viewers') || useViewers()
+const viewers = useViewers()
 
 
 const setText = () => {

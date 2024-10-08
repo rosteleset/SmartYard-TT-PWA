@@ -1,22 +1,30 @@
 <script setup lang="ts">
+import IssueAttachments from '@/components/IssueAttachments.vue';
+import IssueComments from '@/components/IssueComments.vue';
 import IssueInfo from '@/components/IssueInfo.vue';
 import PageHeader from '@/components/PageHeader.vue';
+import { useActions } from '@/hooks/useActions';
 import { useTtStore } from '@/stores/ttStore';
-import { IonContent, IonLabel, IonPage, IonSegment, IonSegmentButton, IonToolbar } from '@ionic/vue';
+import { ActionSheetButton, IonActionSheet, IonContent, IonLabel, IonPage, IonSegment, IonSegmentButton, IonToolbar } from '@ionic/vue';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const tt = useTtStore()
 const route = useRoute()
+const actions = useActions()
+
+const issue = computed(() => tt.issue)
+const segment = ref('info')
+const isActionsOpen = ref(false)
 
 const id = computed(() => route.params['id'] as string)
-const issue = ref<IssueData>()
-const segment = ref('info')
+const buttons = computed<ActionSheetButton[]>(() =>
+    issue.value ? actions.getButtons(issue.value) : []
+);
 
 const loadIssue = () => {
     if (id.value)
-        tt.getIssue(id.value)
-            .then(res => issue.value = res)
+        tt.getIssue(id.value, true)
 }
 
 onMounted(loadIssue)
@@ -27,7 +35,7 @@ watch(route, loadIssue)
 
 <template>
     <IonPage>
-        <PageHeader :label="issue?.issue.issueId || id" defaultHref="/tt">
+        <PageHeader :label="issue?.issue.issueId || id" defaultHref="/tt" @actions="isActionsOpen = true">
             <IonToolbar>
                 <IonSegment v-model="segment">
                     <IonSegmentButton value="info">
@@ -44,10 +52,18 @@ watch(route, loadIssue)
         </PageHeader>
         <IonContent>
             <IssueInfo v-if="issue && segment === 'info'" :issue="issue" />
-            <!-- <IssueAttachments v-if="data && segment === 'attachments'" :issue="data" /> -->
-            <!-- <IssueComments v-if="data && segment === 'comments'" :issue="data" /> -->
+            <IssueAttachments v-if="issue && segment === 'attachments'" :issue="issue" />
+            <IssueComments v-if="issue && segment === 'comments'" :issue="issue" />
         </IonContent>
+        <IonActionSheet class="custom-actions" :is-open="isActionsOpen" :header="$t('tt.actions')" :buttons="buttons"
+            @didDismiss="() => isActionsOpen = false" />
     </IonPage>
 </template>
 
-<style scoped></style>
+<style scoped>
+.custom-actions:deep(.action-sheet-button.action-sheet-separator) {
+    min-height: 1px;
+    padding: 0;
+    background-color: var(--ion-color-light-contrast);
+}
+</style>

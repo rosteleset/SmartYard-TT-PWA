@@ -10,7 +10,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { useTtStore } from "@/stores/ttStore";
 import useMap from "@/hooks/useMap";
 import useAlert from "@/hooks/useAlert";
-// import {useActions} from "@/hooks/useActions";
+import {useActions} from "@/hooks/useActions";
 
 
 // Интерфейс для функции getViewer
@@ -30,7 +30,7 @@ const useViewers = (): UseViewers => {
     const alerts = useAlert()
     const modals = useAlert()
     const map = useMap()
-    // const actions = useActions()
+    const actions = useActions()
 
 
     const getViewer = (code: string): GetViewer => {
@@ -42,7 +42,7 @@ const useViewers = (): UseViewers => {
             alerts,
             modals,
             map,
-            // actions,
+            actions,
             dayjs,
             parseFloatEx,
             escapeHTML,

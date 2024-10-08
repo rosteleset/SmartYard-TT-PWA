@@ -1,13 +1,17 @@
+import useAlert from "@/hooks/useAlert";
 import api from "@/utils/api";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
 export const useTtStore = defineStore('tt', () => {
 
+    const { presentAlert } = useAlert()
+
     // state
     const meta = ref<Meta>()
     const project = ref<Project>()
     const filter = ref<FilterWithLabel>()
+    const issue = ref<IssueData>()
 
     // actions
     const load = async () => {
@@ -62,12 +66,54 @@ export const useTtStore = defineStore('tt', () => {
         }
     }
 
-    const getIssue = async (issueId: string): Promise<IssueData> => {
+    const getIssue = async (issueId: string, save?: boolean): Promise<IssueData> => {
         try {
             const res = await api.GET(`tt/issue/${issueId}`)
+            if (save)
+                issue.value = res.issue
             return res.issue
         } catch (err) {
             return Promise.reject(err)
+        }
+    }
+
+    const updateIssue = () => {
+        if (issue.value)
+            return getIssue(issue.value.issue.issueId, true)
+        else
+            return Promise.reject()
+    }
+
+    const addComment = async (comment: string, commentPrivate: boolean, issueId?: string) => {
+        const result = await api.POST('tt/comment', {
+            issueId: issueId || issue.value?.issue.issueId,
+            comment,
+            commentPrivate
+        })
+        return result
+    }
+
+    const editComment = (comment: string, commentPrivate: boolean, commentIndex: number) => {
+        return api.PUT('tt/comment', { issueId: issue.value?.issue.issueId, comment, commentPrivate, commentIndex })
+    }
+
+    const addAttachment = (attachment: any) => {
+
+        return api.POST('tt/file', { issueId: issue.value?.issue.issueId, attachments: [attachment] })
+    }
+
+    const doAction = async ({ action, set, issueId }: { action: string, set?: any, issueId?: string }) => {
+        try {
+            return await api.PUT(`tt/action/${issueId || issue.value?.issue.issueId}`, {
+                action,
+                set
+            });
+        } catch (error: any) {
+            presentAlert({
+                header: 'Не удалось выполнить действие',
+                message: error.message,
+                buttons: ['Ok'],
+            })
         }
     }
 
@@ -75,10 +121,16 @@ export const useTtStore = defineStore('tt', () => {
         meta,
         project,
         filter,
+        issue,
         load,
         getProjectByAcronym,
         getFilterWithLabel,
         getIssues,
-        getIssue
+        getIssue,
+        updateIssue,
+        addComment,
+        editComment,
+        addAttachment,
+        doAction
     }
 })

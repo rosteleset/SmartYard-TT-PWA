@@ -38,7 +38,8 @@ const getCenter = (): PointExpression => {
 const cancel = () => modalController.dismiss(null, 'cancel');
 
 onMounted(() => {
-  globalThis.L = L;
+  if (!globalThis.L)
+    globalThis.L = L;
 })
 
 </script>

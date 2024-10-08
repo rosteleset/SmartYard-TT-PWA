@@ -34,8 +34,20 @@ import '@ionic/vue/css/palettes/dark.system.css';
 /* Theme variables */
 import './theme/variables.css';
 import { createPinia } from 'pinia';
+import { addIcons } from 'ionicons';
+import { chatbubbles, happy, home, notifications, notificationsOff, sad, time } from 'ionicons/icons';
 
 const pinia = createPinia();
+
+addIcons({
+  'notifications': notifications,
+  'notifications-off': notificationsOff,
+  'chatbubbles': chatbubbles,
+  'home': home,
+  'happy': happy,
+  'sad': sad,
+  'time': time
+});
 
 const app = createApp(App)
   .use(IonicVue)

@@ -8,8 +8,8 @@ import nl2br from "@/utils/nl2br";
 import convertLinks from "@/utils/convertLinks";
 import { useAuthStore } from "@/stores/authStore";
 import { useTtStore } from "@/stores/ttStore";
-// import useMap from "@/hooks/useMap";
-// import useAlert from "@/hooks/useAlert";
+import useMap from "@/hooks/useMap";
+import useAlert from "@/hooks/useAlert";
 // import {useActions} from "@/hooks/useActions";
 
 
@@ -27,9 +27,9 @@ const useViewers = (): UseViewers => {
 
     const auth = useAuthStore()
     const tt = useTtStore()
-    // const alerts = useAlert()
-    // const modals = useAlert()
-    // const map = useMap()
+    const alerts = useAlert()
+    const modals = useAlert()
+    const map = useMap()
     // const actions = useActions()
 
 
@@ -39,9 +39,9 @@ const useViewers = (): UseViewers => {
             api,
             auth,
             tt,
-            // alerts,
-            // modals,
-            // map,
+            alerts,
+            modals,
+            map,
             // actions,
             dayjs,
             parseFloatEx,

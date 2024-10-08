@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import IssuesFilters from '@/components/IssuesFilters.vue';
+import useAlert from '@/hooks/useAlert';
 import { useTtStore } from '@/stores/ttStore';
 import { InfiniteScrollCustomEvent, IonButtons, IonContent, IonHeader, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonMenu, IonMenuButton, IonPage, IonRefresher, IonRefresherContent, IonSearchbar, IonTitle, IonToolbar, RefresherCustomEvent } from '@ionic/vue';
 import { onMounted, ref, watch } from 'vue';
@@ -7,6 +8,7 @@ import { useRouter } from 'vue-router';
 
 const tt = useTtStore()
 const { currentRoute, push } = useRouter()
+const { presentAlert } = useAlert()
 
 const issues = ref<Issue[]>([])
 const count = ref<number>(0)
@@ -15,6 +17,7 @@ const skip = ref<number>(0)
 const search = ref(currentRoute.value.query.search as string || '')
 
 const load = async (event?: InfiniteScrollCustomEvent) => {
+    // if (!tt.project && (!tt.filter || !search.value))
     try {
         const res = await tt.getIssues({
             limit: limit.value,
@@ -27,6 +30,7 @@ const load = async (event?: InfiniteScrollCustomEvent) => {
         skip.value = Number(res.skip) + limit.value
         event?.target.complete()
     } catch (e) {
+        console.warn(e);
     }
 }
 
@@ -42,7 +46,14 @@ const handleRefresh = (event?: RefresherCustomEvent) => {
 
 const handleSearch = () => {
     push({ query: { ...currentRoute.value.query, search: search.value } })
-    handleRefresh()
+    if (tt.project)
+        handleRefresh()
+    else
+        presentAlert({
+            header: "Project not selected",
+            buttons: ['Ok'],
+        })
+
 }
 
 watch([() => tt.project, () => tt.filter], () => handleRefresh())

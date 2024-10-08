@@ -3,11 +3,11 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 
 export const useTtStore = defineStore('tt', () => {
+
     // state
     const meta = ref<Meta>()
     const project = ref<Project>()
     const filter = ref<FilterWithLabel>()
-
 
     // actions
     const load = async () => {
@@ -36,6 +36,12 @@ export const useTtStore = defineStore('tt', () => {
     }
 
     const getIssues = async ({ project: _project = project.value?.acronym, filter: _filter = filter.value?.filter, limit, skip, search }: { limit: number, skip: number, project?: string, filter?: string, search?: string }): Promise<DataStructure> => {
+
+        if (!_project)
+            return Promise.reject('Project not selected')
+
+        if (!_filter && !search)
+            return Promise.reject('Filter not selected')
 
         try {
             const params: Record<string, string | undefined> = {

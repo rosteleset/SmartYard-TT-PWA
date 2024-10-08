@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import NestedFilterGroup from '@/components/NestedFilterGroup.vue';
-import PageHeader from '@/components/PageHeader.vue';
 import { useTtStore } from '@/stores/ttStore';
-import api from '@/utils/api';
-import { IonContent, IonHeader, IonItem, IonItemDivider, IonItemGroup, IonLabel, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
-import { computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-
+import { IonContent, IonHeader, IonSelect, IonSelectOption, IonTitle, IonToolbar, SelectChangeEventDetail } from '@ionic/vue';
+import { computed } from 'vue';
+import NestedFilterSelect from './NestedFilterSelect.vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const tt = useTtStore()
-const { currentRoute } = useRouter()
+const { push,replace } = useRouter()
+const route = useRoute();
 
-const project = tt.getProjectByAcronym(currentRoute.value.query['project'] as string)
+const project = computed(() => tt.project)
+const filter = computed(() => tt.filter)
+
 
 const grouped = computed(() =>
-    buildNestedGroups(project.filters.map(filter => tt.getFilterWithLabel(filter.filter, project)))
+    tt.project ? buildNestedGroups(tt.project.filters.map(filter => tt.getFilterWithLabel(filter.filter))) : null
 )
 
 function buildNestedGroups(filters: FilterWithLabel[]): GroupedFilters {
@@ -60,16 +60,38 @@ function buildNestedGroups(filters: FilterWithLabel[]): GroupedFilters {
     return res; // Возвращаем результат
 }
 
+const compareWith = (o1: FilterWithLabel, o2: FilterWithLabel) => {
+    return o1 && o2 ? o1.filter === o2.filter : o1 === o2;
+}
+
+const handlerProject = (event: CustomEvent<SelectChangeEventDetail<Project>>) => {
+    push({ query: { ...route.query, project: event.detail.value.acronym } })
+}
+
+const handlerFilter = (event: CustomEvent<SelectChangeEventDetail<FilterWithLabel>>) => {
+
+    replace({ path: route.path, query: { ...route.query, filter: event.detail.value.filter } })
+}
+
 </script>
 
 <template>
-    <IonPage>
-        <PageHeader :label="`${project?.acronym}: filters`" default-href="/tt/" />
+    <IonHeader>
+        <IonToolbar>
+            <IonTitle>Filters</IonTitle>
+        </IonToolbar>
+    </IonHeader>
+    <IonContent class="ion-padding">
+        <IonSelect label="project" label-placement="floating" interface="popover" v-model:value="project"
+            @ionChange="handlerProject">
+            <IonSelectOption v-for="project in tt.meta?.projects" :key="project.acronym" :value="project">
+                {{ project.project }}
+            </IonSelectOption>
+        </IonSelect>
 
-        <IonContent>
-            <NestedFilterGroup :group="grouped" :project="project" />
-        </IonContent>
-    </IonPage>
+        <IonSelect label="filter" label-placement="floating" interface="popover" v-model:value="filter"
+            @ionChange="handlerFilter" :compareWith="compareWith">
+            <NestedFilterSelect v-if="grouped" :group="grouped" />
+        </IonSelect>
+    </IonContent>
 </template>
-
-<style scoped></style>

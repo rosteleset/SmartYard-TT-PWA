@@ -2,27 +2,26 @@
 import IssueInfo from '@/components/IssueInfo.vue';
 import PageHeader from '@/components/PageHeader.vue';
 import { useTtStore } from '@/stores/ttStore';
-import api from '@/utils/api';
-import { IonContent, IonHeader, IonItem, IonLabel, IonList, IonPage, IonSegment, IonSegmentButton, IonTitle, IonToolbar } from '@ionic/vue';
+import { IonContent, IonLabel, IonPage, IonSegment, IonSegmentButton, IonToolbar } from '@ionic/vue';
 import { computed, onMounted, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 
 const tt = useTtStore()
-const { currentRoute, push } = useRouter()
+const route = useRoute()
 
-const id = computed(() => currentRoute.value.params['id'] as string)
+const id = computed(() => route.params['id'] as string)
 const issue = ref<IssueData>()
 const segment = ref('info')
 
 const loadIssue = () => {
-    const id = currentRoute.value.params['id'] as string
-    tt.getIssue(id)
-        .then(res => issue.value = res)
+    if (id.value)
+        tt.getIssue(id.value)
+            .then(res => issue.value = res)
 }
 
 onMounted(loadIssue)
 
-watch(currentRoute, loadIssue)
+watch(route, loadIssue)
 
 </script>
 

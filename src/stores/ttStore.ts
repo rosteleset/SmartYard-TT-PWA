@@ -1,11 +1,13 @@
-import { defineStore } from "pinia";
-import { computed, ref } from "vue";
 import api from "@/utils/api";
+import { defineStore } from "pinia";
+import { ref } from "vue";
 
 export const useTtStore = defineStore('tt', () => {
     // state
     const meta = ref<Meta>()
     const project = ref<Project>()
+    const filter = ref<FilterWithLabel>()
+
 
     // actions
     const load = async () => {
@@ -33,16 +35,21 @@ export const useTtStore = defineStore('tt', () => {
         return { ...{ label }, ..._filter }
     }
 
-    const getIssues = async (limit: number, filter: string, skip: number): Promise<DataStructure> => {
+    const getIssues = async (limit: number, filter: string, skip: number, search?: string): Promise<DataStructure> => {
         if (!project.value || !filter)
             return Promise.reject()
         try {
-            const res = await api.GET('tt/issues', {
+            const params: Record<string, string> = {
                 project: project.value?.acronym,
                 filter: filter,
                 skip: skip.toString(),
-                limit: limit.toString()
-            })
+                limit: limit.toString(),
+            }
+            if (search) {
+                params.filter = '#search'
+                params.search = search
+            }
+            const res = await api.GET('tt/issues', params)
 
             return res.issues
         } catch (err) {
@@ -62,6 +69,7 @@ export const useTtStore = defineStore('tt', () => {
     return {
         meta,
         project,
+        filter,
         load,
         getProjectByAcronym,
         getFilterWithLabel,

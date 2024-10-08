@@ -1,16 +1,12 @@
-import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { useAuthStore } from '@/stores/authStore';
-import LoginPage from '@/views/LoginPage.vue';
-import HomePage from '@/views/HomePage.vue';
-import ProjectsPage from '@/views/ProjectsPage.vue';
-import { IonRouterOutlet } from '@ionic/vue';
-import { Component } from 'ionicons/dist/types/stencil-public-runtime';
 import { useTtStore } from '@/stores/ttStore';
-import FiltersPage from '@/views/FiltersPage.vue';
-import IssuesPage from '@/views/IssuesPage.vue';
+import HomePage from '@/views/HomePage.vue';
 import IssuePage from '@/views/IssuePage.vue';
+import IssuesPage from '@/views/IssuesPage.vue';
+import LoginPage from '@/views/LoginPage.vue';
 import SimplePage from '@/views/SimplePage.vue';
 import TabWrapper from '@/views/TabWrapper.vue';
+import { createRouter, createWebHistory } from '@ionic/vue-router';
 
 
 const routes = [
@@ -33,17 +29,7 @@ const routes = [
         children: [
           {
             path: '',
-            redirect: '/tt/projects'
-          },
-          {
-            path: 'projects',
-            name: 'projects',
-            component: ProjectsPage,
-          },
-          {
-            path: 'filters',
-            name: 'filters',
-            component: FiltersPage,
+            redirect: '/tt/issues'
           },
           {
             path: 'issues',
@@ -84,6 +70,7 @@ router.beforeEach(async (to, from, next) => {
 });
 
 router.beforeEach(async (to, from, next) => {
+
   const ttStore = useTtStore();
 
   if (to.path.startsWith('/tt') && !ttStore.meta)
@@ -91,6 +78,9 @@ router.beforeEach(async (to, from, next) => {
 
   if (to.query['project'])
     ttStore.project = ttStore.meta?.projects.find(p => p.acronym === to.query['project'])
+
+  if (to.query['filter'])
+    ttStore.filter = ttStore.getFilterWithLabel(to.query['filter'] as string)
 
   next();
 })

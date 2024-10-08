@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useTtStore } from '@/stores/ttStore';
-import { IonContent, IonHeader, IonSelect, IonSelectOption, IonTitle, IonToolbar, SelectChangeEventDetail } from '@ionic/vue';
+import { IonContent, IonHeader, IonMenu, IonSelect, IonSelectOption, IonTitle, IonToolbar, SelectChangeEventDetail } from '@ionic/vue';
 import { computed } from 'vue';
 import NestedFilterSelect from './NestedFilterSelect.vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const tt = useTtStore()
-const { push,replace } = useRouter()
+const { push, replace } = useRouter()
 const route = useRoute();
 
 const project = computed(() => tt.project)
@@ -76,22 +76,24 @@ const handlerFilter = (event: CustomEvent<SelectChangeEventDetail<FilterWithLabe
 </script>
 
 <template>
-    <IonHeader>
-        <IonToolbar>
-            <IonTitle>Filters</IonTitle>
-        </IonToolbar>
-    </IonHeader>
-    <IonContent class="ion-padding">
-        <IonSelect label="project" label-placement="floating" interface="popover" v-model:value="project"
-            @ionChange="handlerProject">
-            <IonSelectOption v-for="project in tt.meta?.projects" :key="project.acronym" :value="project">
-                {{ project.project }}
-            </IonSelectOption>
-        </IonSelect>
+    <IonMenu content-id="issues" type="push">
+        <IonHeader>
+            <IonToolbar>
+                <IonTitle>Filters</IonTitle>
+            </IonToolbar>
+        </IonHeader>
+        <IonContent class="ion-padding">
+            <IonSelect label="project" label-placement="floating" interface="popover" v-model:value="project"
+                @ionChange="handlerProject">
+                <IonSelectOption v-for="project in tt.meta?.projects" :key="project.acronym" :value="project">
+                    {{ project.project }}
+                </IonSelectOption>
+            </IonSelect>
 
-        <IonSelect label="filter" label-placement="floating" interface="popover" v-model:value="filter"
-            @ionChange="handlerFilter" :compareWith="compareWith">
-            <NestedFilterSelect v-if="grouped" :group="grouped" />
-        </IonSelect>
-    </IonContent>
+            <IonSelect label="filter" label-placement="floating" interface="popover" v-model:value="filter"
+                @ionChange="handlerFilter" :compareWith="compareWith">
+                <NestedFilterSelect v-if="grouped" :group="grouped" />
+            </IonSelect>
+        </IonContent>
+    </IonMenu>
 </template>

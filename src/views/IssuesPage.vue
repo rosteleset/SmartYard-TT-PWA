@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import IssuesFilters from '@/components/IssuesFilters.vue';
 import { useTtStore } from '@/stores/ttStore';
-import { InfiniteScrollCustomEvent, IonButtons, IonContent, IonHeader, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonMenuButton, IonPage, IonRefresher, IonRefresherContent, IonSearchbar, IonTitle, IonToolbar, RefresherCustomEvent } from '@ionic/vue';
+import { InfiniteScrollCustomEvent, IonButtons, IonContent, IonHeader, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonMenu, IonMenuButton, IonPage, IonRefresher, IonRefresherContent, IonSearchbar, IonTitle, IonToolbar, RefresherCustomEvent } from '@ionic/vue';
 import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -49,32 +50,36 @@ onMounted(load)
 </script>
 
 <template>
-    <IonPage id="issues">
-        <IonHeader>
-            <IonToolbar>
-                <IonButtons slot="start" :collapse="true">
-                    <IonMenuButton />
-                </IonButtons>
-                <IonTitle>{{ tt.filter?.label }}</IonTitle>
-            </IonToolbar>
-            <IonToolbar>
-                <IonSearchbar v-model="search" :debounce="1000" @ionInput="handleSearch" />
-            </IonToolbar>
+    <IonPage>
+        <IssuesFilters />
 
-        </IonHeader>
-        <IonContent>
-            <IonRefresher slot="fixed" @ionRefresh="handleRefresh($event)">
-                <IonRefresherContent />
-            </IonRefresher>
-            <IonList v-if="issues">
-                <IonItem v-for="issue of issues" :key="issue.id" @click="handleOpen(issue)" button detail>
-                    <IonLabel>{{ issue.issueId }} - {{ issue.subject }}</IonLabel>
-                </IonItem>
-            </IonList>
-            <IonInfiniteScroll v-if="skip < count" @ionInfinite="load">
-                <IonInfiniteScrollContent />
-            </IonInfiniteScroll>
-        </IonContent>
+        <IonPage id="issues">
+            <IonHeader>
+                <IonToolbar>
+                    <IonButtons slot="start" :collapse="true">
+                        <IonMenuButton />
+                    </IonButtons>
+                    <IonTitle>{{ tt.filter?.label }}</IonTitle>
+                </IonToolbar>
+                <IonToolbar>
+                    <IonSearchbar v-model="search" :debounce="1000" @ionInput="handleSearch" />
+                </IonToolbar>
+
+            </IonHeader>
+            <IonContent>
+                <IonRefresher slot="fixed" @ionRefresh="handleRefresh($event)">
+                    <IonRefresherContent />
+                </IonRefresher>
+                <IonList v-if="issues">
+                    <IonItem v-for="issue of issues" :key="issue.id" @click="handleOpen(issue)" button detail>
+                        <IonLabel>{{ issue.issueId }} - {{ issue.subject }}</IonLabel>
+                    </IonItem>
+                </IonList>
+                <IonInfiniteScroll v-if="skip < count" @ionInfinite="load">
+                    <IonInfiniteScrollContent />
+                </IonInfiniteScroll>
+            </IonContent>
+        </IonPage>
     </IonPage>
 </template>
 

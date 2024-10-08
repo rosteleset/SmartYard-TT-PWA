@@ -35,13 +35,12 @@ export const useTtStore = defineStore('tt', () => {
         return { ...{ label }, ..._filter }
     }
 
-    const getIssues = async (limit: number, filter: string, skip: number, search?: string): Promise<DataStructure> => {
-        if (!project.value || !filter)
-            return Promise.reject()
+    const getIssues = async ({ project: _project = project.value?.acronym, filter: _filter = filter.value?.filter, limit, skip, search }: { limit: number, skip: number, project?: string, filter?: string, search?: string }): Promise<DataStructure> => {
+
         try {
-            const params: Record<string, string> = {
-                project: project.value?.acronym,
-                filter: filter,
+            const params: Record<string, string | undefined> = {
+                project: _project,
+                filter: _filter,
                 skip: skip.toString(),
                 limit: limit.toString(),
             }

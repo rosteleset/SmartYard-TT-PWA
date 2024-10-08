@@ -15,10 +15,12 @@ const skip = ref<number>(0)
 const search = ref(currentRoute.value.query.search as string || '')
 
 const load = async (event?: InfiniteScrollCustomEvent) => {
-    if (!tt.filter)
-        return
     try {
-        const res = await tt.getIssues(limit.value, tt.filter.filter, skip.value, search.value);
+        const res = await tt.getIssues({
+            limit: limit.value,
+            skip: skip.value,
+            search: search.value
+        });
         issues.value = Number(res.skip) === 0 ? res.issues : [...issues.value, ...res.issues]
         count.value = res.count
         limit.value = Number(res.limit)

@@ -1,4 +1,5 @@
 import { useAuthStore } from "@/stores/authStore"
+import filterUndefined from "./filterUndefined";
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
@@ -25,8 +26,8 @@ const request = async (url: string, method?: string, body?: any) => {
         return data
 }
 
-const GET = (url: string, params?: Record<string, string>) => {
-    const _url = url + '?' + new URLSearchParams(params)
+const GET = (url: string, params?: Record<string, string | undefined>) => {
+    const _url = params ? url + '?' + new URLSearchParams(filterUndefined(params)) : url
     return request(_url)
 }
 

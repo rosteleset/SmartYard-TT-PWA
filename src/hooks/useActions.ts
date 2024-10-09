@@ -33,7 +33,7 @@ export const useActions = () => {
             text = action
 
         if (specialActions.includes(text))
-            return t(`tt.${text}`);
+            return t(text);
         else
             return text
     }

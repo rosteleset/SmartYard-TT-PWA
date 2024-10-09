@@ -32,22 +32,22 @@ const confirm = () => {
   <IonHeader>
     <IonToolbar>
       <IonButtons slot="start">
-        <IonButton color="medium" @click="cancel">{{ $t('base.cancel') }}</IonButton>
+        <IonButton color="medium" @click="cancel">{{ $t('cancel') }}</IonButton>
       </IonButtons>
-      <IonTitle>{{ $t('tt.modifyComment') }}</IonTitle>
+      <IonTitle>{{ $t('modifyComment') }}</IonTitle>
       <IonButtons slot="end">
-        <IonButton @click="confirm" :strong="true">{{ $t('base.confirm') }}</IonButton>
+        <IonButton @click="confirm" :strong="true">{{ $t('confirm') }}</IonButton>
       </IonButtons>
     </IonToolbar>
   </IonHeader>
   <IonContent class="ion-padding">
     <IonItem>
-      <IonTextarea :auto-grow="true" label-placement="floating" :label="$t('tt.comment')" placeholder="Type something here"
+      <IonTextarea :auto-grow="true" label-placement="floating" :label="$t('comment')" placeholder="Type something here"
         v-model="commentBody" />
     </IonItem>
     <IonItem>
       <IonCheckbox id="terms" v-model="commentPrivate">
-        <div class="ion-text-wrap">{{ $t('tt.commentPrivate') }}</div>
+        <div class="ion-text-wrap">{{ $t('commentPrivate') }}</div>
       </IonCheckbox>
     </IonItem>
   </IonContent>

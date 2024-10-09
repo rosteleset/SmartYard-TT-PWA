@@ -5,6 +5,7 @@ import api from "@/utils/api";
 import { IonInput, IonTextarea } from "@ionic/vue";
 import { useI18n } from "vue-i18n";
 import CustomFileInput from "@/components/CustomFileInput.vue";
+import CustomAutocomplete from "@/components/CustomAutocomplete.vue";
 
 const useIssueInput = () => {
     const tt = useTtStore()
@@ -46,17 +47,23 @@ const useIssueInput = () => {
 
         switch (cf.type) {
             case "text":
-                component = IonInput;
+                if (cf.editor)
+                    component = IonInput;
                 props.readonly = cf.editor === "text-ro";
                 props.type = cf.editor;
                 break;
             case "select":
-                component = CustomSelect;
-                props.variants = cf.options.map(option => option.option);
-                props.text = cf.options.reduce((acc, item) => ({
-                    ...acc,
-                    [item.option]: item.optionDisplay
-                }), {} as Record<string, string>);
+                if (cf.format && cf.format.indexOf("suggestions") >= 0)
+                    component = CustomAutocomplete
+                else
+                    component = CustomSelect;
+                if (cf.options && cf.options.length > 0) {
+                    props.variants = cf.options.map(option => option.option);
+                    props.text = cf.options.reduce((acc, item) => ({
+                        ...acc,
+                        [item.option]: item.optionDisplay
+                    }), {} as Record<string, string>);
+                }
                 props.multiple = cf.format?.includes("multiple");
                 break;
             case "array":
@@ -94,7 +101,7 @@ const useIssueInput = () => {
             field,
             project,
             labelPlacement: 'floating',
-            label: t(`tt.${field}`)
+            label: t('field')
         }
         const slots: Record<string, any> = {}
 

@@ -104,11 +104,11 @@ onMounted(
   <IonHeader>
     <IonToolbar>
       <IonButtons slot="start">
-        <IonButton color="medium" @click="cancel">{{ $t('base.cancel') }}</IonButton>
+        <IonButton color="medium" @click="cancel">{{ $t('cancel') }}</IonButton>
       </IonButtons>
       <IonTitle>{{ name }}</IonTitle>
       <IonButtons slot="end">
-        <IonButton @click="confirm" :strong="true">{{ $t('base.confirm') }}</IonButton>
+        <IonButton @click="confirm" :strong="true">{{ $t('confirm') }}</IonButton>
       </IonButtons>
     </IonToolbar>
   </IonHeader>

@@ -66,6 +66,8 @@ const openCatalogSelect = async (e: Event) => {
 }
 
 const confirm = () => {
+  console.log(project.value);
+  
   return;
   const issue = {
     project: project.value?.acronym,
@@ -110,24 +112,24 @@ watch(catalog, () => {
   <IonHeader>
     <IonToolbar>
       <IonButtons slot="start">
-        <IonButton color="medium" @click="cancel">{{ $t('base.cancel') }}</IonButton>
+        <IonButton color="medium" @click="cancel">{{ $t('cancel') }}</IonButton>
       </IonButtons>
-      <IonTitle>{{ $t('tt.createIssue') }}</IonTitle>
+      <IonTitle>{{ $t('createIssue') }}</IonTitle>
       <IonButtons slot="end">
-        <IonButton @click="confirm" :strong="true">{{ $t('base.confirm') }}</IonButton>
+        <IonButton @click="confirm" :strong="true">{{ $t('confirm') }}</IonButton>
       </IonButtons>
     </IonToolbar>
   </IonHeader>
   <IonContent class="ion-padding">
-    <IonSelect interface="popover" label-placement="floating" :label="$t(`tt.project`)" v-model="project">
+    <IonSelect interface="popover" label-placement="floating" :label="$t(`project`)" v-model="project">
       <IonSelectOption v-for="variant in tt.meta?.projects" :value="variant" :key="variant.projectId">
         {{
-          variant.acronym
+          variant.project
         }}
       </IonSelectOption>
     </IonSelect>
 
-    <IonSelect interface="popover" label-placement="floating" :label="$t(`tt.workflow`)" v-model="workflow">
+    <IonSelect interface="popover" label-placement="floating" :label="$t(`workflow`)" v-model="workflow">
       <IonSelectOption v-for="key in project?.workflows" :value="key" :key="key">
         {{
           tt.meta?.workflows[key].name
@@ -135,7 +137,7 @@ watch(catalog, () => {
       </IonSelectOption>
     </IonSelect>
 
-    <IonInput readonly label-placement="floating" :label="$t(`tt.catalog`)" v-model="catalog"
+    <IonInput readonly label-placement="floating" :label="$t(`catalog`)" v-model="catalog"
       @click="openCatalogSelect">
     </IonInput>
 

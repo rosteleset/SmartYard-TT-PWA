@@ -65,18 +65,18 @@ const handlerGallery = () => {
   <IonHeader>
     <IonToolbar>
       <IonButtons slot="start">
-        <IonButton color="medium" @click="cancel">{{ $t('base.cancel') }}</IonButton>
+        <IonButton color="medium" @click="cancel">{{ $t('cancel') }}</IonButton>
       </IonButtons>
-      <IonTitle>{{ $t('tt.saAddFile') }}</IonTitle>
+      <IonTitle>{{ $t('saAddFile') }}</IonTitle>
       <IonButtons slot="end">
-        <IonButton @click="confirm" :strong="true">{{ $t('base.confirm') }}</IonButton>
+        <IonButton @click="confirm" :strong="true">{{ $t('confirm') }}</IonButton>
       </IonButtons>
     </IonToolbar>
   </IonHeader>
   <IonContent class="ion-padding">
     <IonImg :src="photo?.webPath"/>
-    <IonButton expand="block" @click="handlerCamera">{{ $t('tt.camera') }}</IonButton>
-    <IonButton expand="block" @click="handlerGallery">{{ $t('tt.gallery') }}</IonButton>
+    <IonButton expand="block" @click="handlerCamera">{{ $t('camera') }}</IonButton>
+    <IonButton expand="block" @click="handlerGallery">{{ $t('gallery') }}</IonButton>
 
   </IonContent>
 </template>

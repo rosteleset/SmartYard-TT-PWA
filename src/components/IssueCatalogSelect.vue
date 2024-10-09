@@ -78,11 +78,11 @@ const filterList = (searchQuery: string | undefined) => {
   <IonHeader>
     <IonToolbar>
       <IonButtons slot="start">
-        <IonButton @click="cancelChanges()">{{ $t('base.cancel') }}</IonButton>
+        <IonButton @click="cancelChanges()">{{ $t('cancel') }}</IonButton>
       </IonButtons>
-      <IonTitle>{{ $t('tt.workflow') }}</IonTitle>
+      <IonTitle>{{ $t('workflow') }}</IonTitle>
       <IonButtons slot="end">
-        <IonButton @click="confirmChanges()">{{ $t('base.confirm') }}</IonButton>
+        <IonButton @click="confirmChanges()">{{ $t('confirm') }}</IonButton>
       </IonButtons>
     </IonToolbar>
     <IonToolbar>

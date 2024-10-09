@@ -56,7 +56,7 @@ const openModal = async (comment?: Comment, index?: number) => {
     <IonCard v-for="(comment, index) of issue.issue.comments" :key="index">
         <IonCardHeader>
             <IonCardTitle>
-                {{ comment.author }} {{ $t('tt.commented') }} [#{{ (Number(index) + 1) }}]
+                {{ comment.author }} {{ $t('commented') }} [#{{ (Number(index) + 1) }}]
                 {{ dayjs.unix(comment.created).format('DD.MM.YYYY HH:mm') }}
                 <IonIcon :icon="comment.private ? eyeOff : eye"></IonIcon>
             </IonCardTitle>
@@ -65,7 +65,7 @@ const openModal = async (comment?: Comment, index?: number) => {
             {{ comment.body }}
         </IonCardContent>
         <IonButton v-if="getEditable(comment)" fill="clear" @click="openModal(comment, index)">
-            {{ $t('base.edit') }}
+            {{ $t('edit') }}
         </IonButton>
     </IonCard>
     <IonFab slot="fixed" vertical="bottom" horizontal="end">

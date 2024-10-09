@@ -58,10 +58,10 @@ const openModal = async () => {
 const deleteHandler = async (attachment: Attachment) => {
 
   const alert = await alertController.create({
-    header: t('base.confirmation'),
-    message: `${t('tt.deleteFile')} "${attachment.filename}"?`,
+    header: t('confirmation'),
+    message: `${t('deleteFile')} "${attachment.filename}"?`,
     buttons: [{
-      text: t('base.delete'),
+      text: t('delete'),
       handler: async () => {
         api.DELETE('tt/file', {
           issueId: issue.issue.issueId,
@@ -91,7 +91,7 @@ const deleteHandler = async (attachment: Attachment) => {
 
     </IonCardHeader>
     <IonButton v-if="getEditable(img)" fill="clear" color="danger" @click="deleteHandler(img)">
-      {{ $t('base.delete') }}
+      {{ $t('delete') }}
     </IonButton>
   </IonCard>
   <IonFab slot="fixed" vertical="bottom" horizontal="end">

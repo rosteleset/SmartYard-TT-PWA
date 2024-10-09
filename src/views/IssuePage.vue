@@ -55,7 +55,7 @@ watch(route, loadIssue)
             <IssueAttachments v-if="issue && segment === 'attachments'" :issue="issue" />
             <IssueComments v-if="issue && segment === 'comments'" :issue="issue" />
         </IonContent>
-        <IonActionSheet class="custom-actions" :is-open="isActionsOpen" :header="$t('tt.actions')" :buttons="buttons"
+        <IonActionSheet class="custom-actions" :is-open="isActionsOpen" :header="$t('actions')" :buttons="buttons"
             @didDismiss="() => isActionsOpen = false" />
     </IonPage>
 </template>

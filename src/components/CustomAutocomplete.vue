@@ -4,13 +4,13 @@ import api from '@/utils/api';
 import { IonInput, IonItem, IonList } from '@ionic/vue';
 import { ref } from 'vue';
 
-const { field, variants, label, text } = defineProps<{
+const { field, variants, label, text, getSuggestion } = defineProps<{
     field: string,
     variants?: string[],
     label?: string,
-    labelPlacement?:string,
+    labelPlacement?: string,
     text?: Record<string, string>,
-    multiple?: boolean
+    getSuggestion?: (query: string) => Promise<any>
 }>()
 
 const tt = useTtStore();
@@ -37,14 +37,10 @@ const debouncedOnInput = debounce(() => {
         filteredSuggestions.value = variants.filter((suggestion) =>
             suggestion.toLowerCase().includes(query.value.toLowerCase())
         );
-    } else if (query.value) {
-        api.GET('/tt/suggestions', {
-            project: tt.project?.acronym,
-            field: `_cf_${field}`,
-            query: query.value
-        })
+    } else if (getSuggestion && query.value) {
+        getSuggestion(query.value)
             .then(res => {
-                filteredSuggestions.value = res.suggestions;
+                filteredSuggestions.value = res;
             });
     }
 }, 500);

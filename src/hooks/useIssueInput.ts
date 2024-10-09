@@ -53,8 +53,15 @@ const useIssueInput = () => {
                 props.type = cf.editor;
                 break;
             case "select":
-                if (cf.format && cf.format.indexOf("suggestions") >= 0)
+                if (cf.format && cf.format.indexOf("suggestions") >= 0) {
                     component = CustomAutocomplete
+                    props.getSuggestion = (query: string) => api.GET('/tt/suggestions', {
+                        project: project.acronym,
+                        field: `_cf_${cf.field}`,
+                        query: query
+                    })
+                        .then(res => res.suggestions)
+                }
                 else
                     component = CustomSelect;
                 if (cf.options && cf.options.length > 0) {
@@ -63,8 +70,8 @@ const useIssueInput = () => {
                         ...acc,
                         [item.option]: item.optionDisplay
                     }), {} as Record<string, string>);
+                    props.multiple = cf.format?.includes("multiple");
                 }
-                props.multiple = cf.format?.includes("multiple");
                 break;
             case "array":
                 component = CustomSelect;
@@ -74,14 +81,26 @@ const useIssueInput = () => {
                 props.createTags = true;
                 break;
             case "geo":
-                component = IonInput;
-                // Специфическая обработка для геоданных, можно добавить запросы API, если нужно
+                component = CustomAutocomplete;
+                props.getSuggestion = (query: string) => api.GET('/geo/suggestions', {
+                    search: query
+                }).then(res => res.suggestions.map((s: any) => s.value))
                 break;
             case "users":
                 component = CustomSelect;
                 props.variants = getPeoples(project);
                 props.multiple = cf.format?.includes("multiple");
                 break;
+            case "issues":
+                component = CustomAutocomplete;
+                props.getSuggestion = (query: string) => api.GET('/tt/issues', {
+                    project: project.acronym,
+                    filter: "#issueSearch",
+                    skip: '0',
+                    limit: '32768',
+                    search: query
+                }).then(res => res.issues.issues.map((issue: any) => issue.issueId))
+                break
             default:
                 component = IonInput;
                 break;
@@ -117,14 +136,19 @@ const useIssueInput = () => {
                     component = IonTextarea
                     break;
                 case "resolution":
-                    return IonInput
+                    component = CustomSelect
+                    props.variants = tt.meta?.resolutions.map(resolution => resolution.resolution)
+                    break;
                 case "assigned":
                 case "watchers":
                     component = CustomSelect
                     props['variants'] = getPeoples(project)
                     props['multiple'] = isMultiple(project)
-                    break
+                    break;
                 case "status":
+                    component = CustomSelect
+                    props['variants'] = tt.meta?.statuses.map(tag => tag.status)
+                    break
                 case "tags":
                     component = CustomSelect
                     props['variants'] = project.tags.map(tag => tag.tag)
@@ -135,7 +159,7 @@ const useIssueInput = () => {
                     component = CustomSelect
                     break
                 case "commentPrivate":
-                    component = CustomSelect
+                    component = IonInput
                     break
                 case "attachments":
                     component = CustomFileInput

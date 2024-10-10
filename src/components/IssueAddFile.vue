@@ -71,7 +71,7 @@ const handlerGallery = () => {
       </IonButtons>
       <IonTitle>{{ $t('saAddFile') }}</IonTitle>
       <IonButtons slot="end">
-        <IonButton @click="confirm" :strong="true">{{ $t('confirm') }}</IonButton>
+        <IonButton @click="confirm" :strong="true">{{ $t('save') }}</IonButton>
       </IonButtons>
     </IonToolbar>
   </IonHeader>

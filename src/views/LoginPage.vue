@@ -47,7 +47,7 @@ onMounted(() => {
       </IonItem>
 
       <IonButton expand="block" @click="handleLogin" :disabled="loading">
-        {{ $t('login') }}
+        {{ $t('loginAction') }}
       </IonButton>
 
       <IonText color="danger" v-if="error">{{ error }}</IonText>

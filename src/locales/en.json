@@ -1,12 +1,20 @@
 {
+  "settings": {
+    "account": "Account",
+    "realName": "Real Name",
+    "username": "Username",
+    "logout": "Sign Out",
+    "app": "App",
+    "locale": "Locale"
+  },
   "actions": "Actions",
   "ok": "Ok",
   "project-not-selected": "Project not selected",
   "login": "Login",
   "password": "Password",
   "remember-me": "Remember me",
-  "tt": "TT",
-  "settings": "Settings",
+  "tt-page": "TT",
+  "settings-page": "Settings",
   "select-files": "Select files",
   "take-a-photo": "Take a photo",
   "something-went-wrong": "Something went wrong",

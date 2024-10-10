@@ -1,4 +1,12 @@
 {
+  "settings": {
+    "account": "Аккаунт",
+    "realName": "Полное имя",
+    "username": "Логин",
+    "logout": "Выйти",
+    "app": "Приложение",
+    "locale": "язык"
+  },
   "actions": "Действия",
   "camera": "Камера",
   "cancel": "Отмена",
@@ -30,12 +38,12 @@
   "saAddFile": "Приложить файл(ы)",
   "select-files": "Выбрать файлы",
   "save": "Сохранить",
-  "settings": "Настройки",
+  "settings-page": "Настройки",
   "something-went-wrong": "Что-то пошло не так",
   "take-a-photo": "Сделать фото",
   "the-comment-will-be-downloaded-when-connected-to-the-network": "Комментарий будет загружен при подключении к сети.",
   "the-photo-will-be-downloaded-when-connected-to-the-network": "Фотография будет загружена при подключении к сети.",
-  "tt": "ТТ",
+  "tt-page": "ТТ",
   "type-something-here": "Введите что-нибудь здесь",
   "uncategorized": "Без категории",
   "workflow": "Файл"

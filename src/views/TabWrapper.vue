@@ -21,7 +21,7 @@ const tabs = [
             <IonTabBar slot="bottom">
                 <IonTabButton v-for="tab in tabs" :key="tab.name" :tab="tab.name" :href="`/${tab.name}`">
                     <IonIcon :icon="tab.icon" />
-                    <IonLabel>{{ $t(tab.name) }}</IonLabel>
+                    <IonLabel>{{ $t(`${tab.name}-page`) }}</IonLabel>
                 </IonTabButton>
             </IonTabBar>
         </IonTabs>

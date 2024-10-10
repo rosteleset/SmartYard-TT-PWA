@@ -6,7 +6,6 @@ import { useI18n } from "vue-i18n";
 
 export const useTtStore = defineStore('tt', () => {
 
-    const {t} = useI18n()
     const { presentAlert } = useAlert()
 
     // state
@@ -104,18 +103,16 @@ export const useTtStore = defineStore('tt', () => {
     }
 
     const doAction = async ({ action, set, issueId }: { action: string, set?: any, issueId?: string }) => {
-        try {
-            return await api.PUT(`tt/action/${issueId || issue.value?.issue.issueId}`, {
-                action,
-                set
-            });
-        } catch (error: any) {
-            presentAlert({
-                header: t('failed-to-perform-action'),
-                message: error.message,
-                buttons: [t('ok')],
-            })
-        }
+
+        return api.PUT(`tt/action/${issueId || issue.value?.issue.issueId}`, {
+            action,
+            set
+        });
+        // presentAlert({
+        //     header: t('failed-to-perform-action'),
+        //     message: error.message,
+        //     buttons: [t('ok')],
+        // })
     }
 
     return {

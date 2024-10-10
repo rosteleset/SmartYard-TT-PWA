@@ -1,9 +1,11 @@
 import { useAuthStore } from '@/stores/authStore';
+import useSettingsStore from '@/stores/settingsStore';
 import { useTtStore } from '@/stores/ttStore';
 import HomePage from '@/views/HomePage.vue';
 import IssuePage from '@/views/IssuePage.vue';
 import IssuesPage from '@/views/IssuesPage.vue';
 import LoginPage from '@/views/LoginPage.vue';
+import SettingsPage from '@/views/SettingsPage.vue';
 import SimplePage from '@/views/SimplePage.vue';
 import TabWrapper from '@/views/TabWrapper.vue';
 import { createRouter, createWebHistory } from '@ionic/vue-router';
@@ -46,7 +48,7 @@ const routes = [
       {
         path: 'settings',
         name: 'settings',
-        component: HomePage,
+        component: SettingsPage,
         children: [
         ]
       }
@@ -59,9 +61,15 @@ const router = createRouter({
   routes,
 });
 
+// init hook
 router.beforeEach(async (to, from, next) => {
+  const settingsStore = useSettingsStore();
   const authStore = useAuthStore();
-  await authStore.initialize();
+
+  if (!settingsStore.isInitialized)
+    await settingsStore.init()
+  if (!authStore.user)
+    await authStore.initialize();
   if (to.meta.requiresAuth && !authStore.token) {
     next('/login');
   } else {
@@ -69,6 +77,7 @@ router.beforeEach(async (to, from, next) => {
   }
 });
 
+// tt hook
 router.beforeEach(async (to, from, next) => {
 
   const ttStore = useTtStore();

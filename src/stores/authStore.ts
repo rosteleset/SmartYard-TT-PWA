@@ -51,7 +51,7 @@ export const useAuthStore = defineStore('auth', () => {
             token.value = storedToken;
             loading.value = true;
             api.GET('/user/whoAmI')
-                .then(user => user.value = user.user)
+                .then(_user => user.value = _user.user)
                 .catch(_error => error.value = _error.message)
                 .finally(() => loading.value = false)
         }

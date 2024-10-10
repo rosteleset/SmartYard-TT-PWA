@@ -26,7 +26,7 @@ const { name, _fields, issue } = defineProps<{
 }>()
 
 const tt = useTtStore()
-const {t} = useI18n()
+const { t } = useI18n()
 const inputs = useIssueInput()
 const { presentAlert } = useAlert()
 
@@ -115,9 +115,8 @@ onMounted(
     </IonToolbar>
   </IonHeader>
   <IonContent v-if="models" class="ion-padding">
-    <IonItem v-for="(field, key) in models" :key="key">
-      <component :is="getComponentResult[key].component" v-bind="getComponentResult[key].props"
-        v-model="models[field]" />
+    <IonItem v-for=" key in Object.keys(models)" :key="key">
+      <component :is="getComponentResult[key].component" v-bind="getComponentResult[key].props" v-model="models[key]" />
     </IonItem>
   </IonContent>
 </template>

@@ -83,14 +83,14 @@ const handlerFilter = (event: CustomEvent<SelectChangeEventDetail<FilterWithLabe
             </IonToolbar>
         </IonHeader>
         <IonContent class="ion-padding">
-            <IonSelect label="project" label-placement="floating" interface="popover" v-model:value="project"
+            <IonSelect :label="$t('project')" label-placement="floating" interface="popover" v-model:value="project"
                 @ionChange="handlerProject">
                 <IonSelectOption v-for="project in tt.meta?.projects" :key="project.acronym" :value="project">
                     {{ project.project }}
                 </IonSelectOption>
             </IonSelect>
 
-            <IonSelect label="filter" label-placement="floating" interface="popover" v-model:value="filter"
+            <IonSelect :label="$t('filter')" label-placement="floating" interface="popover" v-model:value="filter"
                 @ionChange="handlerFilter" :compareWith="compareWith">
                 <NestedFilterSelect v-if="grouped" :group="grouped" />
             </IonSelect>

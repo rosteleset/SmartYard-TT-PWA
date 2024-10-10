@@ -70,8 +70,10 @@ export const useTtStore = defineStore('tt', () => {
     const getIssue = async (issueId: string, save?: boolean): Promise<IssueData> => {
         try {
             const res = await api.GET(`tt/issue/${issueId}`)
-            if (save)
+            if (save) {
                 issue.value = res.issue
+                project.value = getProjectByAcronym(res.issue.issue.project)
+            }
             return res.issue
         } catch (err) {
             return Promise.reject(err)

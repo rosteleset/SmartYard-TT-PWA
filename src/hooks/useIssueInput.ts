@@ -2,10 +2,11 @@ import { useTtStore } from "@/stores/ttStore";
 import CustomSelect from "@/components/CustomSelect.vue";
 import { onMounted, ref } from "vue";
 import api from "@/utils/api";
-import { IonInput, IonTextarea } from "@ionic/vue";
+import { IonInput, IonTextarea, IonToggle } from "@ionic/vue";
 import { useI18n } from "vue-i18n";
 import CustomFileInput from "@/components/CustomFileInput.vue";
 import CustomAutocomplete from "@/components/CustomAutocomplete.vue";
+import CustomToggle from "@/components/CustomToggle.vue";
 
 const useIssueInput = () => {
     const tt = useTtStore()
@@ -159,7 +160,7 @@ const useIssueInput = () => {
                     component = CustomSelect
                     break
                 case "commentPrivate":
-                    component = IonInput
+                    component = CustomToggle
                     break
                 case "attachments":
                     component = CustomFileInput

@@ -79,7 +79,7 @@ const handlerFilter = (event: CustomEvent<SelectChangeEventDetail<FilterWithLabe
     <IonMenu content-id="issues" type="push">
         <IonHeader>
             <IonToolbar>
-                <IonTitle>Filters</IonTitle>
+                <IonTitle>{{ $t('filters') }}</IonTitle>
             </IonToolbar>
         </IonHeader>
         <IonContent class="ion-padding">

@@ -2,9 +2,11 @@ import useAlert from "@/hooks/useAlert";
 import api from "@/utils/api";
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 export const useTtStore = defineStore('tt', () => {
 
+    const {t} = useI18n()
     const { presentAlert } = useAlert()
 
     // state
@@ -109,9 +111,9 @@ export const useTtStore = defineStore('tt', () => {
             });
         } catch (error: any) {
             presentAlert({
-                header: 'Не удалось выполнить действие',
+                header: t('failed-to-perform-action'),
                 message: error.message,
-                buttons: ['Ok'],
+                buttons: [t('ok')],
             })
         }
     }

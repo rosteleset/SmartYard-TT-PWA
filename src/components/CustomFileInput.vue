@@ -80,8 +80,8 @@ const removeItem = (index: number) => {
             <IonLabel>{{ label || field }}</IonLabel>
         </div>
         <IonButtons>
-            <IonButton @click="selectFiles">Выбрать файлы</IonButton>
-            <IonButton @click="capturePhoto">Сделать фото</IonButton>
+            <IonButton @click="selectFiles">{{ $t('select-files') }}</IonButton>
+            <IonButton @click="capturePhoto">{{ $t('take-a-photo') }}</IonButton>
         </IonButtons>
 
         <input ref="fileInput" type="file" multiple @change="handleFileChange" style="display: none;" />

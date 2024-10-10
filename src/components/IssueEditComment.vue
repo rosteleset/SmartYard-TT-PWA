@@ -42,7 +42,7 @@ const confirm = () => {
   </IonHeader>
   <IonContent class="ion-padding">
     <IonItem>
-      <IonTextarea :auto-grow="true" label-placement="floating" :label="$t('comment')" placeholder="Type something here"
+      <IonTextarea :auto-grow="true" label-placement="floating" :label="$t('comment')" :placeholder="$t('type-something-here')"
         v-model="commentBody" />
     </IonItem>
     <IonItem>

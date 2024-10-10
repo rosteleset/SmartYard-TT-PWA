@@ -4,12 +4,14 @@ import IssuesFilters from '@/components/IssuesFilters.vue';
 import useAlert from '@/hooks/useAlert';
 import useModal from '@/hooks/useModal';
 import { useTtStore } from '@/stores/ttStore';
-import { InfiniteScrollCustomEvent, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonMenu, IonMenuButton, IonPage, IonRefresher, IonRefresherContent, IonSearchbar, IonTitle, IonToolbar, RefresherCustomEvent } from '@ionic/vue';
-import { add, addCircle, addCircleOutline } from 'ionicons/icons';
+import { InfiniteScrollCustomEvent, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonMenuButton, IonPage, IonRefresher, IonRefresherContent, IonSearchbar, IonTitle, IonToolbar, RefresherCustomEvent } from '@ionic/vue';
+import { add } from 'ionicons/icons';
 import { onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
 const tt = useTtStore()
+const {t} = useI18n()
 const { currentRoute, push } = useRouter()
 const { presentAlert } = useAlert()
 const { openModal } = useModal()
@@ -54,8 +56,8 @@ const handleSearch = () => {
         handleRefresh()
     else
         presentAlert({
-            header: "Project not selected",
-            buttons: ['Ok'],
+            header: t('project-not-selected'),
+            buttons: [t('ok')],
         })
 
 }

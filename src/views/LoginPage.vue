@@ -26,28 +26,28 @@ onMounted(() => {
   <IonPage>
     <IonHeader>
       <IonToolbar>
-        <IonTitle>Login</IonTitle>
+        <IonTitle>{{ $t('login') }}</IonTitle>
         <IonProgressBar v-if="loading" type="indeterminate"></IonProgressBar>
       </IonToolbar>
     </IonHeader>
 
     <IonContent class="ion-padding">
       <IonItem>
-        <IonInput label="Login" label-placement="floating" v-model="login"></IonInput>
+        <IonInput :label="$t('login')" label-placement="floating" v-model="login"></IonInput>
       </IonItem>
 
       <IonItem>
-        <IonInput label="Password" label-placement="floating" type="password" v-model="password"></IonInput>
+        <IonInput :label="$t('password')" label-placement="floating" type="password" v-model="password"></IonInput>
       </IonItem>
 
       <IonItem>
         <IonCheckbox IonCheckbox v-model="rememberMe" class="ion-padding-vertical">
-          remember me
+          {{ $t('remember-me') }}
         </IonCheckbox>
       </IonItem>
 
       <IonButton expand="block" @click="handleLogin" :disabled="loading">
-        Login
+        {{ $t('login') }}
       </IonButton>
 
       <IonText color="danger" v-if="error">{{ error }}</IonText>

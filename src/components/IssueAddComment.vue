@@ -11,15 +11,16 @@ import {
   IonTextarea,
   IonCheckbox, alertController
 } from "@ionic/vue";
-import {ref} from "vue";
-import {useTtStore} from "@/stores/ttStore";
+import { ref } from "vue";
+import { useTtStore } from "@/stores/ttStore";
+import { useI18n } from "vue-i18n";
 
-const {issue} = defineProps<{
+const { issue } = defineProps<{
   issue?: string | string[]
 }>()
 
 const tt = useTtStore()
-
+const { t } = useI18n()
 const comment = ref<string>("");
 const commentPrivate = ref(true);
 
@@ -28,53 +29,53 @@ const confirm = () => {
 
   if (Array.isArray(issue))
     Promise.all(issue.map(id =>
-        tt.addComment(comment.value, commentPrivate.value, id)
+      tt.addComment(comment.value, commentPrivate.value, id)
     ))
-        .then(() =>
-            modalController.dismiss(null, 'confirm')
-        )
-        .catch(error => {
-          if (error.message === 'Failed to fetch')
-            alertController.create({
-              header: 'Нет сети',
-              message: 'Комментарии будет загружен при подключении к сети',
-              buttons: ['Ok'],
-            })
-                .then((alert) => alert.present())
-                .then(() => modalController.dismiss(null, 'confirm'))
-          else {
-            alertController.create({
-              header: 'Что то пошло не так',
-              message: error.message,
-              buttons: ['Ok'],
-            })
-                .then((alert) => alert.present())
-          }
-        })
+      .then(() =>
+        modalController.dismiss(null, 'confirm')
+      )
+      .catch(error => {
+        if (error.message === 'Failed to fetch')
+          alertController.create({
+            header: t('no-network'),
+            message: t('comments-will-be-loaded-when-connected-to-the-network'),
+            buttons: [t('ok')],
+          })
+            .then((alert) => alert.present())
+            .then(() => modalController.dismiss(null, 'confirm'))
+        else {
+          alertController.create({
+            header: t('something-went-wrong'),
+            message: error.message,
+            buttons: [t('ok')],
+          })
+            .then((alert) => alert.present())
+        }
+      })
 
   else
     tt.addComment(comment.value, commentPrivate.value, issue)
-        .then(() =>
-            modalController.dismiss(null, 'confirm')
-        )
-        .catch(error => {
-          if (error.message === 'Failed to fetch')
-            alertController.create({
-              header: 'Нет сети',
-              message: 'Комментарий будет загружен при подключении к сети',
-              buttons: ['Ok'],
-            })
-                .then((alert) => alert.present())
-                .then(() => modalController.dismiss(null, 'confirm'))
-          else {
-            alertController.create({
-              header: 'Что то пошло не так',
-              message: error.message,
-              buttons: ['Ok'],
-            })
-                .then((alert) => alert.present())
-          }
-        })
+      .then(() =>
+        modalController.dismiss(null, 'confirm')
+      )
+      .catch(error => {
+        if (error.message === 'Failed to fetch')
+          alertController.create({
+            header: t('no-network'),
+            message: t('the-comment-will-be-downloaded-when-connected-to-the-network'),
+            buttons: [t('ok')],
+          })
+            .then((alert) => alert.present())
+            .then(() => modalController.dismiss(null, 'confirm'))
+        else {
+          alertController.create({
+            header: t('something-went-wrong'),
+            message: error.message,
+            buttons: [t('ok')],
+          })
+            .then((alert) => alert.present())
+        }
+      })
 }
 </script>
 
@@ -92,8 +93,8 @@ const confirm = () => {
   </IonHeader>
   <IonContent class="ion-padding">
     <IonItem>
-      <IonTextarea :auto-grow="true" label-placement="floating" :label="$t('comment')" placeholder="Type something here"
-                   v-model="comment"/>
+      <IonTextarea :auto-grow="true" label-placement="floating" :label="$t('comment')" :placeholder="$t('type-something-here')"
+        v-model="comment" />
     </IonItem>
     <IonItem>
       <IonCheckbox id="terms" v-model="commentPrivate">
@@ -103,6 +104,4 @@ const confirm = () => {
   </IonContent>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

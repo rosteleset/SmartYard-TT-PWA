@@ -120,7 +120,7 @@ const useIssueInput = () => {
             field,
             project,
             labelPlacement: 'floating',
-            label: t('field')
+            label: t(field)
         }
         const slots: Record<string, any> = {}
 

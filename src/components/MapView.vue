@@ -48,9 +48,9 @@ onMounted(() => {
   <IonHeader>
     <IonToolbar>
       <IonButtons slot="start">
-        <IonButton color="medium" @click="cancel">close</IonButton>
+        <IonButton color="medium" @click="cancel">{{ $t('close') }}</IonButton>
       </IonButtons>
-      <IonTitle>map</IonTitle>
+      <IonTitle>{{ $t('map') }}</IonTitle>
     </IonToolbar>
   </IonHeader>
   <IonContent>

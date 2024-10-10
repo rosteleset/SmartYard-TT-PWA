@@ -3,8 +3,10 @@ import { IonItemGroup, IonItemDivider, IonLabel, IonItem } from "@ionic/vue";
 import { useTtStore } from "@/stores/ttStore";
 import { computed, onMounted, provide } from "vue";
 import IssueField from "./IssueField.vue";
+import { useI18n } from "vue-i18n";
 
 const tt = useTtStore()
+const { t } = useI18n()
 
 const { issue } = defineProps<{
     issue: IssueData
@@ -12,7 +14,7 @@ const { issue } = defineProps<{
 
 const groupedCustomFields = computed(() => {
     return tt.meta?.customFields.reduce((groups: Record<string, CustomField[]>, field) => {
-        const catalog = field.catalog || 'Без категории';
+        const catalog = field.catalog || t('uncategorized');
         if (!groups[catalog]) {
             groups[catalog] = [];
         }

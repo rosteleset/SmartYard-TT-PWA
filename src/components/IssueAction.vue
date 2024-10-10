@@ -15,6 +15,7 @@ import {
   modalController
 } from "@ionic/vue";
 import { computed, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 type Models = Record<string, any>;
 
@@ -25,6 +26,7 @@ const { name, _fields, issue } = defineProps<{
 }>()
 
 const tt = useTtStore()
+const {t} = useI18n()
 const inputs = useIssueInput()
 const { presentAlert } = useAlert()
 
@@ -91,9 +93,9 @@ onMounted(
         })
         .catch((error) => {
           presentAlert({
-            header: 'Что то пошло не так',
+            header: t('something-went-wrong'),
             message: error.message,
-            buttons: ['Ok'],
+            buttons: [t('ok')],
           })
         })
   });

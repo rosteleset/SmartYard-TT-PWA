@@ -19,11 +19,13 @@ import IssueCatalogSelect from "@/components/IssueCatalogSelect.vue";
 import useIssueInput from "@/hooks/useIssueInput";
 import { useRouter } from "vue-router";
 import api from "@/utils/api";
+import { useI18n } from "vue-i18n";
 
 // Определяем тип для модели
 type Models = Record<string, any>;
 
 const tt = useTtStore()
+const { t } = useI18n()
 const inputs = useIssueInput()
 const router = useRouter()
 
@@ -67,7 +69,7 @@ const openCatalogSelect = async (e: Event) => {
 
 const confirm = () => {
   console.log(project.value);
-  
+
   return;
   const issue = {
     project: project.value?.acronym,
@@ -82,9 +84,9 @@ const confirm = () => {
     })
     .catch(error => {
       alertController.create({
-        header: 'Что то пошло не так',
+        header: t('something-went-wrong'),
         message: error.message,
-        buttons: ['Ok'],
+        buttons: [t('ok')],
       })
         .then((alert) => alert.present())
     })
@@ -137,8 +139,7 @@ watch(catalog, () => {
       </IonSelectOption>
     </IonSelect>
 
-    <IonInput readonly label-placement="floating" :label="$t(`catalog`)" v-model="catalog"
-      @click="openCatalogSelect">
+    <IonInput readonly label-placement="floating" :label="$t(`catalog`)" v-model="catalog" @click="openCatalogSelect">
     </IonInput>
 
     <component v-for="(model, key) in models" :key="key" :is="getComponentResult[key].component"

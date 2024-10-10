@@ -16,8 +16,10 @@ import {ref} from "vue";
 import {useTtStore} from "@/stores/ttStore";
 import {useAttachments, UserPhoto} from "@/hooks/useAttachments";
 import {CameraSource, Photo} from "@capacitor/camera";
+import { useI18n } from "vue-i18n";
 
 const tt = useTtStore()
+const { t } = useI18n()
 const {takePhoto} = useAttachments()
 const photo = ref<UserPhoto>();
 
@@ -33,17 +35,17 @@ const confirm = () => {
         .catch(error => {
           if (error.message === 'Failed to fetch')
             alertController.create({
-              header: 'Нет сети',
-              message: 'Фото будет загружено при подключении к сети',
-              buttons: ['Ok'],
+              header: t('no-network'),
+              message: t('the-photo-will-be-downloaded-when-connected-to-the-network'),
+              buttons: [t('ok')],
             })
                 .then((alert) => alert.present())
                 .then(() => modalController.dismiss(null, 'confirm'))
           else {
             alertController.create({
-              header: 'Что то пошло не так',
+              header: t('something-went-wrong'),
               message: error.message,
-              buttons: ['Ok'],
+              buttons: [t('ok')],
             })
                 .then((alert) => alert.present())
           }

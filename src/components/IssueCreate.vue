@@ -70,7 +70,7 @@ const openCatalogSelect = async (e: Event) => {
 const confirm = () => {
   console.log(project.value);
 
-  return;
+  // return;
   const issue = {
     project: project.value?.acronym,
     workflow: workflow.value,

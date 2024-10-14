@@ -82,14 +82,18 @@ router.beforeEach(async (to, from, next) => {
 
   const ttStore = useTtStore();
 
-  if (to.path.startsWith('/tt') && !ttStore.meta)
-    await ttStore.load();
+  try {
+    if (to.path.startsWith('/tt') && !ttStore.meta)
+      await ttStore.load();
 
-  if (to.query['project'])
-    ttStore.project = ttStore.meta?.projects.find(p => p.acronym === to.query['project'])
+    if (to.query['project'])
+      ttStore.project = ttStore.meta?.projects.find(p => p.acronym === to.query['project'])
 
-  if (to.query['filter'])
-    ttStore.filter = ttStore.getFilterWithLabel(to.query['filter'] as string)
+    if (to.query['filter'])
+      ttStore.filter = ttStore.getFilterWithLabel(to.query['filter'] as string)
+  } catch (error) {
+    console.warn(error);
+  }
 
   next();
 })

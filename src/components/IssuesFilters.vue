@@ -60,8 +60,8 @@ function buildNestedGroups(filters: FilterWithLabel[]): GroupedFilters {
     return res; // Возвращаем результат
 }
 
-const compareWith = (o1: FilterWithLabel, o2: FilterWithLabel) => {
-    return o1 && o2 ? o1.filter === o2.filter : o1 === o2;
+const compareWith = (filter1: FilterWithLabel, filter2: FilterWithLabel) => {
+    return filter1 && filter2 ? filter1.filter === filter2.filter : filter1 === filter2;
 }
 
 const handlerProject = (event: CustomEvent<SelectChangeEventDetail<Project>>) => {

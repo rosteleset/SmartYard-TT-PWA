@@ -4,7 +4,7 @@ import IssuesFilters from '@/components/IssuesFilters.vue';
 import useAlert from '@/hooks/useAlert';
 import useModal from '@/hooks/useModal';
 import { useTtStore } from '@/stores/ttStore';
-import { InfiniteScrollCustomEvent, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonMenuButton, IonPage, IonRefresher, IonRefresherContent, IonSearchbar, IonTitle, IonToolbar, RefresherCustomEvent } from '@ionic/vue';
+import { InfiniteScrollCustomEvent, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonMenuButton, IonPage, IonProgressBar, IonRefresher, IonRefresherContent, IonSearchbar, IonTitle, IonToolbar, RefresherCustomEvent } from '@ionic/vue';
 import { add } from 'ionicons/icons';
 import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -21,10 +21,12 @@ const count = ref<number>(0)
 const limit = ref<number>(40)
 const skip = ref<number>(0)
 const search = ref(currentRoute.value.query.search as string || '')
+const loading = ref(false)
 
 const load = async (event?: InfiniteScrollCustomEvent) => {
     // if (!tt.project && (!tt.filter || !search.value))
     try {
+        loading.value = true
         const res = await tt.getIssues({
             limit: limit.value,
             skip: skip.value,
@@ -37,6 +39,8 @@ const load = async (event?: InfiniteScrollCustomEvent) => {
         event?.target.complete()
     } catch (e) {
         console.warn(e);
+    } finally {
+        loading.value = false
     }
 }
 
@@ -92,7 +96,7 @@ onMounted(load)
                 <IonToolbar>
                     <IonSearchbar v-model="search" :debounce="1000" @ionInput="handleSearch" />
                 </IonToolbar>
-
+                <IonProgressBar v-if="loading" type="indeterminate"></IonProgressBar>
             </IonHeader>
             <IonContent>
                 <IonRefresher slot="fixed" @ionRefresh="handleRefresh($event)">

@@ -29,7 +29,7 @@ const groupedCustomFields = computed(() => {
 <template>
     <IonItemGroup>
         <IonItemDivider>
-            <IonLabel>0</IonLabel>
+            <IonLabel>{{ $t('info') }}</IonLabel>
         </IonItemDivider>
         <IssueField v-for="field in Object.values(issue.fields).filter(f => f[0] === '*')" :issue="issue.issue"
             :field="field" :key="field"
@@ -38,7 +38,7 @@ const groupedCustomFields = computed(() => {
 
     <IonItemGroup>
         <IonItemDivider>
-            <IonLabel>base</IonLabel>
+            <IonLabel>{{ $t('base') }}</IonLabel>
         </IonItemDivider>
         <IssueField
             v-for="field of Object.values(issue.fields).filter(field => field[0] !== '*' && !field.match('_cf_'))"

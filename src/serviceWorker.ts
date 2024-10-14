@@ -7,6 +7,7 @@ declare let self: ServiceWorkerGlobalScope
 precacheAndRoute(self.__WB_MANIFEST)
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL
+const version = 0.01
 
 // Регистрация маршрута для кеширования всех запросов к SERVER_URL
 registerRoute(

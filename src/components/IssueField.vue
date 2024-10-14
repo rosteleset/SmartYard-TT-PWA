@@ -78,7 +78,11 @@ watch(() => issue, setText)
 <template>
     <IonItem v-if="text || component">
         <IonLabel>
-            <h2>{{ cf?.fieldDisplay || field }}</h2>
+            <h2>
+                <IonText color="secondary">
+                    {{ cf?.fieldDisplay || $t(field) }}
+                </IonText>
+            </h2>
             <component v-if="component" :is="component" />
             <div v-else v-html="text"></div>
         </IonLabel>

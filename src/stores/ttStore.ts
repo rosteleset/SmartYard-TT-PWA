@@ -87,6 +87,10 @@ export const useTtStore = defineStore('tt', () => {
             return Promise.reject()
     }
 
+    const deleteIssue = (_issue?: string) => {
+        return api.DELETE(`tt/issue/${_issue || issue.value?.issue.issueId}`)
+    }
+
     const addComment = async (comment: string, commentPrivate: boolean, issueId?: string) => {
         const result = await api.POST('tt/comment', {
             issueId: issueId || issue.value?.issue.issueId,
@@ -128,6 +132,7 @@ export const useTtStore = defineStore('tt', () => {
         getIssues,
         getIssue,
         updateIssue,
+        deleteIssue,
         addComment,
         editComment,
         addAttachment,

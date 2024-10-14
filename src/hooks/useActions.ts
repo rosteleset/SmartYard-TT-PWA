@@ -53,8 +53,7 @@ export const useActions = () => {
 
     const initAction = (_name: string, issue?: string | string[], fields?: string[]) => {
         let name = _name
-        const withoutAccept = name.at(0) === '!'
-        if (withoutAccept)
+        if (name.at(0) === '!')
             name = name.slice(1)
         if (specialActions.includes(name))
             switch (name) {
@@ -62,22 +61,41 @@ export const useActions = () => {
                     openModal(IssueAddComment, { issue }).then(() => null)
                     break;
                 case "saAddFile":
-                case "ttSaAddSingleFile":
+                case "saAddSingleFile":
                     openModal(IssueAddFile).then(() => null)
                     break;
+                case "saAssignToMe":
+                    tt.doAction({ action: 'assignToMe' })
+                    break;
+                case "saWatch":
+                    tt.doAction({ action: 'watch' })
+                    break;
+                case "saDelete":
+                    if (Array.isArray(issue))
+                        for (const i of issue) {
+                            tt.deleteIssue(i)
+                        }
+                    else
+                        tt.deleteIssue(issue)
+                    break;
+                case "saSubIssue":
+                case "saCoordinate":
+                case "saLink":
+                    break;
+
                 default:
                     console.log(name)
             }
-        else if (withoutAccept)
-            tt.doAction({ action: name })
-                .catch((error) => {
-                    alertController.create({
-                        header: 'Что то пошло не так',
-                        message: error.message,
-                        buttons: ['Ok'],
-                    })
-                        .then((alert) => alert.present())
-                })
+        // else if (withoutAccept)
+        //     tt.doAction({ action: name })
+        //         .catch((error) => {
+        //             alertController.create({
+        //                 header: 'Что то пошло не так',
+        //                 message: error.message,
+        //                 buttons: ['Ok'],
+        //             })
+        //                 .then((alert) => alert.present())
+        //         })
         else
             openModal(IssueAction, { name, issue, _fields: fields }).then(() => null)
     }

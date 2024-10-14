@@ -67,5 +67,6 @@
   "comment": "Comment",
   "commentPrivate": "For Employees Only",
   "tags": "Tags",
-  "tag": "Tag"
+  "tag": "Tag",
+  "base": "Base"
 }

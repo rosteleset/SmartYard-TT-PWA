@@ -10,7 +10,7 @@ const password = ref('');
 const rememberMe = ref(false);
 
 const handleLogin = () => {
-  authStore.login(login.value, password.value);
+  authStore.login(login.value, password.value, rememberMe.value);
 };
 
 const loading = computed(() => authStore.loading);
@@ -33,7 +33,7 @@ onMounted(() => {
 
     <IonContent class="ion-padding">
       <IonItem>
-        <IonInput :label="$t('login')" label-placement="floating" v-model="login"></IonInput>
+        <IonInput :label="$t('login')" label-placement="floating" autocomplete="username" v-model="login"></IonInput>
       </IonItem>
 
       <IonItem>

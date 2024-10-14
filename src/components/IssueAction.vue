@@ -85,7 +85,9 @@ onMounted(
         action: name
       })
         .then(res => {
-          if (typeof res.template === 'string')
+          if (res.template === "!")
+            confirm()
+          else if (typeof res.template === 'string')
             initFields([res.template]);
           else
             initFields(Object.values(res.template));

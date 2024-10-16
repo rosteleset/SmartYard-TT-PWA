@@ -30,10 +30,11 @@ export const useTtStore = defineStore('tt', () => {
         if (!currentProject)
             throw new Error('Project not found')
         const _filter = currentProject.filters.find(f => f.filter === filter)
-        const label = meta.value?.filters[filter]
-        if (!_filter || !label)
+        const label = meta.value?.filters[filter.toString()]
+
+        if (!_filter)
             throw new Error('Filter not found')
-        return { ...{ label }, ..._filter }
+        return { ...{ label: label || _filter.filter }, ..._filter }
     }
 
     const getIssues = async ({ project: _project = project.value?.acronym, filter: _filter = filter.value?.filter, limit, skip, search }: { limit: number, skip: number, project?: string, filter?: string, search?: string }): Promise<DataStructure> => {

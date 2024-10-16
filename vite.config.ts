@@ -27,7 +27,7 @@ export default defineConfig(({ mode }) => {
         scope: BASE_PATH,
         manifest: {
           lang: 'ru',
-          theme_color: '#007bff',
+          theme_color: '#2880b9',
           background_color: '#FFFFFF',
           display: 'standalone',
           icons: [

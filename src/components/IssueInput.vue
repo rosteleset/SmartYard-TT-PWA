@@ -128,7 +128,7 @@ const getFieldData = () => {
                 } else if (cf.format.split(" ").includes("usersAndGroups")) {
                     attributes.options = getPeoples(project.value, true, true);
                 }
-
+                attributes.options = select2Filter(attributes.options, props.filter)
                 attributes.multiple = cf.format.indexOf("multiple") >= 0;
                 attributes.validate = validate;
                 break;
@@ -220,7 +220,8 @@ const getFieldData = () => {
 
 const select2Filter = (options: any[], filter: any) => {
     if (!filter) return options;
-    return options.filter(option => filter.includes(option.id) || filter.includes(option.text));
+    const _filter = Object.values(filter)
+    return options.filter(option => _filter.includes(option.id) || _filter.includes(option.text));
 };
 
 const getPeoples = (project: Project, withGroups: boolean, withUsers: boolean) => {

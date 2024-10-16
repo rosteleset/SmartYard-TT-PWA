@@ -65,11 +65,12 @@
   "saAssignToMe": "Assign to Me",
   "saCoordinate": "Coordinate",
   "comment": "Comment",
+  "optionalComment":"Comment",
   "commentPrivate": "For Employees Only",
   "tags": "Tags",
   "tag": "Tag",
   "base": "Base",
   "confirmAssignToMe": "Assign issue to yourself?",
   "confirmWatch": "Add yourself to watchers?",
-    "confirmUnWatch": "Stop watching the issue?"
+  "confirmUnWatch": "Stop watching the issue?"
 }

@@ -30,6 +30,28 @@ export const useActions = () => {
     const { presentAlert } = useAlert()
     const { openModal } = useModal()
 
+    const ff = (template: any) => {
+        const result: Record<string, any> = {}
+
+        if (typeof template === 'string')
+            result[template] = false;
+        else {
+            for (const key in template) {
+                let fieldKey = (typeof template[key] === "string") ? template[key] : key;
+                fieldKey = fieldKey.toString();
+
+                // Проверка, начинается ли ключ с символа '%'
+                if (fieldKey.startsWith('%')) {
+                    const parts = fieldKey.split('%');
+                    result[parts[2]] = (typeof template[key] === "string") ? false : template[key];
+                } else {
+                    result[fieldKey] = (typeof template[key] === "string") ? false : template[key];
+                }
+            }
+        }
+        return result;
+    }
+
     const getActionLabel = (action: string) => {
         let text: string;
         if (action.at(0) === '!')
@@ -56,7 +78,7 @@ export const useActions = () => {
         })
     }
 
-    const initAction = (_name: string, issue?: string | string[], fields?: string[]) => {
+    const initAction = (_name: string, issue?: string | string[], fields?: Record<string, any>) => {
         let name = _name
         if (name.at(0) === '!')
             name = name.slice(1)
@@ -121,6 +143,8 @@ export const useActions = () => {
                     action: name
                 })
                     .then(res => {
+                        console.log(ff(res.template));
+
                         const withoutAccept = res.template === "!"
                         if (withoutAccept)
                             if (multiplay)
@@ -128,10 +152,7 @@ export const useActions = () => {
                             else
                                 tt.doAction({ action: name, issueId: issue })
                         else {
-                            if (typeof res.template === 'string')
-                                fields = [res.template];
-                            else
-                                fields = Object.values(res.template);
+                            fields = ff(res.template)
                         }
 
 

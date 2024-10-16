@@ -65,6 +65,7 @@
   "saAssignToMe": "Забрать себе",
   "saCoordinate": "Скоординировать",
   "comment": "Комментарий",
+  "optionalComment":"Комментарий",
   "commentPrivate": "Только для сотрудников",
   "tags": "Ярлыки",
   "tag": "Ярлык",

@@ -21,7 +21,7 @@ type Models = Record<string, any>;
 
 const { name, _fields, issue } = defineProps<{
   name: string,
-  _fields: string[],
+  _fields: Record<string, any>,
   issue?: string | string[]
 }>()
 
@@ -67,7 +67,7 @@ onMounted(
       return;
 
     if (_fields)
-      initFields(_fields);
+      initFields(Object.keys(_fields));
   });
 
 </script>
@@ -85,7 +85,7 @@ onMounted(
     </IonToolbar>
   </IonHeader>
   <IonContent v-if="models">
-    <IssueInput v-for="key in Object.keys(models)" :key="key" :field="key" v-model="models[key]" />
+    <IssueInput v-for="key in Object.keys(models)" :key="key" :field="key" v-model="models[key]" :filter="_fields[key]" />
   </IonContent>
 </template>
 

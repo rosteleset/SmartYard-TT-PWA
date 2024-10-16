@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
 import { useAuthStore } from '@/stores/authStore';
-import { IonButton, IonCheckbox, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonPage, IonProgressBar, IonText, IonTitle, IonToolbar } from '@ionic/vue';
+import { IonButton, IonCheckbox, IonContent, IonHeader, IonInput, IonItem, IonPage, IonProgressBar, IonText, IonTitle, IonToolbar } from '@ionic/vue';
+import { computed, onMounted, ref } from 'vue';
 
 const authStore = useAuthStore();
 

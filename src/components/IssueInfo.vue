@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { IonItemGroup, IonItemDivider, IonLabel, IonItem } from "@ionic/vue";
 import { useTtStore } from "@/stores/ttStore";
-import { computed, onMounted, provide } from "vue";
-import IssueField from "./IssueField.vue";
+import { IonItemDivider, IonItemGroup, IonLabel } from "@ionic/vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+import IssueField from "./IssueField.vue";
 
 const tt = useTtStore()
 const { t } = useI18n()

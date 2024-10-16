@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IonItem, IonToggle } from '@ionic/vue';
+import { IonToggle } from '@ionic/vue';
 
 
 const { label } = defineProps<{

@@ -1,12 +1,8 @@
-import useAlert from "@/hooks/useAlert";
 import api from "@/utils/api";
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { useI18n } from "vue-i18n";
 
 export const useTtStore = defineStore('tt', () => {
-
-    const { presentAlert } = useAlert()
 
     // state
     const meta = ref<Meta>()

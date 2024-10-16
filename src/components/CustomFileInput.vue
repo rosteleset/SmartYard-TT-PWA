@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { IonButton, IonItem, IonLabel, IonList, IonButtons, IonIcon } from "@ionic/vue";
-import { CameraSource } from '@capacitor/camera';
 import { PhotoData, useAttachments } from '@/hooks/useAttachments';
+import { CameraSource } from '@capacitor/camera';
+import { IonButton, IonButtons, IonIcon, IonItem, IonLabel, IonList } from "@ionic/vue";
 import { trash } from "ionicons/icons";
+import { ref } from 'vue';
 
-const { field, label, multiple } = defineProps<{
+const { field, label } = defineProps<{
     field: string,
     label?: string,
     multiple?: boolean
@@ -13,7 +13,7 @@ const { field, label, multiple } = defineProps<{
 
 const items = defineModel<PhotoData[]>({ default: [] });
 
-const { photos, takePhoto } = useAttachments();
+const { takePhoto } = useAttachments();
 
 const fileInput = ref<HTMLInputElement | null>(null);
 

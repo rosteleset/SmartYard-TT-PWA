@@ -1,20 +1,16 @@
 <script setup lang="ts">
 
-import useAlert from "@/hooks/useAlert";
 import { useTtStore } from "@/stores/ttStore";
-import api from "@/utils/api";
 import {
   IonButton,
   IonButtons,
   IonContent,
   IonHeader,
-  IonItem,
   IonTitle,
   IonToolbar,
   modalController
 } from "@ionic/vue";
-import { computed, onMounted, ref } from "vue";
-import { useI18n } from "vue-i18n";
+import { onMounted, ref } from "vue";
 import IssueInput from "./IssueInput.vue";
 
 type Models = Record<string, any>;
@@ -26,8 +22,6 @@ const { name, _fields, issue } = defineProps<{
 }>()
 
 const tt = useTtStore()
-const { t } = useI18n()
-const { presentAlert } = useAlert()
 
 const models = ref<Models>({});
 

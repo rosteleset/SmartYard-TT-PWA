@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { useTtStore } from '@/stores/ttStore';
-import api from '@/utils/api';
-import { IonInput, IonItem, IonList, IonChip, IonIcon, IonLabel } from '@ionic/vue';
-import { ref } from 'vue';
+import { IonChip, IonIcon, IonInput, IonItem, IonLabel, IonList } from '@ionic/vue';
 import { closeCircle } from 'ionicons/icons';
+import { ref } from 'vue';
 
 type Suggestion = { id: string, text: string };
 
@@ -16,7 +14,6 @@ const { field, options, label, multiple, getSuggestion } = defineProps<{
     getSuggestion?: (query: string) => Promise<any>
 }>()
 
-const tt = useTtStore();
 const query = defineModel<string | string[]>({ default: '' });
 const selectedText = ref('');
 const selectedItems = ref<Suggestion[]>([]);
@@ -24,7 +21,7 @@ const showSuggestions = ref(false);
 const filteredSuggestions = ref<Suggestion[]>([]);
 
 // Функция debounce
-const debounce = (func: Function, delay: number) => {
+const debounce = (func: (...args: any[]) => void, delay: number) => {
     let timeoutId: NodeJS.Timeout | null = null;
     return (...args: any[]) => {
         if (timeoutId) {

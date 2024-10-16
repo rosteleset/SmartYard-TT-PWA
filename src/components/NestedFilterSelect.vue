@@ -7,15 +7,17 @@ const { group, depth = 0 } = defineProps<{ group: GroupedFilters, depth?: number
 
 <template>
     <template v-if="group.children?.length > 0">
-        <template v-for="children in group.children">
+        <template v-for="children in group.children" :key="children.label">
             <IonSelectOption disabled :class="`neasted-${depth}`">{{ children.label }}</IonSelectOption>
             <NestedFilterSelect :group="children" :depth="depth + 1" />
         </template>
     </template>
-    <IonSelectOption v-if="group.filters?.length > 0" v-for="filter in group.filters" :class="`neasted-${depth}`"
-        :value="filter">
-        {{ filter.label }}
-    </IonSelectOption>
+    <template v-if="group.filters?.length > 0">
+        <IonSelectOption v-for="filter in group.filters" :key="filter.label" :class="`neasted-${depth}`"
+            :value="filter">
+            {{ filter.label }}
+        </IonSelectOption>
+    </template>
 </template>
 
 <style lang="scss">

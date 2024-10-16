@@ -2,12 +2,12 @@ import IssueAction from "@/components/IssueAction.vue";
 import IssueAddComment from "@/components/IssueAddComment.vue";
 import IssueAddFile from "@/components/IssueAddFile.vue";
 import useModal from "@/hooks/useModal";
+import { useAuthStore } from "@/stores/authStore";
 import { useTtStore } from "@/stores/ttStore";
 import api from "@/utils/api";
-import { ActionSheetButton, alertController } from "@ionic/vue";
+import { ActionSheetButton } from "@ionic/vue";
 import { useI18n } from "vue-i18n";
 import useAlert from "./useAlert";
-import { useAuthStore } from "@/stores/authStore";
 
 const specialActions = [
     "saAddComment",
@@ -136,37 +136,39 @@ export const useActions = () => {
                 break;
 
             default:
-                const multiplay = Array.isArray(issue)
+                {
+                    const multiplay = Array.isArray(issue)
 
-                api.GET('tt/action', {
-                    _id: multiplay ? issue[0] : issue || tt.issue?.issue.issueId,
-                    action: name
-                })
-                    .then(res => {
-                        console.log(ff(res.template));
-
-                        const withoutAccept = res.template === "!"
-                        if (withoutAccept)
-                            if (multiplay)
-                                Promise.all(issue.map(i => tt.doAction({ action: name, issueId: i })))
-                            else
-                                tt.doAction({ action: name, issueId: issue })
-                        else {
-                            fields = ff(res.template)
-                        }
-
-
-                        if (!withoutAccept)
-                            openModal(IssueAction, { name, issue, _fields: fields }).then(() => null)
-
+                    api.GET('tt/action', {
+                        _id: multiplay ? issue[0] : issue || tt.issue?.issue.issueId,
+                        action: name
                     })
-                    .catch((error) => {
-                        presentAlert({
-                            header: t('something-went-wrong'),
-                            message: error.message,
-                            buttons: [t('ok')],
+                        .then(res => {
+                            console.log(ff(res.template));
+
+                            const withoutAccept = res.template === "!"
+                            if (withoutAccept)
+                                if (multiplay)
+                                    Promise.all(issue.map(i => tt.doAction({ action: name, issueId: i })))
+                                else
+                                    tt.doAction({ action: name, issueId: issue })
+                            else {
+                                fields = ff(res.template)
+                            }
+
+
+                            if (!withoutAccept)
+                                openModal(IssueAction, { name, issue, _fields: fields }).then(() => null)
+
                         })
-                    })
+                        .catch((error) => {
+                            presentAlert({
+                                header: t('something-went-wrong'),
+                                message: error.message,
+                                buttons: [t('ok')],
+                            })
+                        })
+                }
         }
 
     }

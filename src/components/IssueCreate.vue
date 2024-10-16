@@ -1,12 +1,14 @@
 <script setup lang="ts">
 
+import { useTtStore } from "@/stores/ttStore";
+import api from "@/utils/api";
+import getCatalogsByWorkflow from "@/utils/getCatalogsByWorkflow";
 import {
   alertController,
   IonButton,
   IonButtons,
   IonContent,
   IonHeader,
-  IonInput,
   IonItem,
   IonSelect,
   IonSelectOption,
@@ -14,13 +16,10 @@ import {
   IonToolbar,
   modalController
 } from "@ionic/vue";
-import { useTtStore } from "@/stores/ttStore";
-import { computed, onMounted, ref, watch } from "vue";
-import { useRouter } from "vue-router";
-import api from "@/utils/api";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 import IssueInput from "./IssueInput.vue";
-import getCatalogsByWorkflow from "@/utils/getCatalogsByWorkflow";
 
 // Определяем тип для модели
 type Models = Record<string, any>;

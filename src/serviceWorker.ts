@@ -1,13 +1,12 @@
-import { precacheAndRoute } from 'workbox-precaching'
+import { BackgroundSyncPlugin, } from 'workbox-background-sync';
+import { precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { NetworkFirst, NetworkOnly } from 'workbox-strategies';
-import { BackgroundSyncPlugin, } from 'workbox-background-sync';
 
 declare let self: ServiceWorkerGlobalScope
 precacheAndRoute(self.__WB_MANIFEST)
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL
-const version = 0.01
 
 // Регистрация маршрута для кеширования всех запросов к SERVER_URL
 registerRoute(

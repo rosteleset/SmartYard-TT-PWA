@@ -1,21 +1,19 @@
 <script setup lang="ts">
+import { useAttachments, UserPhoto } from "@/hooks/useAttachments";
+import { useTtStore } from "@/stores/ttStore";
+import { CameraSource } from "@capacitor/camera";
 import {
-  modalController,
-  IonHeader,
-  IonToolbar,
-  IonButtons,
+  alertController,
   IonButton,
-  IonTitle,
+  IonButtons,
   IonContent,
+  IonHeader,
   IonImg,
-  IonItem,
-  IonTextarea,
-  IonCheckbox, alertController
+  IonTitle,
+  IonToolbar,
+  modalController
 } from "@ionic/vue";
-import {ref} from "vue";
-import {useTtStore} from "@/stores/ttStore";
-import {useAttachments, UserPhoto} from "@/hooks/useAttachments";
-import {CameraSource, Photo} from "@capacitor/camera";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const tt = useTtStore()

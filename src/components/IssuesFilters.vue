@@ -18,7 +18,7 @@ const grouped = computed(() =>
 )
 
 function buildNestedGroups(filters: FilterWithLabel[]): GroupedFilters {
-    let res: GroupedFilters = {
+    const res: GroupedFilters = {
         label: 'root',
         children: [],
         filters: []

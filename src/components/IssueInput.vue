@@ -11,13 +11,13 @@
 
 <script setup lang="ts">
 import { useTtStore } from '@/stores/ttStore';
-import api from '@/utils/api';
-import { IonInput, IonTextarea, IonSelect, IonSelectOption, IonDatetime, IonCheckbox, IonItem } from '@ionic/vue';
-import { computed } from 'vue';
-import CustomAutocomplete from './CustomAutocomplete.vue';
-import { useI18n } from 'vue-i18n';
-import CustomToggle from './CustomToggle.vue';
 import { useUsersStore } from '@/stores/usersStore';
+import api from '@/utils/api';
+import { IonDatetime, IonInput, IonItem, IonSelect, IonSelectOption, IonTextarea } from '@ionic/vue';
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import CustomAutocomplete from './CustomAutocomplete.vue';
+import CustomToggle from './CustomToggle.vue';
 
 const props = defineProps<{
     field: string,
@@ -38,7 +38,7 @@ const fieldData = computed(() => getFieldData())
 
 const getFieldData = () => {
     let component;
-    let attributes: any = {
+    const attributes: any = {
         id: field.value,
         placeholder: customField.value?.fieldDescription || customField.value?.fieldDisplay || t(field.value),
         label: customField.value?.fieldDisplay || t(field.value),
@@ -90,22 +90,24 @@ const getFieldData = () => {
                 attributes.validate = validate;
                 break;
             case 'select':
-                component = IonSelect;
-                attributes.interface = "popover"
-                let options = [];
-                if (cf.format && cf.format.indexOf("suggestions") >= 0) {
-                    component = CustomAutocomplete;
-                    attributes.getSuggestion = getSuggestions
+                {
+                    component = IonSelect;
+                    attributes.interface = "popover"
+                    const options = [];
+                    if (cf.format && cf.format.indexOf("suggestions") >= 0) {
+                        component = CustomAutocomplete;
+                        attributes.getSuggestion = getSuggestions
+                    }
+                    options.push(...cf.options.map((opt: any) => ({
+                        id: opt.option,
+                        text: opt.optionDisplay,
+                    })));
+                    attributes.options = select2Filter(options, props.filter);
+                    attributes.multiple = cf.format.indexOf("multiple") >= 0;
+                    attributes.tags = cf.format && cf.format.indexOf("editable") >= 0;
+                    attributes.createTags = cf.format && cf.format.indexOf("editable") >= 0;
+                    attributes.validate = validate;
                 }
-                options.push(...cf.options.map((opt: any) => ({
-                    id: opt.option,
-                    text: opt.optionDisplay,
-                })));
-                attributes.options = select2Filter(options, props.filter);
-                attributes.multiple = cf.format.indexOf("multiple") >= 0;
-                attributes.tags = cf.format && cf.format.indexOf("editable") >= 0;
-                attributes.createTags = cf.format && cf.format.indexOf("editable") >= 0;
-                attributes.validate = validate;
                 break;
             case 'datetime-local':
                 component = IonDatetime;
@@ -268,9 +270,9 @@ const getSuggestions = (query: string) =>
         .then(res => res.suggestions.map((i: any) => ({ id: i, text: i })))
 
 const workflowsByProject = (project: Project) => {
-    let workflows = [];
+    const workflows = [];
     if (project.workflows) {
-        for (let workflow of project.workflows) {
+        for (const workflow of project.workflows) {
             workflows.push({
                 id: workflow,
                 text: tt.meta?.workflows[workflow].name,

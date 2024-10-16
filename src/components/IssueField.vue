@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { IonItem, IonLabel, IonProgressBar, IonText } from "@ionic/vue";
-import dayjs from "dayjs";
-import { computed, inject, onMounted, ref, shallowRef, watch } from "vue";
+import useViewers from "@/hooks/useViewers";
 import { useTtStore } from "@/stores/ttStore";
-import useViewers, { UseViewers } from "@/hooks/useViewers";
 import { useUsersStore } from "@/stores/usersStore";
+import { IonItem, IonLabel, IonText } from "@ionic/vue";
+import dayjs from "dayjs";
+import { computed, onMounted, ref, shallowRef, watch } from "vue";
 
 
 const { issue, field: _field, cf, _value } = defineProps<{

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { IonButton, IonCard, IonInput, IonCardHeader, IonCardTitle } from "@ionic/vue";
 import { useAuthStore } from "@/stores/authStore";
-import { onMounted, ref } from "vue";
 import api from "@/utils/api";
+import { IonButton, IonCard, IonCardTitle, IonInput } from "@ionic/vue";
+import { onMounted, ref } from "vue";
 
 interface User {
   enabled: number

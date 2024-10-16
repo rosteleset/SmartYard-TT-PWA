@@ -1,6 +1,10 @@
 <script setup lang="ts">
+import IssueAddComment from "@/components/IssueAddComment.vue";
+import issueEditComment from "@/components/IssueEditComment.vue";
+import { useAuthStore } from "@/stores/authStore";
+import { useTtStore } from "@/stores/ttStore";
 import {
-    IonItem,
+    IonButton,
     IonCard,
     IonCardContent,
     IonCardHeader,
@@ -8,18 +12,10 @@ import {
     IonFab,
     IonFabButton,
     IonIcon,
-    IonList,
-    IonButton,
     modalController
 } from "@ionic/vue";
 import dayjs from "dayjs";
 import { add, eye, eyeOff } from "ionicons/icons";
-import IssueAddComment from "@/components/IssueAddComment.vue";
-import { useTtStore } from "@/stores/ttStore";
-import { useAuthStore } from "@/stores/authStore";
-import issueEditComment from "@/components/IssueEditComment.vue";
-
-const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 const { issue } = defineProps<{
     issue: IssueData

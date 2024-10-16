@@ -1,26 +1,23 @@
 <script setup lang="ts">
+import IssueAddFile from "@/components/IssueAddFile.vue";
+import { useAuthStore } from "@/stores/authStore";
+import { useTtStore } from "@/stores/ttStore";
+import api from "@/utils/api";
 import {
   alertController,
   IonButton,
   IonCard,
-  IonCardContent,
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
   IonFab,
   IonFabButton,
   IonIcon,
-  IonItem,
-  IonList,
   modalController
 } from "@ionic/vue";
-import { useAuthStore } from "@/stores/authStore";
 import dayjs from "dayjs";
 import { add } from "ionicons/icons";
-import { useTtStore } from "@/stores/ttStore";
-import IssueAddFile from "@/components/IssueAddFile.vue";
 import { useI18n } from "vue-i18n";
-import api from "@/utils/api";
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
@@ -85,7 +82,7 @@ const deleteHandler = async (attachment: Attachment) => {
     <IonCardHeader>
       <IonCardTitle>{{ dayjs.unix(img.metadata.date).format('DD.MM.YYYY HH:mm') }} - {{
         img.metadata.attachman
-      }}
+        }}
       </IonCardTitle>
       <IonCardSubtitle>{{ img.filename }}</IonCardSubtitle>
 

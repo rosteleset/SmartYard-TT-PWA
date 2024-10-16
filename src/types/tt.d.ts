@@ -102,7 +102,7 @@ interface CustomField {
     fieldDescription: string | null;
     regex: string | null;
     link: string | null;
-    format: string | null;
+    format: string;
     editor: string;
     indx: string | null;
     search: string | null;
@@ -195,7 +195,7 @@ interface DetailIssue extends Issue {
     catalog: string;
     project: string;
     childrens: DataStructure;
-    watchers: string[];
+    watchers: Record<number, string>;
 
     [key: string]: any;
 }

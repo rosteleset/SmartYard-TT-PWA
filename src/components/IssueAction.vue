@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 import useAlert from "@/hooks/useAlert";
-import useIssueInput from "@/hooks/useIssueInput";
 import { useTtStore } from "@/stores/ttStore";
 import api from "@/utils/api";
 import {
@@ -16,31 +15,21 @@ import {
 } from "@ionic/vue";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import IssueInput from "./IssueInput.vue";
 
 type Models = Record<string, any>;
 
 const { name, _fields, issue } = defineProps<{
   name: string,
-  _fields?: string[],
+  _fields: string[],
   issue?: string | string[]
 }>()
 
 const tt = useTtStore()
 const { t } = useI18n()
-const inputs = useIssueInput()
 const { presentAlert } = useAlert()
 
 const models = ref<Models>({});
-
-const getComponentResult = computed(() => {
-  return Object.keys(models.value).reduce<Record<string, {
-    component: any;
-    props: Record<string, any>;
-  }>>((acc: any, key) => {
-    acc[key] = inputs.getComponent(key, tt.project);
-    return acc;
-  }, {});
-});
 
 const initFields = (labels: string[]) => {
   // Ищем индекс поля с ключом 'comment'
@@ -53,7 +42,7 @@ const initFields = (labels: string[]) => {
 
   // Преобразуем массив обратно в объект и сохраняем его в fields.value
   models.value = Object.fromEntries(
-    labels.map((value) => [value, value === 'commentPrivate' ? true : '']))
+    labels.map((value) => [value, value === 'commentPrivate' ? true : tt.issue?.issue[value] || '']))
 }
 
 const cancel = () => modalController.dismiss(null, 'cancel');
@@ -79,27 +68,6 @@ onMounted(
 
     if (_fields)
       initFields(_fields);
-    else
-      api.GET('tt/action', {
-        _id: id,
-        action: name
-      })
-        .then(res => {
-          if (res.template === "!")
-            confirm()
-          else if (typeof res.template === 'string')
-            initFields([res.template]);
-          else
-            initFields(Object.values(res.template));
-
-        })
-        .catch((error) => {
-          presentAlert({
-            header: t('something-went-wrong'),
-            message: error.message,
-            buttons: [t('ok')],
-          })
-        })
   });
 
 </script>
@@ -116,10 +84,8 @@ onMounted(
       </IonButtons>
     </IonToolbar>
   </IonHeader>
-  <IonContent v-if="models" class="ion-padding">
-    <IonItem v-for=" key in Object.keys(models)" :key="key">
-      <component :is="getComponentResult[key].component" v-bind="getComponentResult[key].props" v-model="models[key]" />
-    </IonItem>
+  <IonContent v-if="models">
+    <IssueInput v-for="key in Object.keys(models)" :key="key" :field="key" v-model="models[key]" />
   </IonContent>
 </template>
 

@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import { computed, inject, onMounted, ref, shallowRef, watch } from "vue";
 import { useTtStore } from "@/stores/ttStore";
 import useViewers, { UseViewers } from "@/hooks/useViewers";
+import { useUsersStore } from "@/stores/usersStore";
 
 
 const { issue, field: _field, cf, _value } = defineProps<{
@@ -14,6 +15,7 @@ const { issue, field: _field, cf, _value } = defineProps<{
 }>()
 
 const tt = useTtStore()
+const users = useUsersStore()
 const text = ref<string | undefined>()
 const component = shallowRef<any>()
 const field = computed(() => _field[0] === '*' ? _field.slice(1) : _field)
@@ -64,6 +66,13 @@ const setText = () => {
             case "updated":
                 text.value = dayjs.unix(value).format('DD.MM.YYYY HH:mm')
                 break;
+            case "assigned":
+            case "watchers":
+                if (typeof value === 'string')
+                    text.value = value
+                else
+                    text.value = Object.values(value).map(v => users.users.find(u => u.login === v)?.realName || v).join(', ')
+                break;
             default:
                 text.value = Array.isArray(value) ? value.join(', ') : value
                 break;
@@ -80,7 +89,7 @@ watch(() => issue, setText)
         <IonLabel>
             <h2>
                 <IonText color="secondary">
-                    {{ cf?.fieldDisplay || $t(field) }}
+                    <b>{{ cf?.fieldDisplay || $t(field) }}</b>
                 </IonText>
             </h2>
             <component v-if="component" :is="component" />

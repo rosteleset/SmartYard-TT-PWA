@@ -16,3 +16,12 @@ interface User {
     webRtcExtension: string;
     webRtcPassword: string;
 }
+
+interface Group {
+    gid: number;
+    name: string;
+    acronym: string;
+    users: number;
+    admin: number;
+    adminLogin: string;
+  }

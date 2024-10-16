@@ -68,5 +68,8 @@
   "commentPrivate": "For Employees Only",
   "tags": "Tags",
   "tag": "Tag",
-  "base": "Base"
+  "base": "Base",
+  "confirmAssignToMe": "Assign issue to yourself?",
+  "confirmWatch": "Add yourself to watchers?",
+    "confirmUnWatch": "Stop watching the issue?"
 }

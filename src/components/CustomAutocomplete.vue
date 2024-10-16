@@ -1,22 +1,20 @@
 <script setup lang="ts">
-import { useTtStore } from '@/stores/ttStore';
-import api from '@/utils/api';
 import { IonInput, IonItem, IonList } from '@ionic/vue';
 import { ref } from 'vue';
 
-const { field, variants, label, text, getSuggestion } = defineProps<{
-    field: string,
-    variants?: string[],
+type Suggestion = { id: string, text: string };
+
+const { options, label, getSuggestion } = defineProps<{
+    options?: Suggestion[],
     label?: string,
     labelPlacement?: string,
-    text?: Record<string, string>,
     getSuggestion?: (query: string) => Promise<any>
 }>()
 
-const tt = useTtStore();
 const query = defineModel<string>({ default: null });
+const selectedText = ref(''); // отображаемое значение
 const showSuggestions = ref(false);
-const filteredSuggestions = ref<string[]>([]);
+const filteredSuggestions = ref<Suggestion[]>([]);
 
 // Функция debounce
 const debounce = (func: Function, delay: number) => {
@@ -33,12 +31,13 @@ const debounce = (func: Function, delay: number) => {
 
 // Дебаунсированная функция для обработки ввода
 const debouncedOnInput = debounce(() => {
-    if (variants) {
-        filteredSuggestions.value = variants.filter((suggestion) =>
-            suggestion.toLowerCase().includes(query.value.toLowerCase())
-        );
-    } else if (getSuggestion && query.value) {
-        getSuggestion(query.value)
+
+    if (options && options.length > 0) {
+        filteredSuggestions.value = options.filter((suggestion) => {
+            return suggestion.text.toLowerCase().includes(selectedText.value.toLowerCase())
+        });
+    } else if (getSuggestion && selectedText.value) {
+        getSuggestion(selectedText.value)
             .then(res => {
                 filteredSuggestions.value = res;
             });
@@ -49,12 +48,24 @@ const onInput = () => {
     debouncedOnInput();
 };
 
-const selectSuggestion = (suggestion: string) => {
-    query.value = suggestion;
+const selectSuggestion = (suggestion: Suggestion) => {
+    query.value = suggestion.id; // сохраняем id в модель
+    selectedText.value = suggestion.text; // отображаем text
     showSuggestions.value = false;
 };
 
+// Функция для сохранения введенного текста, если он не совпадает с предложениями
+const saveEnteredValue = () => {
+    const matchingSuggestion = filteredSuggestions.value.find(suggestion => suggestion.text.toLowerCase() === selectedText.value.toLowerCase());
+
+    if (!matchingSuggestion) {
+        // Если совпадений нет, сохраняем введенный текст в query
+        query.value = selectedText.value;
+    }
+};
+
 const hideSuggestions = () => {
+    saveEnteredValue();
     setTimeout(() => {
         showSuggestions.value = false;
     }, 500);
@@ -62,14 +73,15 @@ const hideSuggestions = () => {
 </script>
 
 <template>
-    <IonInput v-model="query" @input="onInput" @ionFocus="showSuggestions = true" @ionBlur="hideSuggestions"
-        :label="label || field" labelPlacement="floating" />
-    <IonList v-if="showSuggestions">
-        <IonItem v-for="(suggestion, index) in filteredSuggestions" :key="index" button
-            @click="selectSuggestion(suggestion)">
-            {{ text ? text[suggestion] : suggestion }}
-        </IonItem>
-    </IonList>
+    <IonInput v-model="selectedText" @input="onInput" @ionFocus="showSuggestions = true" @ionBlur="hideSuggestions"
+        :label="label" labelPlacement="floating">
+        <IonList v-if="showSuggestions">
+            <IonItem v-for="(suggestion, index) in filteredSuggestions" :key="index" button
+                @click="selectSuggestion(suggestion)">
+                {{ suggestion.text }}
+            </IonItem>
+        </IonList>
+    </IonInput>
 </template>
 
 <style scoped>

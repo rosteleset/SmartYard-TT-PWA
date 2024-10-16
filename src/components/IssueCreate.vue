@@ -7,6 +7,7 @@ import {
   IonContent,
   IonHeader,
   IonInput,
+  IonItem,
   IonSelect,
   IonSelectOption,
   IonTitle,
@@ -14,63 +15,31 @@ import {
   modalController
 } from "@ionic/vue";
 import { useTtStore } from "@/stores/ttStore";
-import { computed, ref, watch } from "vue";
-import IssueCatalogSelect from "@/components/IssueCatalogSelect.vue";
-import useIssueInput from "@/hooks/useIssueInput";
+import { computed, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import api from "@/utils/api";
 import { useI18n } from "vue-i18n";
+import IssueInput from "./IssueInput.vue";
+import getCatalogsByWorkflow from "@/utils/getCatalogsByWorkflow";
 
 // Определяем тип для модели
 type Models = Record<string, any>;
 
 const tt = useTtStore()
 const { t } = useI18n()
-const inputs = useIssueInput()
 const router = useRouter()
 
-const project = ref(tt.project)
+const project = ref(tt.project || tt.meta?.projects[0])
 const workflow = ref<string>()
 const catalog = ref<string>()
-
-// const fields = ref()
+const blocked = ref(false)
 const models = ref<Models>({});
 
-const getComponentResult = computed(() => {
-  return Object.keys(models.value).reduce<Record<string, {
-    component: any;
-    props: Record<string, any>;
-  }>>((acc: any, key) => {
-    acc[key] = inputs.getComponent(key, project.value);
-    return acc;
-  }, {});
-});
+const catalogs = computed(() => tt.meta && workflow.value ? getCatalogsByWorkflow(tt.meta?.workflows[workflow.value]) : [])
 
-const openCatalogSelect = async (e: Event) => {
-  e.preventDefault()
-  if (!workflow.value)
-    return;
-  const modal = await modalController.create({
-    component: IssueCatalogSelect,
-    componentProps: {
-      workflow: tt.meta?.workflows[workflow.value],
-      selectedItem: catalog.value,
-    }
-  });
-
-  await modal.present();
-
-  const { data, role } = await modal.onWillDismiss();
-
-  if (role === 'confirm') {
-    catalog.value = data;
-  }
-}
+// const fields = ref()
 
 const confirm = () => {
-  console.log(project.value);
-
-  // return;
   const issue = {
     project: project.value?.acronym,
     workflow: workflow.value,
@@ -91,6 +60,7 @@ const confirm = () => {
         .then((alert) => alert.present())
     })
 }
+
 const cancel = () => modalController.dismiss(null, 'cancel')
 
 watch(catalog, () => {
@@ -101,13 +71,21 @@ watch(catalog, () => {
     catalog: catalog.value,
   })
     .then(res => {
+      blocked.value = true
       const fields = res.template.fields
       Object.keys(res.template.fields).forEach(key => {
-        models.value[fields[key]] = ''; // Инициализируем пустой строкой или другим значением по умолчанию
+        if (!['project', 'workflow', 'catalog'].includes(fields[key]))
+          models.value[fields[key]] = ''; // Инициализируем пустой строкой или другим значением по умолчанию
       });
     })
 })
 
+// onMounted(() => {
+//   if (tt.meta?.customFields)
+//     for (const cf of tt.meta.customFields) {
+//       models.value['_cf_'+cf.field] = ''
+//     }
+// })
 </script>
 
 <template>
@@ -122,29 +100,42 @@ watch(catalog, () => {
       </IonButtons>
     </IonToolbar>
   </IonHeader>
-  <IonContent class="ion-padding">
-    <IonSelect interface="popover" label-placement="floating" :label="$t(`project`)" v-model="project">
-      <IonSelectOption v-for="variant in tt.meta?.projects" :value="variant" :key="variant.projectId">
-        {{
-          variant.project
-        }}
-      </IonSelectOption>
-    </IonSelect>
+  <IonContent>
+    <IonItem>
+      <IonSelect interface="popover" label-placement="floating" :label="$t(`project`)" v-model="project"
+        :disabled="blocked">
+        <IonSelectOption v-for="variant in tt.meta?.projects" :value="variant" :key="variant.projectId">
+          {{
+            variant.project
+          }}
+        </IonSelectOption>
+      </IonSelect>
+    </IonItem>
 
-    <IonSelect interface="popover" label-placement="floating" :label="$t(`workflow`)" v-model="workflow">
-      <IonSelectOption v-for="key in project?.workflows" :value="key" :key="key">
-        {{
-          tt.meta?.workflows[key].name
-        }}
-      </IonSelectOption>
-    </IonSelect>
+    <IonItem>
+      <IonSelect interface="popover" label-placement="floating" :label="$t(`workflow`)" v-model="workflow"
+        :disabled="blocked">
+        <IonSelectOption v-for="key in project?.workflows" :value="key" :key="key">
+          {{
+            tt.meta?.workflows[key].name
+          }}
+        </IonSelectOption>
+      </IonSelect>
+    </IonItem>
 
-    <IonInput readonly label-placement="floating" :label="$t(`catalog`)" v-model="catalog" @click="openCatalogSelect">
-    </IonInput>
+    <IonItem>
+      <IonSelect interface="popover" label-placement="floating" :label="$t(`catalog`)" v-model="catalog"
+        :disabled="blocked">
+        <IonSelectOption v-for="catalog in catalogs" :value="catalog.value" :key="catalog.value"
+          :disabled="catalog.disabled">
+          {{
+            catalog.value
+          }}
+        </IonSelectOption>
+      </IonSelect>
+    </IonItem>
 
-    <component v-for="(model, key) in models" :key="key" :is="getComponentResult[key].component"
-      v-bind="getComponentResult[key].props" v-model="models[key]" />
-
+    <IssueInput v-for="key in Object.keys(models)" :key="key" :field="key" v-model="models[key]" :project="project" />
   </IonContent>
 </template>
 

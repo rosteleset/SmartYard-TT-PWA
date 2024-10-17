@@ -7,9 +7,10 @@ import dayjs from "dayjs";
 import { computed, onMounted, ref, shallowRef, watch } from "vue";
 
 
-const { issue, field: _field, cf, _value } = defineProps<{
-    issue: DetailIssue,
+const { issue, field: _field, target, cf, _value } = defineProps<{
+    issue: Issue | DetailIssue,
     field: string,
+    target: string,
     cf?: CustomField,
     _value?: any
 }>()
@@ -29,7 +30,7 @@ const setText = () => {
     if (viewer) {
         try {
             const _viewer = viewers.getViewer(viewer.code)
-            const result = _viewer(value, issue, field.value)
+            const result = _viewer(value, issue, field.value, target)
             if (result && typeof result === 'object' && result.template) {
                 component.value = result
             }
@@ -43,6 +44,9 @@ const setText = () => {
 
         if (value)
             switch (cf.editor) {
+                // case "text":
+
+                //     break;
                 case "date":
                     text.value = dayjs.unix(value).format('DD.MM.YYYY')
                     break;
@@ -88,7 +92,7 @@ watch(() => issue, setText)
 
 <template>
     <IonItem v-if="text || component">
-        <IonLabel>
+        <IonLabel v-if="target === 'pwa'">
             <h2>
                 <IonText color="secondary">
                     <b>{{ cf?.fieldDisplay || $t(field) }}</b>
@@ -96,6 +100,13 @@ watch(() => issue, setText)
             </h2>
             <component v-if="component" :is="component" />
             <div v-else v-html="text"></div>
+        </IonLabel>
+        <IonLabel v-else>
+            <IonText color="secondary">
+                <b>{{ cf?.fieldDisplay || $t(field) }}: </b>
+            </IonText>
+            <component v-if="component" :is="component" />
+            <span v-else v-html="text"></span>
         </IonLabel>
     </IonItem>
 </template>

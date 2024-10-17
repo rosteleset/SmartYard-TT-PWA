@@ -11,19 +11,15 @@ const { push } = useRouter()
 const route = useRoute();
 
 const project = computed(() => tt.project)
-const filter = computed(() => tt.filter)
-
 
 const handlerProject = (event: CustomEvent<SelectChangeEventDetail<Project>>) => {
     push({ query: { ...route.query, project: event.detail.value.acronym } })
 }
 
-
-
 </script>
 
 <template>
-    <IonMenu content-id="issues" type="push">
+    <IonMenu menuId="issuesMenu" contentId="issues" >
         <IonHeader>
             <IonToolbar>
                 <IonTitle>{{ $t('filters') }}</IonTitle>

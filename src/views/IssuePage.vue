@@ -44,7 +44,7 @@ watch(route, loadIssue)
 
 <template>
     <IonPage>
-        <PageHeader :label="issue?.issue.issueId || id" defaultHref="/tt" @actions="isActionsOpen = true">
+        <PageHeader :label="issue?.issue.issueId || id" defaultHref="/" @actions="isActionsOpen = true">
             <IonToolbar>
                 <IonSegment v-model="segment">
                     <IonSegmentButton value="info">

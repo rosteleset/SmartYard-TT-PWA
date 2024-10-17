@@ -181,6 +181,7 @@ interface Issue {
     workflow: string;
     issueId: string;
     id: string;
+    [key: string]: any;
 }
 
 interface DetailIssue extends Issue {

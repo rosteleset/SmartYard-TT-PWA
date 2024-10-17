@@ -14,7 +14,7 @@ import * as vue from "vue";
 
 // Интерфейс для функции getViewer
 interface GetViewer {
-    (value: any, issue: DetailIssue, field: string): any;
+    (value: any, issue: Issue | DetailIssue, field: string, target: string): any;
 }
 
 // Интерфейс для хука useViewers
@@ -50,7 +50,7 @@ const useViewers = (): UseViewers => {
         }
         const f = new Function('value', 'issue', 'field', 'target', 'filter', 'utils', code)
 
-        return (value, issue, field) => f(value, issue, field, 'pwa', null, utils)
+        return (value, issue, field, target) => f(value, issue, field, target, null, utils)
     }
 
     return { getViewer }

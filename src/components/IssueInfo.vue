@@ -33,7 +33,7 @@ const groupedCustomFields = computed(() => {
         </IonItemDivider>
         <IssueField v-for="field in Object.values(issue.fields).filter(f => f[0] === '*')" :issue="issue.issue"
             :field="field" :key="field"
-            :cf="field.match('_cf_') ? tt.meta?.customFields.find(cf => cf.field === field.slice(5)) : undefined" />
+            :cf="field.match('_cf_') ? tt.meta?.customFields.find(cf => cf.field === field.slice(5)) : undefined" target="pwa" />
     </IonItemGroup>
 
     <IonItemGroup>
@@ -42,7 +42,7 @@ const groupedCustomFields = computed(() => {
         </IonItemDivider>
         <IssueField
             v-for="field of Object.values(issue.fields).filter(field => field[0] !== '*' && !field.match('_cf_'))"
-            :issue="issue.issue" :field="field" :key="field" />
+            :issue="issue.issue" :field="field" :key="field" target="pwa" />
     </IonItemGroup>
 
     <IonItemGroup v-for="(fields, catalog) in groupedCustomFields" :key="catalog" class="item-group-has">
@@ -50,7 +50,7 @@ const groupedCustomFields = computed(() => {
             <IonLabel>{{ catalog }}</IonLabel>
         </IonItemDivider>
         <IssueField v-for="field of fields" :key="field.field" :issue="issue.issue" :field="`_cf_${field.field}`"
-            :cf="field" />
+            :cf="field" target="pwa" />
     </IonItemGroup>
 </template>
 

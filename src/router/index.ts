@@ -1,6 +1,7 @@
 import { useAuthStore } from '@/stores/authStore';
 import useSettingsStore from '@/stores/settingsStore';
 import { useTtStore } from '@/stores/ttStore';
+import { useUsersStore } from '@/stores/usersStore';
 import HomePage from '@/views/HomePage.vue';
 import IssuePage from '@/views/IssuePage.vue';
 import IssuesPage from '@/views/IssuesPage.vue';
@@ -24,7 +25,7 @@ const routes = [
     children: [
       {
         path: '',
-        component: HomePage
+        redirect:'/tt'
       },
       {
         path: 'tt',
@@ -43,7 +44,7 @@ const routes = [
             path: 'issue/:id',
             name: 'issue',
             component: IssuePage,
-          }
+          },
         ]
       },
       {
@@ -80,33 +81,51 @@ router.beforeEach(async (to, from, next) => {
 
 // tt hook
 router.beforeEach(async (to, from, next) => {
-
   const ttStore = useTtStore();
-
+  const users = useUsersStore()
+  if (!ttStore.meta) {
+    await ttStore.load();
+  }
   try {
-    if (to.path.startsWith('/tt') && !ttStore.meta)
-      await ttStore.load();
+    if (to.path.startsWith('/tt/issues')) {
+      const lastProject = (await Preferences.get({ key: 'lastProject' })).value;
+      const lastFilter = (await Preferences.get({ key: 'lastFilter' })).value;
 
-    const project = to.query['project'] as string || (await Preferences.get({ key: 'lastProject' })).value
-    const filter = to.query['filter'] as string || (await Preferences.get({ key: 'lastFilter' })).value
+      const project = to.query['project'] as string ?? lastProject;
+      const filter = to.query['filter'] as string ?? lastFilter;
 
-    console.log(project);
-    console.log(filter);
-    
+      const queryUpdates: Record<string, string> = {};
 
-    if (project) {
-      ttStore.project = ttStore.meta?.projects.find(p => p.acronym === project)
-      Preferences.set({ key: 'lastProject', value: project})
-    }
-    if (filter) {
-      ttStore.filter = ttStore.getFilterWithLabel(filter)
-      Preferences.set({ key: 'lastFilter', value: filter})
+      if (project) {
+        ttStore.project = ttStore.meta?.projects.find(p => p.acronym === project);
+        if (project !== lastProject) {
+          await Preferences.set({ key: 'lastProject', value: project });
+        }
+        if (!to.query['project']) queryUpdates['project'] = project;
+      }
+
+      if (filter) {
+        ttStore.filter = ttStore.getFilterWithLabel(filter);
+        if (filter !== lastFilter) {
+          await Preferences.set({ key: 'lastFilter', value: filter });
+        }
+        if (!to.query['filter']) queryUpdates['filter'] = filter;
+      }
+
+      if (Object.keys(queryUpdates).length > 0) {
+        next({ ...to, query: { ...to.query, ...queryUpdates } });
+      }
+      else {
+        next();
+      }
+    } else {
+      next();
     }
   } catch (error) {
     console.warn(error);
+    next();
   }
+});
 
-  next();
-})
 
 export default router;

@@ -1,22 +1,24 @@
 <script setup lang="ts">
 import IssueCreate from '@/components/IssueCreate.vue';
+import IssueListItem from '@/components/IssueListItem.vue';
 import IssuesFilters from '@/components/IssuesFilters.vue';
 import useAlert from '@/hooks/useAlert';
 import useModal from '@/hooks/useModal';
 import { useTtStore } from '@/stores/ttStore';
-import { InfiniteScrollCustomEvent, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonMenuButton, IonPage, IonProgressBar, IonRefresher, IonRefresherContent, IonSearchbar, IonTitle, IonToolbar, RefresherCustomEvent } from '@ionic/vue';
+import { InfiniteScrollCustomEvent, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonContent, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonMenuButton, IonPage, IonProgressBar, IonRefresher, IonRefresherContent, IonSearchbar, IonTitle, IonToolbar, menuController, RefresherCustomEvent } from '@ionic/vue';
 import { add } from 'ionicons/icons';
 import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
 const tt = useTtStore()
-const {t} = useI18n()
+const { t } = useI18n()
 const { currentRoute, push } = useRouter()
 const { presentAlert } = useAlert()
 const { openModal } = useModal()
 
 const issues = ref<Issue[]>([])
+const projection = ref<Record<string, number>>({})
 const count = ref<number>(0)
 const limit = ref<number>(40)
 const skip = ref<number>(0)
@@ -33,6 +35,7 @@ const load = async (event?: InfiniteScrollCustomEvent) => {
             search: search.value
         });
         issues.value = Number(res.skip) === 0 ? res.issues : [...issues.value, ...res.issues]
+        projection.value = res.projection
         count.value = res.count
         limit.value = Number(res.limit)
         skip.value = Number(res.skip) + limit.value
@@ -49,6 +52,7 @@ const handleOpen = async (issue: Issue) => {
 }
 
 const handleRefresh = (event?: RefresherCustomEvent) => {
+    menuController.close('issuesMenu')
     skip.value = 0
     load()
         .then(() => event?.target.complete())
@@ -103,9 +107,11 @@ onMounted(load)
                     <IonRefresherContent />
                 </IonRefresher>
                 <IonList v-if="issues">
-                    <IonItem v-for="issue of issues" :key="issue.id" @click="handleOpen(issue)" button detail>
+                    <IssueListItem v-for="issue of issues" :key="issue.id" :issue="issue" :projection="projection"
+                        @click="handleOpen(issue)" />
+                    <!-- <IonItem v-for="issue of issues" :key="issue.id" @click="handleOpen(issue)" button detail>
                         <IonLabel>{{ issue.issueId }} - {{ issue.subject }}</IonLabel>
-                    </IonItem>
+                    </IonItem> -->
                 </IonList>
                 <IonInfiniteScroll v-if="skip < count" @ionInfinite="load">
                     <IonInfiniteScrollContent />

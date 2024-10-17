@@ -1,10 +1,16 @@
 import { BackgroundSyncPlugin, } from 'workbox-background-sync';
-import { precacheAndRoute } from 'workbox-precaching';
+import { clientsClaim } from 'workbox-core';
+import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { NetworkFirst, NetworkOnly } from 'workbox-strategies';
 
 declare let self: ServiceWorkerGlobalScope
+cleanupOutdatedCaches()
+
 precacheAndRoute(self.__WB_MANIFEST)
+
+self.skipWaiting()
+clientsClaim()
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL
 

@@ -51,7 +51,7 @@ onMounted(() => {
           {{ $t('loginAction') }}
         </IonButton>
 
-        <IonText color="danger" v-if="error">{{ error }}</IonText>
+        <IonText color="danger" v-if="error">{{ $t(`errors.${error}`) }}</IonText>
       </form>
     </IonContent>
   </IonPage>

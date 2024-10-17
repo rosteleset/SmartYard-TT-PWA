@@ -7,6 +7,15 @@
     "app": "App",
     "locale": "Locale"
   },
+  "errors": {
+    "noCredentials": "No accounting data",
+    "accessDenied": "Access denied",
+    "tokenNotFound": "Token",
+    "noToken": "Token is not specified",
+    "userNotFound": "User is not found",
+    "permissionDenied": "Access denied",
+    "notAcceptable": "Not acceptable"
+  },
   "ok": "Ok",
   "project-not-selected": "Project not selected",
   "login": "Login",
@@ -65,7 +74,7 @@
   "saAssignToMe": "Assign to Me",
   "saCoordinate": "Coordinate",
   "comment": "Comment",
-  "optionalComment":"Comment",
+  "optionalComment": "Comment",
   "commentPrivate": "For Employees Only",
   "tags": "Tags",
   "tag": "Tag",

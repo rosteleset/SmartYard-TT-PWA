@@ -41,11 +41,16 @@ export const useAuthStore = defineStore('auth', () => {
         const storedToken = (await Preferences.get({ key: 'token' })).value
         let storedDid = (await Preferences.get({ key: 'did' })).value;
 
-        if (!storedDid)
-            (storedDid = crypto.randomUUID())
-                && Preferences.set({ key: 'did', value: storedDid });
+        try {
+            if (!storedDid)
+                (storedDid = crypto.randomUUID())
+                    && Preferences.set({ key: 'did', value: storedDid });
 
-        did.value = storedDid;
+            did.value = storedDid;
+        } catch (error) {
+            console.warn(error);
+        }
+
 
         if (storedToken) {
             token.value = storedToken;

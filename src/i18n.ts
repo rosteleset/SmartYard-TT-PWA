@@ -2,7 +2,7 @@ import { createI18n } from 'vue-i18n'
 import ru from './locales/ru.json'
 import en from './locales/en.json'
 
-const fallbackLocale = 'ru'
+const fallbackLocale = 'en'
 
 const messages = {
     en: en,
@@ -12,7 +12,7 @@ const messages = {
 // Создаем и возвращаем экземпляр i18n
 const instance = createI18n({
     legacy: false,
-    locale: 'en',
+    locale: navigator.language.match('ru') ? 'ru' : 'en',
     fallbackLocale,
     messages
 })

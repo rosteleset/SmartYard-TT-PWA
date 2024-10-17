@@ -56,7 +56,7 @@ export const useAttachments = () => {
         const data = await blobToData(photo)
 
         if (maxSize && data.size > maxSize)
-            return Promise.reject(new Error(`size (${data.size}) > ${maxSize}`))
+            return Promise.reject(new Error(`file size exceeded`))
         else
             return {...photo, ...{data}}
     }

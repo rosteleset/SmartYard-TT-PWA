@@ -7,6 +7,16 @@
     "app": "Приложение",
     "locale": "язык"
   },
+  "errors": {
+    "serverUnavailable": "Сервер недоступен",
+    "noCredentials": "Нет учетных данных",
+    "accessDenied": "В доступе отказано",
+    "tokenNotFound": "Срок действия токена истек",
+    "noToken": "Token не указан",
+    "userNotFound": "Пользователь не найден",
+    "permissionDenied": "В доступе отказано",
+    "notAcceptable": "Действие невозможно"
+  },
   "camera": "Камера",
   "cancel": "Отмена",
   "close": "Закрыть",
@@ -65,7 +75,7 @@
   "saAssignToMe": "Забрать себе",
   "saCoordinate": "Скоординировать",
   "comment": "Комментарий",
-  "optionalComment":"Комментарий",
+  "optionalComment": "Комментарий",
   "commentPrivate": "Только для сотрудников",
   "tags": "Ярлыки",
   "tag": "Ярлык",

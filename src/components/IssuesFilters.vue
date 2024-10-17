@@ -1,77 +1,24 @@
 <script setup lang="ts">
 import { useTtStore } from '@/stores/ttStore';
 import { IonContent, IonHeader, IonMenu, IonSelect, IonSelectOption, IonTitle, IonToolbar, SelectChangeEventDetail } from '@ionic/vue';
-import { computed } from 'vue';
-import NestedFilterSelect from './NestedFilterSelect.vue';
+import { computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import FilterSelect from './FilterSelect.vue';
+import { Preferences } from '@capacitor/preferences';
 
 const tt = useTtStore()
-const { push, replace } = useRouter()
+const { push } = useRouter()
 const route = useRoute();
 
 const project = computed(() => tt.project)
 const filter = computed(() => tt.filter)
 
 
-const grouped = computed(() =>
-    tt.project ? buildNestedGroups(tt.project.filters.map(filter => tt.getFilterWithLabel(filter.filter))) : null
-)
-
-function buildNestedGroups(filters: FilterWithLabel[]): GroupedFilters {
-    const res: GroupedFilters = {
-        label: 'root',
-        children: [],
-        filters: []
-    };
-
-    // Функция для поиска или создания новой группы
-    const findOrCreateGroup = (groups: GroupedFilters[], label: string): GroupedFilters => {
-        let group = groups.find(g => g.label === label);
-        if (!group) {
-            group = { label, children: [], filters: [] };
-            groups.push(group);
-        }
-        return group;
-    };
-
-    for (const filter of filters) {
-        const labels = filter.label.split(' / ');
-        let prevGroup: GroupedFilters | undefined;
-
-        labels.forEach((label, index) => {
-            const isLastLabel = index === labels.length - 1;
-
-            if (index === 0) {
-                // Работаем с корневой группой на первом уровне
-                if (isLastLabel)
-                    res.filters?.push(filter)
-                else
-                    prevGroup = findOrCreateGroup(res.children || [], label);
-            } else if (isLastLabel && prevGroup) {
-                // Если это последний уровень, добавляем фильтр
-                prevGroup.filters ? prevGroup.filters.push({ ...filter, label }) : prevGroup.filters = [{ ...filter, label }];
-            } else {
-                // Работаем с вложенными группами
-                prevGroup = findOrCreateGroup(prevGroup?.children ?? [], label);
-            }
-        });
-    }
-
-    return res; // Возвращаем результат
-}
-
-const compareWith = (filter1: FilterWithLabel, filter2: FilterWithLabel) => {
-    return filter1 && filter2 ? filter1.filter === filter2.filter : filter1 === filter2;
-}
-
 const handlerProject = (event: CustomEvent<SelectChangeEventDetail<Project>>) => {
     push({ query: { ...route.query, project: event.detail.value.acronym } })
 }
 
-const handlerFilter = (event: CustomEvent<SelectChangeEventDetail<FilterWithLabel>>) => {
 
-    replace({ path: route.path, query: { ...route.query, filter: event.detail.value.filter } })
-}
 
 </script>
 
@@ -83,17 +30,14 @@ const handlerFilter = (event: CustomEvent<SelectChangeEventDetail<FilterWithLabe
             </IonToolbar>
         </IonHeader>
         <IonContent class="ion-padding">
-            <IonSelect :label="$t('project')" label-placement="floating" interface="popover" v-model:value="project"
+            <IonSelect :label="$t('project')" label-placement="floating" interface="alert" v-model:value="project"
                 @ionChange="handlerProject">
                 <IonSelectOption v-for="project in tt.meta?.projects" :key="project.acronym" :value="project">
                     {{ project.project }}
                 </IonSelectOption>
             </IonSelect>
 
-            <IonSelect :label="$t('filter')" label-placement="floating" interface="popover" v-model:value="filter"
-                @ionChange="handlerFilter" :compareWith="compareWith">
-                <NestedFilterSelect v-if="grouped" :group="grouped" />
-            </IonSelect>
+            <FilterSelect />
         </IonContent>
     </IonMenu>
 </template>

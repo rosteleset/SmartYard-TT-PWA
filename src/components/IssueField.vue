@@ -70,7 +70,9 @@ const setText = () => {
             case "watchers":
                 if (typeof value === 'string')
                     text.value = value
-                else
+                else if (Array.isArray(value))
+                    text.value = value.map(v => users.users.find(u => u.login === v)?.realName || v).join(', ')
+                else if (value)
                     text.value = Object.values(value).map(v => users.users.find(u => u.login === v)?.realName || v).join(', ')
                 break;
             default:

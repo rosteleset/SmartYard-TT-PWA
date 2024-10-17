@@ -8,6 +8,7 @@ import LoginPage from '@/views/LoginPage.vue';
 import SettingsPage from '@/views/SettingsPage.vue';
 import SimplePage from '@/views/SimplePage.vue';
 import TabWrapper from '@/views/TabWrapper.vue';
+import { Preferences } from '@capacitor/preferences';
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 
 
@@ -86,11 +87,21 @@ router.beforeEach(async (to, from, next) => {
     if (to.path.startsWith('/tt') && !ttStore.meta)
       await ttStore.load();
 
-    if (to.query['project'])
-      ttStore.project = ttStore.meta?.projects.find(p => p.acronym === to.query['project'])
+    const project = to.query['project'] as string || (await Preferences.get({ key: 'lastProject' })).value
+    const filter = to.query['filter'] as string || (await Preferences.get({ key: 'lastFilter' })).value
 
-    if (to.query['filter'])
-      ttStore.filter = ttStore.getFilterWithLabel(to.query['filter'] as string)
+    console.log(project);
+    console.log(filter);
+    
+
+    if (project) {
+      ttStore.project = ttStore.meta?.projects.find(p => p.acronym === project)
+      Preferences.set({ key: 'lastProject', value: project})
+    }
+    if (filter) {
+      ttStore.filter = ttStore.getFilterWithLabel(filter)
+      Preferences.set({ key: 'lastFilter', value: filter})
+    }
   } catch (error) {
     console.warn(error);
   }

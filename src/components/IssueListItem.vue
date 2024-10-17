@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useTtStore } from '@/stores/ttStore';
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonItem } from '@ionic/vue';
+import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/vue';
+import dayjs from "dayjs";
 import { computed } from 'vue';
 import IssueField from './IssueField.vue';
-import dayjs from "dayjs";
 
 const { issue, projection } = defineProps<{ issue: Issue, projection: Record<string, number> }>()
 
@@ -30,7 +30,7 @@ const fields = computed(() => Object.keys(projection).map(key => {
         </IonCardHeader>
         <IonCardContent>
             <!-- <IonList> -->
-                <IssueField v-for="field in fields" :issue="issue" :field="field?.field" :cf="field.cf" target="list" />
+                <IssueField v-for="field in fields" :key="field.field" :issue="issue" :field="field?.field" :cf="field.cf" target="list" />
             <!-- </IonList> -->
         </IonCardContent>
     </IonCard>

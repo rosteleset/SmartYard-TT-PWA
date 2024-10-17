@@ -11,12 +11,11 @@ import {
     IonModal,
     IonRadioGroup,
     IonTitle,
-    IonToolbar,
-    menuController
+    IonToolbar
 } from "@ionic/vue";
 import { computed, ref } from "vue";
-import NestedFilterGroup from "./NestedFilterGroup.vue";
 import { useRoute, useRouter } from "vue-router";
+import NestedFilterGroup from "./NestedFilterGroup.vue";
 
 const route = useRoute();
 const { push } = useRouter()

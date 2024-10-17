@@ -2,7 +2,6 @@ import { useAuthStore } from '@/stores/authStore';
 import useSettingsStore from '@/stores/settingsStore';
 import { useTtStore } from '@/stores/ttStore';
 import { useUsersStore } from '@/stores/usersStore';
-import HomePage from '@/views/HomePage.vue';
 import IssuePage from '@/views/IssuePage.vue';
 import IssuesPage from '@/views/IssuesPage.vue';
 import LoginPage from '@/views/LoginPage.vue';
@@ -82,7 +81,7 @@ router.beforeEach(async (to, from, next) => {
 // tt hook
 router.beforeEach(async (to, from, next) => {
   const ttStore = useTtStore();
-  const users = useUsersStore()
+  useUsersStore()
   if (!ttStore.meta) {
     await ttStore.load();
   }

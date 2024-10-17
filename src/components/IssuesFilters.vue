@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { useTtStore } from '@/stores/ttStore';
 import { IonContent, IonHeader, IonMenu, IonSelect, IonSelectOption, IonTitle, IonToolbar, SelectChangeEventDetail } from '@ionic/vue';
-import { computed, watch } from 'vue';
+import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import FilterSelect from './FilterSelect.vue';
-import { Preferences } from '@capacitor/preferences';
 
 const tt = useTtStore()
 const { push } = useRouter()

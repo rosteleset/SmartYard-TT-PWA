@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
-import {IonCard, IonCardTitle, IonInput, IonItem, IonSelect, IonSelectOption, IonText} from "@ionic/vue";
 import useSettingsStore from "@/stores/settingsStore";
-import {useI18n} from "vue-i18n";
+import { IonCard, IonCardTitle, IonInput, IonSelect, IonSelectOption } from "@ionic/vue";
+import { useI18n } from "vue-i18n";
 
 declare const __APP_VERSION__: string;
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IonAccordion, IonItem, IonLabel, IonSelectOption } from '@ionic/vue';
+import { IonAccordion, IonItem, IonLabel } from '@ionic/vue';
 
 const { group, depth = 0 } = defineProps<{ group: GroupedFilters, depth?: number }>()
 

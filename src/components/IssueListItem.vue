@@ -30,11 +30,11 @@ const fields = computed(() => Object.keys(projection).map(key => {
         </IonCardHeader>
         <IonCardContent>
             <!-- <IonList> -->
-                <IssueField v-for="field in fields" :key="field.field" :issue="issue" :field="field?.field" :cf="field.cf" target="list" />
+            <IssueField v-for="field in fields" :key="field.field" :issue="issue" :field="field?.field" :cf="field.cf"
+                target="listPwa" />
             <!-- </IonList> -->
         </IonCardContent>
     </IonCard>
 </template>
 
-<style>
-</style>
+<style></style>

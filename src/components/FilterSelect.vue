@@ -9,7 +9,6 @@ import {
     IonInput,
     IonList,
     IonModal,
-    IonRadioGroup,
     IonTitle,
     IonToolbar
 } from "@ionic/vue";
@@ -22,7 +21,6 @@ const { push } = useRouter()
 const tt = useTtStore()
 
 const isOpen = ref(false);
-const workingSelectedValue = ref(tt.filter);
 
 const grouped = computed(() =>
     tt.project ? buildNestedGroups(tt.project.filters.map(filter => tt.getFilterWithLabel(filter.filter))) : null
@@ -73,29 +71,32 @@ function buildNestedGroups(filters: FilterWithLabel[]): GroupedFilters {
 
 const handleSelect = (filter: FilterWithLabel) => {
     push({ query: { ...route.query, filter: filter.filter } });
+    dismiss()
+}
+
+const dismiss = () => {
     isOpen.value = false
 }
 
 </script>
 
 <template>
-    <IonInput label="filter" labelPlacement="floating" ed @ionFocus="isOpen = true" :value="tt.filter?.label" readonly ></IonInput>
-    <IonModal :is-open="isOpen">
+    <IonInput label="filter" labelPlacement="floating" ed @ionFocus="isOpen = true" :value="tt.filter?.label" readonly>
+    </IonInput>
+    <IonModal :is-open="isOpen" @willDismiss="dismiss">
         <IonHeader>
             <IonToolbar>
                 <IonTitle>{{ $t('filter') }}</IonTitle>
                 <IonButtons slot="end">
-                    <IonButton @click="isOpen = false">{{ $t('cancel') }}</IonButton>
+                    <IonButton @click="dismiss">{{ $t('cancel') }}</IonButton>
                 </IonButtons>
             </IonToolbar>
         </IonHeader>
         <IonContent>
             <IonList>
-                <IonRadioGroup v-model="workingSelectedValue">
-                    <IonAccordionGroup multiple>
-                        <NestedFilterGroup v-if="grouped" :group="grouped" @select="handleSelect" />
-                    </IonAccordionGroup>
-                </IonRadioGroup>
+                <IonAccordionGroup multiple :value="tt.filter?.label.split(' / ')">
+                    <NestedFilterGroup v-if="grouped" :group="grouped" @select="handleSelect" />
+                </IonAccordionGroup>
             </IonList>
         </IonContent>
     </IonModal>

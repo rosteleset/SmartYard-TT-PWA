@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useTtStore } from '@/stores/ttStore';
 import { IonAccordion, IonItem, IonLabel } from '@ionic/vue';
 
 const { group, depth = 0 } = defineProps<{ group: GroupedFilters, depth?: number }>()
@@ -6,6 +7,12 @@ const { group, depth = 0 } = defineProps<{ group: GroupedFilters, depth?: number
 const emits = defineEmits<{
     select: [filter: FilterWithLabel]
 }>()
+
+const tt = useTtStore()
+
+const filterFilters = (filters: FilterWithLabel[]) => {
+    return filters.sort((a, b) => a.label.localeCompare(b.label))
+}
 
 const handleSelect = (filter: FilterWithLabel) => {
     emits('select', filter);
@@ -25,7 +32,8 @@ const handleSelect = (filter: FilterWithLabel) => {
         </IonAccordion>
     </template>
     <template v-if="group.filters?.length > 0">
-        <IonItem v-for="filter in group.filters.sort((a,b)=>a.label.localeCompare(b.label))" :key="filter.label" :value="filter" @click="emits('select', filter)" button>
+        <IonItem v-for="filter in filterFilters(group.filters)" :key="filter.label" :value="filter"
+            :color="tt.filter?.filter === filter.filter ? 'primary' : ''" @click="emits('select', filter)" button>
             <IonLabel :class="`neasted-${depth}`">{{ filter.label }}</IonLabel>
         </IonItem>
     </template>

@@ -24,7 +24,7 @@ const routes = [
     children: [
       {
         path: '',
-        redirect:'/tt'
+        redirect: '/tt'
       },
       {
         path: 'tt',
@@ -81,40 +81,46 @@ router.beforeEach(async (to, from, next) => {
 // tt hook
 router.beforeEach(async (to, from, next) => {
   const ttStore = useTtStore();
-  useUsersStore()
-  if (!ttStore.meta) {
-    await ttStore.load();
-  }
+  const usersStore = useUsersStore()
+
   try {
-    if (to.path.startsWith('/tt/issues')) {
-      const lastProject = (await Preferences.get({ key: 'lastProject' })).value;
-      const lastFilter = (await Preferences.get({ key: 'lastFilter' })).value;
+    if (to.path.startsWith('/tt')) {
+      if (!ttStore.meta)
+        await ttStore.load();
+      if (usersStore.users.length === 0)
+        await usersStore.load()
+      if (to.name === 'issues') {
+        const lastProject = (await Preferences.get({ key: 'lastProject' })).value;
+        const lastFilter = (await Preferences.get({ key: 'lastFilter' })).value;
 
-      const project = to.query['project'] as string ?? lastProject;
-      const filter = to.query['filter'] as string ?? lastFilter;
+        const project = to.query['project'] as string ?? lastProject;
+        const filter = to.query['filter'] as string ?? lastFilter;
 
-      const queryUpdates: Record<string, string> = {};
+        const queryUpdates: Record<string, string> = {};
 
-      if (project) {
-        ttStore.project = ttStore.meta?.projects.find(p => p.acronym === project);
-        if (project !== lastProject) {
-          await Preferences.set({ key: 'lastProject', value: project });
+        if (project) {
+          ttStore.project = ttStore.meta?.projects.find(p => p.acronym === project);
+          if (project !== lastProject) {
+            await Preferences.set({ key: 'lastProject', value: project });
+          }
+          if (!to.query['project']) queryUpdates['project'] = project;
         }
-        if (!to.query['project']) queryUpdates['project'] = project;
-      }
 
-      if (filter) {
-        ttStore.filter = ttStore.getFilterWithLabel(filter);
-        if (filter !== lastFilter) {
-          await Preferences.set({ key: 'lastFilter', value: filter });
+        if (filter) {
+          ttStore.filter = ttStore.getFilterWithLabel(filter);
+          if (filter !== lastFilter) {
+            await Preferences.set({ key: 'lastFilter', value: filter });
+          }
+          if (!to.query['filter']) queryUpdates['filter'] = filter;
         }
-        if (!to.query['filter']) queryUpdates['filter'] = filter;
-      }
 
-      if (Object.keys(queryUpdates).length > 0) {
-        next({ ...to, query: { ...to.query, ...queryUpdates } });
-      }
-      else {
+        if (Object.keys(queryUpdates).length > 0) {
+          next({ ...to, query: { ...to.query, ...queryUpdates } });
+        }
+        else {
+          next();
+        }
+      } else {
         next();
       }
     } else {

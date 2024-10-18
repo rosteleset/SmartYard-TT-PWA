@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import useMap from "@/hooks/useMap";
 import useViewers from "@/hooks/useViewers";
 import { useTtStore } from "@/stores/ttStore";
 import { useUsersStore } from "@/stores/usersStore";
+import escapeHTML from "@/utils/escapeHTML";
 import { IonItem, IonLabel, IonText } from "@ionic/vue";
 import dayjs from "dayjs";
 import { computed, onMounted, ref, shallowRef, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
 
 const { issue, field: _field, target, cf, _value } = defineProps<{
@@ -15,8 +18,11 @@ const { issue, field: _field, target, cf, _value } = defineProps<{
     _value?: any
 }>()
 
+const { t } = useI18n()
 const tt = useTtStore()
 const users = useUsersStore()
+const map = useMap()
+
 const text = ref<string | undefined>()
 const component = shallowRef<any>()
 const field = computed(() => _field[0] === '*' ? _field.slice(1) : _field)
@@ -24,8 +30,13 @@ const viewers = useViewers()
 
 
 const setText = () => {
-    const value = _value || issue[field.value]
+    let value = _value || issue[field.value]
     const viewer = tt.meta?.viewers.find(v => v.field === field.value)
+
+
+
+    if (!value)
+        return
 
     if (viewer) {
         try {
@@ -41,25 +52,139 @@ const setText = () => {
             console.warn(viewer.filename, e)
         }
     } else if (cf) {
+        const multiple = cf && cf.format && cf.format.indexOf("multiple") >= 0;
 
-        if (value)
-            switch (cf.editor) {
-                // case "text":
+        switch (cf.type) {
+            case "geo":
+                {
+                    const lon = Number(value.split("[")[1].split(",")[0]);
+                    const lat = Number(value.split("[")[1].split(",")[1].split("]")[0]);
+                    component.value = {
+                        data() {
+                            return {
+                                escapeHTML,
+                                value: value
+                            };
+                        },
+                        methods: {
+                            openMap() {
+                                map.showModal([{ lat, lon }])
+                            }
+                        },
+                        template: `<ion-button @click="openMap">{{escapeHTML(value)}}</ion-button>`
+                    }
+                }
+                break;
 
-                //     break;
-                case "date":
-                    text.value = dayjs.unix(value).format('DD.MM.YYYY')
-                    break;
-                case "datetime-local":
-                    text.value = dayjs.unix(value).format('DD.MM.YYYY HH:mm')
-                    break;
-                case "noyes":
-                    text.value = Number(value) ? 'yes' : 'no'
-                    break;
-                default:
+            case "issues":
+                if (typeof value == "string") {
+                    value = [value];
+                }
+
+                component.value = {
+                    data() {
+                        return {
+                            escapeHTML,
+                            value: value
+                        };
+                    },
+                    computed: {
+                        items() {
+                            return value.map((i: string) => ({
+                                issueId: (i.split("[")[1].split("]")[0]).trim(),
+                                subject: (i.substring(i.indexOf("]") + 1)).trim()
+                            }))
+                        }
+                    },
+                    template: `<ion-item v-for="item in items"><router-link  :to="{name:'issue',params:{id:item.issueId}}">{{item.issueId}}: {{item.subject}}</router-link></ion-item>`
+                }
+                break;
+
+            case "array":
+                {
+                    if (typeof value == "string") {
+                        value = [value];
+                    }
+
+                    const vt = [];
+
+                    for (const i in value) {
+                        vt.push(value[i]);
+                    }
+
+                    vt.sort((a, b) => {
+                        if (a > b) {
+                            return 1;
+                        }
+                        if (a < b) {
+                            return -1;
+                        }
+                        return 0;
+                    });
+
+                    let t = "";
+
+                    t = "<ion-list>";
+
+                    for (const i in vt) {
+                        t += `<ion-item>${escapeHTML(vt[i])}</ion-item>`;
+                    }
+
+                    t += "</ion-list>";
+
+                    text.value = t;
+                }
+                break;
+
+            case "text":
+                // if (cf.format) {
+                //     value = sprintf(cf.format, value);
+                // }
+
+                switch (cf.editor) {
+                    case "yesno":
+                    case "noyes":
+                        text.value = parseInt(value) ? t("yes") : t("no");
+                        break;
+
+                    case "json":
+                        text.value = "<pre style='padding: 0px!important; margin: 0px!important;'>" + escapeHTML(JSON.stringify(value, null, 2)) + "</pre>";
+                        break;
+                    case "datetime-local":
+                        text.value = dayjs.unix(value).format('DD.MM.YYYY HH:mm')
+                        break;
+
+                    case "date":
+                        text.value = dayjs.unix(value).format('DD.MM.YYYY')
+                        break;
+                }
+
+                if (cf.link) {
+                    text.value = "<a href='" + cf.link.replaceAll('%value%', value) + "' target='_blank' class='hover'>" + value + "</a>";
+                }
+
+                break;
+
+            case "select":
+                if (multiple) {
+                    text.value = cf.options.map((option) => (`<ion-item><ion-icon name="${value.includes(option.option) ? 'checkbox-outline' : 'square-outline'} "></ion-icon>${option.optionDisplay}</ion-item>`)).join('')
+                } else {
                     text.value = value
-                    break;
-            }
+                }
+                break;
+
+            case "users":
+                if (typeof value === 'string')
+                    text.value = value
+                else if (Array.isArray(value))
+                    text.value = value.map(v => users.users.find(u => u.login === v)?.realName || v).join(', ')
+                else if (value)
+                    text.value = Object.values(value).map(v => users.users.find(u => u.login === v)?.realName || v).join(', ')
+                break;
+
+            default:
+                break;
+        }
 
     } else
         switch (field.value) {

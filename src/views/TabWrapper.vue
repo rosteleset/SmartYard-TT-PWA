@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { IonIcon, IonLabel, IonPage, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs } from '@ionic/vue';
 import { cog, list } from "ionicons/icons";
-
 const tabs = [
     {
         name: "tt",
@@ -18,7 +17,7 @@ const tabs = [
     <IonPage>
         <IonTabs>
             <IonRouterOutlet />
-            <IonTabBar slot="bottom">
+            <IonTabBar slot="bottom" translucent>
                 <IonTabButton v-for="tab in tabs" :key="tab.name" :tab="tab.name" :href="`/${tab.name}`">
                     <IonIcon :icon="tab.icon" />
                     <IonLabel>{{ $t(`${tab.name}-page`) }}</IonLabel>

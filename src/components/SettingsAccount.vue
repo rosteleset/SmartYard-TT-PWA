@@ -27,7 +27,7 @@ onMounted(() => {
 <template>
   <IonCard class="ion-padding grid">
     <IonCardTitle>{{ $t('settings.account') }}</IonCardTitle>
-    <IonInput :label="$t('settings.username')" label-placement="floating" disabled :value="user?.login" />
+    <IonInput :label="$t('settings.username')" label-placement="floating" :value="user?.login" readonly />
     <IonInput :label="$t('settings.realName')" label-placement="floating" :value="user?.realName" />
 
     <IonButton size="default" expand="block" @click="authStore.logout">{{ $t('settings.logout') }}</IonButton>

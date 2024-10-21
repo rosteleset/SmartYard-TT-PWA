@@ -16,7 +16,7 @@ const appVersion = __APP_VERSION__;
   <IonCard class="ion-padding grid">
     <IonCardTitle>{{ $t('settings.app') }}</IonCardTitle>
 
-    <IonInput label="version" label-placement="floating" :value="appVersion" disabled/>
+    <IonInput label="version" label-placement="floating" :value="appVersion"  readonly/>
 
     <IonSelect
         :label="$t('settings.locale')"

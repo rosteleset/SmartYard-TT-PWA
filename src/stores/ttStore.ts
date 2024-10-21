@@ -8,6 +8,8 @@ export const useTtStore = defineStore('tt', () => {
     const meta = ref<Meta>()
     const project = ref<Project>()
     const filter = ref<FilterWithLabel>()
+    const projection = ref<Record<string, number>>({})
+    const sortBy = ref<{ target: string, direction: number }>()
     const issue = ref<IssueData>()
 
     // actions
@@ -51,6 +53,9 @@ export const useTtStore = defineStore('tt', () => {
                 filter: _filter,
                 skip: skip.toString(),
                 limit: limit.toString(),
+            }
+            if (sortBy.value) {
+                params[`sort[${sortBy.value.target}]`]= sortBy.value.direction.toString()
             }
             if (search) {
                 params.filter = '#search'
@@ -122,6 +127,8 @@ export const useTtStore = defineStore('tt', () => {
         meta,
         project,
         filter,
+        projection,
+        sortBy,
         issue,
         load,
         getProjectByAcronym,

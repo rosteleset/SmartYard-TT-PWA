@@ -35,6 +35,7 @@ const load = async (event?: InfiniteScrollCustomEvent) => {
             search: search.value
         });
         issues.value = Number(res.skip) === 0 ? res.issues : [...issues.value, ...res.issues]
+        tt.projection = res.projection
         projection.value = res.projection
         count.value = res.count
         limit.value = Number(res.limit)
@@ -79,7 +80,7 @@ const handleCreate = () => {
     openModal(IssueCreate)
 }
 
-watch([() => tt.project, () => tt.filter], () => handleRefresh())
+watch([() => tt.project, () => tt.filter, () => tt.sortBy], () => handleRefresh())
 
 onMounted(load)
 

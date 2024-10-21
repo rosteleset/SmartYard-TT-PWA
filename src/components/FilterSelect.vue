@@ -13,11 +13,8 @@ import {
     IonToolbar
 } from "@ionic/vue";
 import { computed, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
 import NestedFilterGroup from "./NestedFilterGroup.vue";
 
-const route = useRoute();
-const { push } = useRouter()
 const tt = useTtStore()
 
 const isOpen = ref(false);
@@ -70,7 +67,7 @@ function buildNestedGroups(filters: FilterWithLabel[]): GroupedFilters {
 }
 
 const handleSelect = (filter: FilterWithLabel) => {
-    push({ query: { ...route.query, filter: filter.filter } });
+    tt.filter = filter
     dismiss()
 }
 
@@ -89,7 +86,7 @@ const dismiss = () => {
             <IonToolbar>
                 <IonTitle>{{ $t('filter') }}</IonTitle>
                 <IonButtons slot="end">
-                    <IonButton @click="dismiss">{{ $t('cancel') }}</IonButton>
+                    <IonButton @click="dismiss">{{ $t('close') }}</IonButton>
                 </IonButtons>
             </IonToolbar>
         </IonHeader>

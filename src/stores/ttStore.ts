@@ -1,8 +1,13 @@
 import api from "@/utils/api";
+import { Preferences } from "@capacitor/preferences";
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 export const useTtStore = defineStore('tt', () => {
+
+    const route = useRoute();
+    const { push } = useRouter()
 
     // state
     const meta = ref<Meta>()
@@ -17,6 +22,29 @@ export const useTtStore = defineStore('tt', () => {
         return api.GET('tt/tt')
             .then(res => {
                 meta.value = res.meta
+                if (route.query.project && typeof route.query.project === 'string')
+                    project.value = getProjectByAcronym(route.query.project)
+                else
+                    Preferences.get({ key: 'lastProject' }).
+                        then(({ value }) => {
+                            if (value)
+                                project.value = getProjectByAcronym(value)
+                        })
+
+                if (route.query.filter && typeof route.query.filter === 'string')
+                    filter.value = getFilterWithLabel(route.query.filter)
+                else
+                    Preferences.get({ key: 'lastFilter' }).
+                        then(({ value }) => {
+                            if (value)
+                                filter.value = getFilterWithLabel(value)
+                        })
+
+                Preferences.get({ key: 'lastSort' }).
+                    then(({ value }) => {
+                        if (value)
+                            sortBy.value = JSON.parse(value)
+                    })
             });
     }
 
@@ -55,7 +83,7 @@ export const useTtStore = defineStore('tt', () => {
                 limit: limit.toString(),
             }
             if (sortBy.value) {
-                params[`sort[${sortBy.value.target}]`]= sortBy.value.direction.toString()
+                params[`sort[${sortBy.value.target}]`] = sortBy.value.direction.toString()
             }
             if (search) {
                 params.filter = '#search'
@@ -122,6 +150,28 @@ export const useTtStore = defineStore('tt', () => {
         //     buttons: [t('ok')],
         // })
     }
+
+    watch([project, filter, sortBy], ([nextProject, nextFilter, nextSortBy], [prevProject, prevFilter, prevSortBy]) => {
+        const newQuery = { ...route.query };
+
+        if (nextProject && nextProject?.acronym !== prevProject?.acronym) {
+            newQuery.project = nextProject?.acronym;
+            Preferences.set({ key: 'lastProject', value: nextProject.acronym });
+        }
+
+        if (nextFilter && nextFilter?.filter !== prevFilter?.filter) {
+            newQuery.filter = nextFilter?.filter;
+            Preferences.set({ key: 'lastFilter', value: nextFilter.filter });
+        }
+
+        const json = JSON.stringify(nextSortBy);
+        if (json !== JSON.stringify(prevSortBy)) {
+            Preferences.set({ key: 'lastSort', value: json });
+        }
+
+        push({ query: newQuery });
+    });
+
 
     return {
         meta,

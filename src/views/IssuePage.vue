@@ -4,14 +4,18 @@ import IssueComments from '@/components/IssueComments.vue';
 import IssueInfo from '@/components/IssueInfo.vue';
 import PageHeader from '@/components/PageHeader.vue';
 import { useActions } from '@/hooks/useActions';
+import useAlert from '@/hooks/useAlert';
 import { useTtStore } from '@/stores/ttStore';
 import { ActionSheetButton, IonActionSheet, IonContent, IonLabel, IonPage, IonProgressBar, IonRefresher, IonRefresherContent, IonSegment, IonSegmentButton, IonToolbar, RefresherCustomEvent } from '@ionic/vue';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
 const tt = useTtStore()
 const route = useRoute()
 const actions = useActions()
+const alert = useAlert()
+const { t } = useI18n()
 
 const issue = computed(() => tt.issue)
 const segment = ref('info')
@@ -28,7 +32,13 @@ const loadIssue = async () => {
         return
     loading.value = true
     await tt.getIssue(id.value, true)
-    loading.value = false
+        .catch(e => alert.presentAlert({
+            header: t('something-went-wrong'),
+            message: t(`errors.${e.message}`)
+        }))
+        .finally(() => {
+            loading.value = false
+        })
 }
 
 const handleRefresh = (event?: RefresherCustomEvent) => {
@@ -37,7 +47,7 @@ const handleRefresh = (event?: RefresherCustomEvent) => {
 }
 
 onMounted(loadIssue)
-
+onUnmounted(() => tt.issue = undefined)
 watch(route, loadIssue)
 
 </script>

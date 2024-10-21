@@ -81,7 +81,8 @@ const dismiss = () => {
 </script>
 
 <template>
-    <IonInput label="filter" labelPlacement="floating" ed @ionFocus="isOpen = true" :value="tt.filter?.label" readonly>
+    <IonInput :label="$t('filter')" labelPlacement="floating" ed @ionFocus="isOpen = true" :value="tt.filter?.label"
+        readonly>
     </IonInput>
     <IonModal :is-open="isOpen" @willDismiss="dismiss">
         <IonHeader>

@@ -40,8 +40,10 @@ const load = async (event?: InfiniteScrollCustomEvent) => {
         limit.value = Number(res.limit)
         skip.value = Number(res.skip) + limit.value
         event?.target.complete()
+        return true
     } catch (e) {
         console.warn(e);
+        return false;
     } finally {
         loading.value = false
     }
@@ -52,10 +54,13 @@ const handleOpen = async (issue: Issue) => {
 }
 
 const handleRefresh = (event?: RefresherCustomEvent) => {
-    menuController.close('issuesMenu')
     skip.value = 0
     load()
-        .then(() => event?.target.complete())
+        .then((r) => {
+            if (r)
+                menuController.close('issuesMenu')
+        })
+        .finally(() => event?.target.complete())
 }
 
 const handleSearch = () => {

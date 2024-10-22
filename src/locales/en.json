@@ -81,5 +81,8 @@
   "base": "Base",
   "confirmAssignToMe": "Assign issue to yourself?",
   "confirmWatch": "Add yourself to watchers?",
-  "confirmUnWatch": "Stop watching the issue?"
+  "confirmUnWatch": "Stop watching the issue?",
+  "sortBy": "Order by",
+  "issueId": "Issue",
+  "error": "Error"
 }

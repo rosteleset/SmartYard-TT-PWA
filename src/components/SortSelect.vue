@@ -22,7 +22,7 @@ const projections = computed(() => {
         .reduce((acc, p) => {
             const cf = p.substring(0, 4) === "_cf_" && tt.meta?.customFields.find(cf => cf.field === p.substring(4))
             const label = cf ? cf.fieldDisplay : t(p)
-            acc[label] = p;
+            acc[p] = label;
             return acc;
         }, {} as Record<string, string>);
 })
@@ -34,12 +34,13 @@ const handler = (projection: string) => {
 
 const dismiss = () => {
     isOpen.value = false
+    
 }
 </script>
 
 <template>
     <IonInput :label="$t('sortBy')" labelPlacement="floating" @ionFocus="isOpen = true"
-        :value="tt.sortBy?.target && projections[tt.sortBy?.target]" readonly />
+        :value="tt.sortBy?.target ? projections[tt.sortBy?.target]:''" readonly />
 
     <IonModal :is-open="isOpen" @willDismiss="dismiss">
         <IonHeader>
@@ -52,7 +53,7 @@ const dismiss = () => {
         </IonHeader>
         <IonContent>
             <IonList>
-                <IonItem v-for="(key, label) in projections" button @click="handler(key)">
+                <IonItem v-for="(label, key) in projections" :key="key" button @click="handler(key)">
                     <IonLabel>{{ label }}</IonLabel>
                     <IonIcon v-if="tt.sortBy && tt.sortBy.target == key"
                         :icon="tt.sortBy.direction === -1 ? arrowUp : arrowDown" />

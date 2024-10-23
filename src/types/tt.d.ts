@@ -191,7 +191,7 @@ interface DetailIssue extends Issue {
     tags: string[];
     author: string;
     attachments: Attachment[];
-    comments: Record<number, Comment>
+    comments: Comment[]
     updated: number;
     catalog: string;
     project: string;

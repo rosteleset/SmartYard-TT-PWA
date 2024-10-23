@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import IssueAttachments from '@/components/IssueAttachments.vue';
+import IssueCdr from '@/components/IssueCdr.vue';
 import IssueComments from '@/components/IssueComments.vue';
 import IssueInfo from '@/components/IssueInfo.vue';
 import PageHeader from '@/components/PageHeader.vue';
 import { useActions } from '@/hooks/useActions';
 import useAlert from '@/hooks/useAlert';
+import useCdr from '@/hooks/useCdr';
 import { useTtStore } from '@/stores/ttStore';
 import { ActionSheetButton, IonActionSheet, IonContent, IonLabel, IonPage, IonProgressBar, IonRefresher, IonRefresherContent, IonSegment, IonSegmentButton, IonToolbar, RefresherCustomEvent } from '@ionic/vue';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
@@ -16,6 +18,7 @@ const route = useRoute()
 const actions = useActions()
 const alert = useAlert()
 const { t } = useI18n()
+const { hasCdr } = useCdr()
 
 const issue = computed(() => tt.issue)
 const segment = ref('info')
@@ -56,15 +59,21 @@ watch(route, loadIssue)
     <IonPage>
         <PageHeader :label="issue?.issue.issueId || id" defaultHref="/" @actions="isActionsOpen = true">
             <IonToolbar>
-                <IonSegment v-model="segment">
+                <IonSegment v-model="segment" :scrollable="true">
                     <IonSegmentButton value="info">
                         <IonLabel>{{ $t('info') }}</IonLabel>
                     </IonSegmentButton>
-                    <IonSegmentButton value="attachments">
+                    <IonSegmentButton v-if="issue?.issue.attachments && issue.issue.attachments.length > 0" value="attachments">
                         <IonLabel>{{ $t('attachments') }}</IonLabel>
                     </IonSegmentButton>
-                    <IonSegmentButton value="comments">
+                    <IonSegmentButton v-if="issue?.issue.comments && issue.issue.comments.length > 0" value="comments">
                         <IonLabel>{{ $t('comments') }}</IonLabel>
+                    </IonSegmentButton>
+                    <IonSegmentButton v-if="issue && hasCdr(issue?.issue)" value="cdr">
+                        <IonLabel>{{ $t('cdr') }}</IonLabel>
+                    </IonSegmentButton>
+                    <IonSegmentButton v-if="issue?.showJournal" value="journal">
+                        <IonLabel>{{ $t('journal') }}</IonLabel>
                     </IonSegmentButton>
                 </IonSegment>
                 <IonProgressBar v-if="loading" type="indeterminate"></IonProgressBar>
@@ -77,6 +86,7 @@ watch(route, loadIssue)
             <IssueInfo v-if="issue && segment === 'info'" :issue="issue" />
             <IssueAttachments v-if="issue && segment === 'attachments'" :issue="issue" />
             <IssueComments v-if="issue && segment === 'comments'" :issue="issue" />
+            <IssueCdr v-if="issue && segment === 'cdr'" :issue="issue" />
         </IonContent>
         <IonActionSheet class="custom-actions" :is-open="isActionsOpen" :header="$t('actions')" :buttons="buttons"
             @didDismiss="() => isActionsOpen = false" />

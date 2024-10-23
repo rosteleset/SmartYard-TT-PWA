@@ -83,7 +83,7 @@ export const useTtStore = defineStore('tt', () => {
                 limit: limit.toString(),
             }
             if (sortBy.value) {
-                params[`sort[${sortBy.value.target}]`] =  sortBy.value.direction.toString()
+                params[`sort[${sortBy.value.target}]`] = sortBy.value.direction.toString()
             }
             if (search) {
                 params.filter = '#search'
@@ -169,7 +169,8 @@ export const useTtStore = defineStore('tt', () => {
             Preferences.set({ key: 'lastSort', value: json });
         }
 
-        push({ query: newQuery });
+        if (route.name === 'issues')
+            push({ query: newQuery });
     });
 
 

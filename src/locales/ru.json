@@ -7,6 +7,20 @@
     "app": "Приложение",
     "locale": "язык"
   },
+  "journal": {
+    "main": "Журнал",
+    "old": "было",
+    "new": "стало",
+    "createIssue": "Создание задачи",
+    "modifyIssue": "Изменение задачи",
+    "addComment": "Добавление комментария",
+    "deleteComment": "Удаление комментария",
+    "modifyComment": "Изменение  комментария",
+    "addAttachment": "Добавление файла",
+    "deleteAttachment": "Удаление файла",
+    "addArrayValue": "Добавление элемента",
+    "deleteArrayValue": "Удаление элемента"
+  },
   "errors": {
     "serverUnavailable": "Сервер недоступен",
     "noCredentials": "Нет учетных данных",
@@ -84,5 +98,10 @@
   "confirmWatch": "Добавить себя в наблюдатели?",
   "sortBy": "Сортировать по",
   "issueId": "Задача",
-  "error": "Ошибка"
+  "error": "Ошибка",
+  "commentAuthor": "Автор комментария",
+  "commentBody": "Комментарий",
+  "commentCreated": "Создан",
+  "workflowAction": "Действие рабочего процесса",
+  "cdr": "Звонки"
 }

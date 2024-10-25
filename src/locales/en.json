@@ -7,6 +7,20 @@
     "app": "App",
     "locale": "Locale"
   },
+  "journal": {
+    "main": "Journal",
+    "old": "was",
+    "new": "now",
+    "createIssue": "Create issue",
+    "modifyIssue": "Modify issue",
+    "addComment": "Add comment",
+    "deleteComment": "Delete comment",
+    "modifyComment": "Modify comment",
+    "addAttachment": "Add attachment",
+    "deleteAttachment": "Delete attachment",
+    "addArrayValue": "Add array value",
+    "deleteArrayValue": "Delete array value"
+  },
   "errors": {
     "noCredentials": "No accounting data",
     "accessDenied": "Access denied",
@@ -84,5 +98,10 @@
   "confirmUnWatch": "Stop watching the issue?",
   "sortBy": "Order by",
   "issueId": "Issue",
-  "error": "Error"
+  "error": "Error",
+  "commentAuthor": "Comment Author",
+  "commentBody": "Comment",
+  "commentCreated": "Created",
+  "workflowAction": "Workflow action",
+  "cdr": "Calls"
 }

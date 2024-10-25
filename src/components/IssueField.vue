@@ -28,6 +28,9 @@ const component = shallowRef<any>()
 const field = computed(() => _field[0] === '*' ? _field.slice(1) : _field)
 const viewers = useViewers()
 
+const getUserOrGroupName = (value: string) => {
+    return users.users.find(u => u.login === value)?.realName || users.groups.find(g => g.acronym === value)?.name || value
+}
 
 const setText = () => {
     try {
@@ -155,9 +158,9 @@ const setText = () => {
                     if (typeof value === 'string')
                         text.value = value
                     else if (Array.isArray(value))
-                        text.value = value.map(v => users.users.find(u => u.login === v)?.realName || v).join(', ')
+                        text.value = value.map(getUserOrGroupName).join(', ')
                     else if (value)
-                        text.value = Object.values(value).map(v => users.users.find(u => u.login === v)?.realName || v).join(', ')
+                        text.value = Object.values(value).map(v => getUserOrGroupName(v as string)).join(', ')
                     break;
 
                 default:
@@ -166,7 +169,7 @@ const setText = () => {
 
         } else
             switch (field.value) {
-                case "workflow":                    
+                case "workflow":
                     text.value = tt.meta?.workflows[value]?.name
                     break;
                 case "created":
@@ -178,9 +181,9 @@ const setText = () => {
                     if (typeof value === 'string')
                         text.value = value
                     else if (Array.isArray(value))
-                        text.value = value.map(v => users.users.find(u => u.login === v)?.realName || v).join(', ')
+                        text.value = value.map(getUserOrGroupName).join(', ')
                     else if (value)
-                        text.value = Object.values(value).map(v => users.users.find(u => u.login === v)?.realName || v).join(', ')
+                        text.value = Object.values(value).map(v => getUserOrGroupName(v as string)).join(', ')
                     break;
                 default:
                     text.value = Array.isArray(value) ? value.join(', ') : value

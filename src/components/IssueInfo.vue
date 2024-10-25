@@ -24,6 +24,11 @@ const groupedCustomFields = computed(() => {
     }, {});
 });
 
+const getCustomField = (field: string) => {
+    if (field.match('_cf_'))
+        return tt.meta?.customFields.find(cf => cf.field === field.slice(5))
+}
+
 </script>
 
 <template>
@@ -32,8 +37,7 @@ const groupedCustomFields = computed(() => {
             <IonLabel>{{ $t('info') }}</IonLabel>
         </IonItemDivider>
         <IssueField v-for="field in Object.values(issue.fields).filter(f => f[0] === '*')" :issue="issue.issue"
-            :field="field" :key="field"
-            :cf="field.match('_cf_') ? tt.meta?.customFields.find(cf => cf.field === field.slice(5)) : undefined" target="pwa" />
+            :field="field" :key="field" :cf="getCustomField(field)" target="pwa" />
     </IonItemGroup>
 
     <IonItemGroup>

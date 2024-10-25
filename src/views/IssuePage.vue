@@ -3,6 +3,7 @@ import IssueAttachments from '@/components/IssueAttachments.vue';
 import IssueCdr from '@/components/IssueCdr.vue';
 import IssueComments from '@/components/IssueComments.vue';
 import IssueInfo from '@/components/IssueInfo.vue';
+import IssueJournal from '@/components/IssueJournal.vue';
 import PageHeader from '@/components/PageHeader.vue';
 import { useActions } from '@/hooks/useActions';
 import useAlert from '@/hooks/useAlert';
@@ -63,7 +64,8 @@ watch(route, loadIssue)
                     <IonSegmentButton value="info">
                         <IonLabel>{{ $t('info') }}</IonLabel>
                     </IonSegmentButton>
-                    <IonSegmentButton v-if="issue?.issue.attachments && issue.issue.attachments.length > 0" value="attachments">
+                    <IonSegmentButton v-if="issue?.issue.attachments && issue.issue.attachments.length > 0"
+                        value="attachments">
                         <IonLabel>{{ $t('attachments') }}</IonLabel>
                     </IonSegmentButton>
                     <IonSegmentButton v-if="issue?.issue.comments && issue.issue.comments.length > 0" value="comments">
@@ -73,7 +75,7 @@ watch(route, loadIssue)
                         <IonLabel>{{ $t('cdr') }}</IonLabel>
                     </IonSegmentButton>
                     <IonSegmentButton v-if="issue?.showJournal" value="journal">
-                        <IonLabel>{{ $t('journal') }}</IonLabel>
+                        <IonLabel>{{ $t('journal.main') }}</IonLabel>
                     </IonSegmentButton>
                 </IonSegment>
                 <IonProgressBar v-if="loading" type="indeterminate"></IonProgressBar>
@@ -87,6 +89,7 @@ watch(route, loadIssue)
             <IssueAttachments v-if="issue && segment === 'attachments'" :issue="issue" />
             <IssueComments v-if="issue && segment === 'comments'" :issue="issue" />
             <IssueCdr v-if="issue && segment === 'cdr'" :issue="issue" />
+            <IssueJournal v-if="issue && segment === 'journal'" :issue="issue" />
         </IonContent>
         <IonActionSheet class="custom-actions" :is-open="isActionsOpen" :header="$t('actions')" :buttons="buttons"
             @didDismiss="() => isActionsOpen = false" />

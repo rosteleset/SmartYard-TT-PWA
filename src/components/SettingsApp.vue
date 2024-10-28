@@ -3,6 +3,7 @@
 import useSettingsStore from "@/stores/settingsStore";
 import { IonCard, IonCardTitle, IonInput, IonSelect, IonSelectOption } from "@ionic/vue";
 import { useI18n } from "vue-i18n";
+import Pwa from "./Pwa.vue";
 
 declare const __APP_VERSION__: string;
 
@@ -28,6 +29,7 @@ const appVersion = __APP_VERSION__;
       <IonSelectOption v-for="locale in i18n.availableLocales" :key="locale">{{ locale }}</IonSelectOption>
     </IonSelect>
 
+    <Pwa/>
   </IonCard>
 </template>
 

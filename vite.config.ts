@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
         srcDir: 'src',
         filename: 'serviceWorker.ts',
         // injectManifest:{
-        //     swSrc: './src/sw.ts',
+        //     swSrc: './src/serviceWorker.ts',
         // },
         scope: BASE_PATH,
         manifest: {

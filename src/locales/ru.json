@@ -103,5 +103,6 @@
   "commentBody": "Комментарий",
   "commentCreated": "Создан",
   "workflowAction": "Действие рабочего процесса",
-  "cdr": "Звонки"
+  "cdr": "Звонки",
+  "install": "Установить"
 }

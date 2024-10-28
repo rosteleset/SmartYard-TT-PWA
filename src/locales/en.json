@@ -103,5 +103,6 @@
   "commentBody": "Comment",
   "commentCreated": "Created",
   "workflowAction": "Workflow action",
-  "cdr": "Calls"
+  "cdr": "Calls",
+  "install": "Install"
 }

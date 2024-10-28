@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useTtStore } from '@/stores/ttStore';
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/vue';
+import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonList } from '@ionic/vue';
 import dayjs from "dayjs";
 import { computed } from 'vue';
 import IssueField from './IssueField.vue';
@@ -29,10 +29,8 @@ const fields = computed(() => Object.keys(projection).map(key => {
             </IonCardSubtitle>
         </IonCardHeader>
         <IonCardContent>
-            <!-- <IonList> -->
             <IssueField v-for="field in fields" :key="field.field" :issue="issue" :field="field?.field" :cf="field.cf"
                 target="pwa-list" />
-            <!-- </IonList> -->
         </IonCardContent>
     </IonCard>
 </template>

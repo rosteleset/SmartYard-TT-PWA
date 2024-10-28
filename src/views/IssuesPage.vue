@@ -115,9 +115,6 @@ onMounted(load)
                 <IonList v-if="issues">
                     <IssueListItem v-for="issue of issues" :key="issue.id" :issue="issue" :projection="projection"
                         @click="handleOpen(issue)" />
-                    <!-- <IonItem v-for="issue of issues" :key="issue.id" @click="handleOpen(issue)" button detail>
-                        <IonLabel>{{ issue.issueId }} - {{ issue.subject }}</IonLabel>
-                    </IonItem> -->
                 </IonList>
                 <IonInfiniteScroll v-if="skip < count" @ionInfinite="load">
                     <IonInfiniteScrollContent />

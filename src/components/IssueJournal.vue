@@ -64,7 +64,7 @@ onMounted(() => {
                     <IonLabel>{{ $t('journal.old') }}</IonLabel>
                 </IonItemDivider>
                 <IssueField v-for="(value, key) in item.old" :issue="issue.issue" :field="key" :cf="getCustomField(key)"
-                    target="pwaJournal" :_value="value" />
+                    target="pwa-journal" :_value="value" />
             </template>
             <template v-if="item.new">
                 <IonItemDivider>

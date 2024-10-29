@@ -58,7 +58,7 @@ onMounted(() => {
             </IonCardTitle>
             <IonCardSubtitle>{{ dayjs.unix(item.date).format('DD.MM.YYYY HH:mm') }}</IonCardSubtitle>
         </IonCardHeader>
-        <IonCardContent>
+        <IonCardContent class="content">
             <template v-if="item.old">
                 <IonItemDivider>
                     <IonLabel>{{ $t('journal.old') }}</IonLabel>
@@ -71,9 +71,15 @@ onMounted(() => {
                     <IonLabel>{{ $t('journal.new') }}</IonLabel>
                 </IonItemDivider>
                 <IssueField v-for="(value, key) in item.new" :issue="issue.issue" :field="key" :cf="getCustomField(key)"
-                    target="pwaJournal" :_value="value" />
+                    target="pwa-journal" :_value="value" />
             </template>
         </IonCardContent>
     </IonCard>
 
 </template>
+
+<style scoped>
+.content {
+    padding: 0;
+}
+</style>

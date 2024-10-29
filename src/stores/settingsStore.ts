@@ -32,15 +32,6 @@ const useSettingsStore = defineStore('config', () => {
         }
     }
 
-    // Настройка событий при монтировании и размонтировании компонента
-    onMounted(() => {
-        window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    });
-
-    onBeforeUnmount(() => {
-        window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    });
-
     // Обработчик события beforeinstallprompt
     function handleBeforeInstallPrompt(event: Event) {
         event.preventDefault();

@@ -1,14 +1,15 @@
 <script setup lang="ts">
 
 import useSettingsStore from "@/stores/settingsStore";
-import { IonCard, IonCardTitle, IonInput, IonSelect, IonSelectOption } from "@ionic/vue";
+import { IonCard, IonCardTitle, IonInput, IonSelect, IonSelectOption, isPlatform } from "@ionic/vue";
 import { useI18n } from "vue-i18n";
-import Pwa from "./Pwa.vue";
+import PwaInstall from "./PwaInstall.vue";
 
 declare const __APP_VERSION__: string;
 
 const i18n = useI18n()
 const settings = useSettingsStore()
+const isIos = isPlatform('ios')
 
 const appVersion = __APP_VERSION__;
 </script>
@@ -17,22 +18,15 @@ const appVersion = __APP_VERSION__;
   <IonCard class="ion-padding grid">
     <IonCardTitle>{{ $t('settings.app') }}</IonCardTitle>
 
-    <IonInput label="version" label-placement="floating" :value="appVersion"  readonly/>
+    <IonInput label="version" label-placement="floating" :value="appVersion" readonly />
 
-    <IonSelect
-        :label="$t('settings.locale')"
-        label-placement="floating"
-        interface="popover"
-        :value="settings.locale"
-        @ionChange="settings.changeLocale($event.target.value)"
-    >
+    <IonSelect :label="$t('settings.locale')" label-placement="floating" interface="popover" :value="settings.locale"
+      @ionChange="settings.changeLocale($event.target.value)">
       <IonSelectOption v-for="locale in i18n.availableLocales" :key="locale">{{ locale }}</IonSelectOption>
     </IonSelect>
 
-    <Pwa/>
+    <PwaInstall />
   </IonCard>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

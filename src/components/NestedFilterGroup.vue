@@ -34,17 +34,13 @@ const handleSelect = (filter: FilterWithLabel) => {
     <template v-if="group.filters?.length > 0">
         <IonItem v-for="filter in filterFilters(group.filters)" :key="filter.label" :value="filter"
             :color="tt.filter?.filter === filter.filter ? 'primary' : ''" @click="emits('select', filter)" button>
-            <IonLabel :class="`neasted-${depth}`">{{ filter.label }}</IonLabel>
+            <IonLabel :style="{ '--depth': depth }" class="neasted">{{ filter.label }}</IonLabel>
         </IonItem>
     </template>
 </template>
 
-<style lang="scss">
-@for $i from 0 through 5 {
-    .neasted {
-        &-#{$i} {
-            padding-left: #{$i * 5}px;
-        }
-    }
+<style scoped>
+.neasted {
+    padding-left: calc(var(--depth, 0) * 5px);
 }
 </style>

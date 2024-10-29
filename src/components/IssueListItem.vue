@@ -28,11 +28,15 @@ const fields = computed(() => Object.keys(projection).map(key => {
             <IonCardSubtitle v-if="projection.created">{{ dayjs.unix(issue.created).format('DD.MM.YYYY HH:mm') }}
             </IonCardSubtitle>
         </IonCardHeader>
-        <IonCardContent>
+        <IonCardContent class="content">
             <IssueField v-for="field in fields" :key="field.field" :issue="issue" :field="field?.field" :cf="field.cf"
                 target="pwa-list" />
         </IonCardContent>
     </IonCard>
 </template>
 
-<style></style>
+<style scoped>
+.content {
+    padding: 0;
+}
+</style>

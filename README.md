@@ -1,6 +1,6 @@
 # SmartYard-TT-PWA
 
-This project is a mobile and web application built using **Ionic**, **Vue 3**, **TypeScript**, and **Vite**. It also supports PWA functionality, with **Capacitor** used for integrating with native device features.
+This project is a mobile and web application—a client for a task tracker integrated into the [RBT](https://github.com/rosteleset/SmartYard-Server) project. It is built using **Ionic**, **Vue 3**, **TypeScript**, and **Vite**. PWA features are also supported, and **Capacitor** is used for integration with native device functionalities.
 
 ### Main Technologies
 

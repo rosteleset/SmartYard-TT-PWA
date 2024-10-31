@@ -174,6 +174,7 @@ const setText = () => {
                     break;
                 case "created":
                 case "updated":
+                case "commentCreated":
                     text.value = dayjs.unix(value).format('DD.MM.YYYY HH:mm')
                     break;
                 case "assigned":
@@ -184,6 +185,9 @@ const setText = () => {
                         text.value = value.map(getUserOrGroupName).join(', ')
                     else if (value)
                         text.value = Object.values(value).map(v => getUserOrGroupName(v as string)).join(', ')
+                    break;
+                case "commentPrivate":
+                text.value = value ? t("yes") : t("no");
                     break;
                 default:
                     text.value = Array.isArray(value) ? value.join(', ') : value

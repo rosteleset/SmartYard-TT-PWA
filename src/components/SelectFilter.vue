@@ -84,7 +84,7 @@ const dismiss = () => {
     <IonModal :is-open="isOpen" @willDismiss="dismiss">
         <IonHeader>
             <IonToolbar>
-                <IonTitle>{{ $t('filter') }}</IonTitle>
+                <IonTitle>{{ $t('filters') }}</IonTitle>
                 <IonButtons slot="end">
                     <IonButton @click="dismiss">{{ $t('close') }}</IonButton>
                 </IonButtons>

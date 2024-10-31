@@ -2,7 +2,7 @@ import { createI18n } from 'vue-i18n'
 import ru from './locales/ru.json'
 import en from './locales/en.json'
 
-const fallbackLocale = 'en'
+const fallbackLocale =  import.meta.env.VITE_DEFAULT_LOCALE || 'en'
 
 const messages = {
     en: en,

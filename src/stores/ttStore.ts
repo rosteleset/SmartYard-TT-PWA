@@ -151,15 +151,15 @@ export const useTtStore = defineStore('tt', () => {
         // })
     }
 
-    watch([project, filter, sortBy], ([nextProject, nextFilter, nextSortBy], [prevProject, prevFilter, prevSortBy]) => {
+    watch([project, filter, sortBy], ([nextProject, nextFilter, nextSortBy], [, , prevSortBy]) => {
         const newQuery = { ...route.query };
 
-        if (nextProject && nextProject?.acronym !== prevProject?.acronym) {
+        if (nextProject && nextProject?.acronym !== route.query.project) {
             newQuery.project = nextProject?.acronym;
             Preferences.set({ key: 'lastProject', value: nextProject.acronym });
         }
 
-        if (nextFilter && nextFilter?.filter !== prevFilter?.filter) {
+        if (nextFilter && nextFilter?.filter !== route.query.filter) {
             newQuery.filter = nextFilter?.filter;
             Preferences.set({ key: 'lastFilter', value: nextFilter.filter });
         }
@@ -167,8 +167,8 @@ export const useTtStore = defineStore('tt', () => {
         const json = JSON.stringify(nextSortBy);
         if (json !== JSON.stringify(prevSortBy)) {
             Preferences.set({ key: 'lastSort', value: json });
-        }
-
+        }        
+        
         if (route.name === 'issues')
             push({ query: newQuery });
     });

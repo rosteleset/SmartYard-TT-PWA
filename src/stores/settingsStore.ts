@@ -35,8 +35,6 @@ const useSettingsStore = defineStore('config', () => {
     // Обработчик события beforeinstallprompt
     function handleBeforeInstallPrompt(event: Event) {
         event.preventDefault();
-        console.log(event);
-
         installPromptEvent.value = event;
     }
 

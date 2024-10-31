@@ -279,9 +279,6 @@ const workflowsByProject = (project: Project) => {
             });
         }
     }
-    console.log(project);
-
-    console.log(workflows);
 
     return workflows;
 };

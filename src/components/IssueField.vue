@@ -200,7 +200,7 @@ watch(() => issue, setText)
 </script>
 
 <template>
-    <IonItem v-if="text || component" :lines="target === 'pwa' ? 'inset' : 'full'" :class="`info-item ${target}`">
+    <IonItem v-if="text || component" :lines="target === 'pwa' ? 'inset' : 'none'" :class="`info-item ${target}`">
         <IonLabel v-if="target === 'pwa'">
             <h2>
                 <IonText color="secondary">
@@ -226,6 +226,7 @@ watch(() => issue, setText)
 }
 
 .pwa-list {
+    --background: transparent;
     --min-height: unset
 }
 </style>

@@ -8,7 +8,7 @@ import { IonContent, IonPage } from "@ionic/vue";
 <template>
   <IonPage>
     <PageHeader :label="$t('settings-page')" />
-    <IonContent class="ion-padding">
+    <IonContent scrollEvents class="ion-padding">
       <SettingsAccount />
       <SettingsApp />
     </IonContent>

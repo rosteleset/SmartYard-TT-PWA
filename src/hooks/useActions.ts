@@ -144,7 +144,6 @@ export const useActions = () => {
                         action: name
                     })
                         .then(res => {
-                            console.log(ff(res.template));
 
                             const withoutAccept = res.template === "!"
                             if (withoutAccept)

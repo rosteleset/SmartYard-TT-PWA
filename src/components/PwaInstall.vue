@@ -14,10 +14,12 @@ const isRunningAsPWA = computed<boolean>(() => {
 </script>
 
 <template>
-    <IonButton v-if="!isRunningAsPWA && settings.installPromptEvent" @click="settings.installPWA" expand="block">
-        {{ $t('install') }}
-    </IonButton>
-    <p v-if="!isRunningAsPWA && isIos" class="ios-install-instructions">
-        Чтобы установить приложение на iOS, откройте меню «Поделиться» в Safari и выберите «Добавить на экран «Домой»».
-    </p>
+    <template v-if="!isRunningAsPWA">
+        <IonButton v-if="settings.installPromptEvent" @click="settings.installPWA" expand="block">
+            {{ $t('install') }}
+        </IonButton>
+        <p v-if="isIos" class="ios-install-instructions">
+            {{ $t('install-instructions') }}
+        </p>
+    </template>
 </template>

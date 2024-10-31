@@ -23,7 +23,7 @@ const fields = computed(() => Object.keys(projection).map(key => {
 
 <template>
     <IonCard button>
-        <IonCardHeader>
+        <IonCardHeader class="header">
             <IonCardTitle>{{ issue.issueId }}</IonCardTitle>
             <IonCardSubtitle v-if="projection.created">{{ dayjs.unix(issue.created).format('DD.MM.YYYY HH:mm') }}
             </IonCardSubtitle>
@@ -36,6 +36,10 @@ const fields = computed(() => Object.keys(projection).map(key => {
 </template>
 
 <style scoped>
+.header {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
 .content {
     padding: 0;
 }

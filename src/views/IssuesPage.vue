@@ -4,10 +4,12 @@ import IssueListItem from '@/components/IssueListItem.vue';
 import IssuesFilters from '@/components/IssuesFilters.vue';
 import useAlert from '@/hooks/useAlert';
 import useModal from '@/hooks/useModal';
+import useTabBarVisibility from '@/hooks/useTabBarVisibility';
+import useTabBarHeight from '@/hooks/useTabBarVisibility';
 import { useTtStore } from '@/stores/ttStore';
-import { InfiniteScrollCustomEvent, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonList, IonMenuButton, IonPage, IonProgressBar, IonRefresher, IonRefresherContent, IonSearchbar, IonTitle, IonToolbar, menuController, RefresherCustomEvent } from '@ionic/vue';
+import { InfiniteScrollCustomEvent, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonList, IonMenuButton, IonPage, IonProgressBar, IonRefresher, IonRefresherContent, IonSearchbar, IonTitle, IonToolbar, menuController, RefresherCustomEvent, ScrollCustomEvent } from '@ionic/vue';
 import { add } from 'ionicons/icons';
-import { onMounted, ref, watch } from 'vue';
+import { inject, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
@@ -24,6 +26,7 @@ const limit = ref<number>(20)
 const skip = ref<number>(0)
 const search = ref(currentRoute.value.query.search as string || '')
 const loading = ref(false)
+// const lastScrollTop = ref(0);
 
 const load = async (event?: InfiniteScrollCustomEvent) => {
     // if (!tt.project && (!tt.filter || !search.value))
@@ -108,7 +111,7 @@ onMounted(load)
                 </IonToolbar>
                 <IonProgressBar v-if="loading" type="indeterminate"></IonProgressBar>
             </IonHeader>
-            <IonContent>
+            <IonContent scrollEvents>
                 <IonRefresher slot="fixed" @ionRefresh="handleRefresh($event)">
                     <IonRefresherContent />
                 </IonRefresher>

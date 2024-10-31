@@ -81,7 +81,7 @@ watch(route, loadIssue)
                 <IonProgressBar v-if="loading" type="indeterminate"></IonProgressBar>
             </IonToolbar>
         </PageHeader>
-        <IonContent>
+        <IonContent scrollEvents>
             <IonRefresher slot="fixed" @ionRefresh="handleRefresh($event)">
                 <IonRefresherContent />
             </IonRefresher>

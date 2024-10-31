@@ -104,5 +104,6 @@
   "commentCreated": "Created",
   "workflowAction": "Workflow action",
   "cdr": "Calls",
-  "install": "Install"
+  "install": "Install",
+  "install-instructions": "To install the app on iOS, open the \"Share\" menu in Safari and select \"Add to Home Screen.\""
 }

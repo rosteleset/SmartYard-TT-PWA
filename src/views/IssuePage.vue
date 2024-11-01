@@ -64,11 +64,11 @@ watch(route, loadIssue)
                     <IonSegmentButton value="info">
                         <IonLabel>{{ $t('info') }}</IonLabel>
                     </IonSegmentButton>
-                    <IonSegmentButton v-if="issue?.issue.attachments && issue.issue.attachments.length > 0"
+                    <IonSegmentButton v-if="issue?.issue.attachments && Object.keys(issue.issue.attachments).length > 0"
                         value="attachments">
                         <IonLabel>{{ $t('attachments') }}</IonLabel>
                     </IonSegmentButton>
-                    <IonSegmentButton v-if="issue?.issue.comments && issue.issue.comments.length > 0" value="comments">
+                    <IonSegmentButton v-if="issue?.issue.comments && Object.keys(issue.issue.comments).length > 0" value="comments">
                         <IonLabel>{{ $t('comments') }}</IonLabel>
                     </IonSegmentButton>
                     <IonSegmentButton v-if="issue && hasCdr(issue?.issue)" value="cdr">

@@ -99,6 +99,7 @@
   "sortBy": "Order by",
   "issueId": "Issue",
   "error": "Error",
+  "attachmentFilename": "File",
   "commentAuthor": "Comment Author",
   "commentBody": "Comment",
   "commentCreated": "Created",

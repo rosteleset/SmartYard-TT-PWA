@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import { useActions } from "@/hooks/useActions";
 import useMap from "@/hooks/useMap";
 import useViewers from "@/hooks/useViewers";
 import { useTtStore } from "@/stores/ttStore";
 import { useUsersStore } from "@/stores/usersStore";
 import escapeHTML from "@/utils/escapeHTML";
-import { IonItem, IonLabel, IonText } from "@ionic/vue";
+import { IonItem, IonLabel, IonText, useIonRouter } from "@ionic/vue";
 import dayjs from "dayjs";
 import { computed, onMounted, ref, shallowRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -22,6 +23,7 @@ const { t } = useI18n()
 const tt = useTtStore()
 const users = useUsersStore()
 const map = useMap()
+const { specialActions } = useActions()
 
 const text = ref<string | undefined>()
 const component = shallowRef<any>()
@@ -86,6 +88,7 @@ const setText = () => {
                     component.value = {
                         data() {
                             return {
+                                routter:useIonRouter(),
                                 escapeHTML,
                                 value: value
                             };
@@ -98,7 +101,8 @@ const setText = () => {
                                 }))
                             }
                         },
-                        template: `<ion-item v-for="item in items"><router-link  :to="{name:'issue',params:{id:item.issueId}}">{{item.issueId}}: {{item.subject}}</router-link></ion-item>`
+                        // template: `<ion-item v-for="item in items"><router-link  :to="{name:'issue',params:{id:item.issueId}}">{{item.issueId}}: {{item.subject}}</router-link></ion-item>`
+                        template:`<ion-button @click="router.push({name:'issue',params:{id:item.issueId}})">{{item.issueId}}: {{item.subject}}</ion-button>`
                     }
                     break;
 
@@ -118,9 +122,6 @@ const setText = () => {
                     break;
 
                 case "text":
-                    // if (cf.format) {
-                    //     value = sprintf(cf.format, value);
-                    // }
 
                     switch (cf.editor) {
                         case "yesno":
@@ -169,6 +170,9 @@ const setText = () => {
 
         } else
             switch (field.value) {
+                case "project":
+                    text.value = tt.getProjectByAcronym(value).project || value
+                    break;
                 case "workflow":
                     text.value = tt.meta?.workflows[value]?.name
                     break;
@@ -176,6 +180,10 @@ const setText = () => {
                 case "updated":
                 case "commentCreated":
                     text.value = dayjs.unix(value).format('DD.MM.YYYY HH:mm')
+                    break;
+                case "author":
+                case "commentAuthor":
+                    text.value = getUserOrGroupName(value);
                     break;
                 case "assigned":
                 case "watchers":
@@ -187,10 +195,27 @@ const setText = () => {
                         text.value = Object.values(value).map(v => getUserOrGroupName(v as string)).join(', ')
                     break;
                 case "commentPrivate":
-                text.value = value ? t("yes") : t("no");
+                    text.value = value ? t("yes") : t("no");
                     break;
+                case "parent":
+                    text.value = ``
+                    component.value = {
+                        data() {
+                            return {
+                                router:useIonRouter(),
+                                value: value
+                            };
+                        },
+                        template: `<ion-button @click="router.push({name:'issue',params:{id:value}})">{{value}}</ion-button>`
+                    }
+                    break;
+                case "workflowAction":
+                    if (specialActions.includes(value))
+                        text.value = t(value)
+                    else
+                        text.value = value
                 default:
-                    text.value = Array.isArray(value) ? value.join(', ') : value
+                    text.value = Array.isArray(value) ? escapeHTML(value.join(', ')) : escapeHTML(value)
                     break;
             }
     } catch (e) {

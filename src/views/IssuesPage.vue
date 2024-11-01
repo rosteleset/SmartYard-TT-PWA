@@ -109,7 +109,7 @@ onMounted(load)
                 </IonToolbar>
                 <IonProgressBar v-if="loading" type="indeterminate"></IonProgressBar>
             </IonHeader>
-            <IonContent forceOverscroll scrollEvents>
+            <IonContent scrollEvents>
                 <IonRefresher slot="fixed" @ionRefresh="handleRefresh($event)">
                     <IonRefresherContent />
                 </IonRefresher>

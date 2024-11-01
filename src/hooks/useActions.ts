@@ -9,21 +9,21 @@ import { ActionSheetButton } from "@ionic/vue";
 import { useI18n } from "vue-i18n";
 import useAlert from "./useAlert";
 
-const specialActions = [
-    "saAddComment",
-    "saAddFile",
-    "saAddSingleFile",
-    "saAddSingleFileQuiet",
-    "saAssignToMe",
-    "saWatch",
-    "saDelete",
-    "saSubIssue",
-    "saCoordinate",
-    "saLink",
-]
+
 
 export const useActions = () => {
-
+    const specialActions = [
+        "saAddComment",
+        "saAddFile",
+        "saAddSingleFile",
+        "saAddSingleFileQuiet",
+        "saAssignToMe",
+        "saWatch",
+        "saDelete",
+        "saSubIssue",
+        "saCoordinate",
+        "saLink",
+    ]
     const { t } = useI18n()
     const tt = useTtStore()
     const auth = useAuthStore()
@@ -175,6 +175,7 @@ export const useActions = () => {
     return {
         getActionLabel,
         getButtons,
-        initAction
+        initAction,
+        specialActions
     }
 }

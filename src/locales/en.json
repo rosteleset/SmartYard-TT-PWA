@@ -109,5 +109,6 @@
   "install-instructions": "To install the app on iOS, open the \"Share\" menu in Safari and select \"Add to Home Screen.\"",
   "yes": "да",
   "no": "нет",
-  "projects": "Projects"
+  "projects": "Projects",
+  "search": "Search"
 }

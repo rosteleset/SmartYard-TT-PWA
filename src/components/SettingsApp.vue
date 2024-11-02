@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import useSettingsStore from "@/stores/settingsStore";
-import { IonCard, IonCardTitle, IonInput, IonSelect, IonSelectOption, isPlatform } from "@ionic/vue";
+import { IonCard, IonCardTitle, IonInput, IonSelect, IonSelectOption } from "@ionic/vue";
 import { useI18n } from "vue-i18n";
 import PwaInstall from "./PwaInstall.vue";
 
@@ -9,7 +9,6 @@ declare const __APP_VERSION__: string;
 
 const i18n = useI18n()
 const settings = useSettingsStore()
-const isIos = isPlatform('ios')
 
 const appVersion = __APP_VERSION__;
 </script>

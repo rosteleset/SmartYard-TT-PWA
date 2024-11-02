@@ -12,19 +12,20 @@ const triggerPoint = 40
 
 // Переменная для управления высотой TabBa
 const showTabBar = ref(true)
-
+let ticking = false;
 const handleScroll = (event: ScrollCustomEvent) => {
+    const { scrollTop, deltaY: delta } = event.detail;
 
-    const scrollTop = event.detail.scrollTop;
-    const delta = event.detail.deltaY;
-
-    // Обновляем высоту
-    if (delta > triggerPoint && showTabBar.value) {
-        // Прокрутка вниз
-        showTabBar.value = false;
-    } else if ((delta < -triggerPoint || scrollTop === 0) && !showTabBar.value) {
-        // Прокрутка вверх
-        showTabBar.value = true;
+    if (!ticking) {
+        requestAnimationFrame(() => {
+            if (delta > triggerPoint && showTabBar.value) {
+                showTabBar.value = false;
+            } else if ((delta < -triggerPoint || scrollTop === 0) && !showTabBar.value) {
+                showTabBar.value = true;
+            }
+            ticking = false;
+        });
+        ticking = true;
     }
 };
 

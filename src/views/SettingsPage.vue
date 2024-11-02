@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import PageHeader from "@/components/PageHeader.vue";
-import SettingsAccount from "@/components/SettingsAccount.vue";
-import SettingsApp from "@/components/SettingsApp.vue";
 import { IonContent, IonPage } from "@ionic/vue";
+import { defineAsyncComponent } from "vue";
+
+const SettingsAccount = defineAsyncComponent(() => import('@/components/SettingsAccount.vue'));
+const SettingsApp = defineAsyncComponent(() => import('@/components/SettingsApp.vue'));
+
 </script>
 
 <template>

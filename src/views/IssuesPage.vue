@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import IssueCreate from '@/components/IssueCreate.vue';
-import IssueListItem from '@/components/IssueListItem.vue';
 import IssuesFilters from '@/components/IssuesFilters.vue';
 import useAlert from '@/hooks/useAlert';
 import useModal from '@/hooks/useModal';
 import { useTtStore } from '@/stores/ttStore';
 import { InfiniteScrollCustomEvent, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonList, IonMenuButton, IonPage, IonProgressBar, IonRefresher, IonRefresherContent, IonSearchbar, IonTitle, IonToolbar, menuController, RefresherCustomEvent } from '@ionic/vue';
 import { add } from 'ionicons/icons';
-import { onMounted, ref, watch } from 'vue';
+import { defineAsyncComponent, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
+const IssueCreate = defineAsyncComponent(() => import('@/components/IssueCreate.vue'));
+const IssueListItem = defineAsyncComponent(() => import('@/components/IssueListItem.vue'));
 
 const tt = useTtStore()
 const { t } = useI18n()
@@ -105,7 +105,7 @@ onMounted(load)
                     </IonButtons>
                 </IonToolbar>
                 <IonToolbar>
-                    <IonSearchbar v-model="search" :debounce="1000" @ionInput="handleSearch" />
+                    <IonSearchbar v-model="search" :debounce="1000" @ionInput="handleSearch" :placeholder="$t('search')" />
                 </IonToolbar>
                 <IonProgressBar v-if="loading" type="indeterminate"></IonProgressBar>
             </IonHeader>

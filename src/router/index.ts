@@ -2,23 +2,16 @@ import { useAuthStore } from '@/stores/authStore';
 import useSettingsStore from '@/stores/settingsStore';
 import { useTtStore } from '@/stores/ttStore';
 import { useUsersStore } from '@/stores/usersStore';
-import IssuePage from '@/views/IssuePage.vue';
-import IssuesPage from '@/views/IssuesPage.vue';
-import LoginPage from '@/views/LoginPage.vue';
-import SettingsPage from '@/views/SettingsPage.vue';
-import SimplePage from '@/views/SimplePage.vue';
-import TabWrapper from '@/views/TabWrapper.vue';
 import { createRouter, createWebHistory } from '@ionic/vue-router';
-
 
 const routes = [
   {
     path: '/login',
-    component: LoginPage,
+    component: () => import('@/views/LoginPage.vue'),
   },
   {
     path: '/',
-    component: TabWrapper,
+    component: () => import('@/views/TabWrapper.vue'),
     meta: { requiresAuth: true },
     children: [
       {
@@ -27,7 +20,7 @@ const routes = [
       },
       {
         path: 'tt',
-        component: SimplePage,
+        component: () => import('@/views/SimplePage.vue'),
         children: [
           {
             path: '',
@@ -36,21 +29,19 @@ const routes = [
           {
             path: 'issues',
             name: 'issues',
-            component: IssuesPage,
+            component: () => import('@/views/IssuesPage.vue'),
           },
           {
             path: 'issue/:id',
             name: 'issue',
-            component: IssuePage,
+            component: () => import('@/views/IssuePage.vue'),
           },
         ]
       },
       {
         path: 'settings',
         name: 'settings',
-        component: SettingsPage,
-        children: [
-        ]
+        component: () => import('@/views/SettingsPage.vue'),
       }
     ]
   },
@@ -67,7 +58,7 @@ router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
 
   if (!settingsStore.isInitialized)
-    await settingsStore.init()
+    await settingsStore.init();
   if (!authStore.user)
     await authStore.initialize();
   if (to.meta.requiresAuth && !authStore.token) {
@@ -80,14 +71,14 @@ router.beforeEach(async (to, from, next) => {
 // tt hook
 router.beforeEach(async (to, from, next) => {
   const ttStore = useTtStore();
-  const usersStore = useUsersStore()
+  const usersStore = useUsersStore();
 
   try {
     if (to.path.startsWith('/tt')) {
       if (!ttStore.meta)
         await ttStore.load();
       if (usersStore.users.length === 0)
-        await usersStore.load()
+        await usersStore.load();
     }
     next();
   } catch (error) {
@@ -95,6 +86,5 @@ router.beforeEach(async (to, from, next) => {
     next();
   }
 });
-
 
 export default router;

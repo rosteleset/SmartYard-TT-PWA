@@ -17,8 +17,8 @@ const loading = computed(() => authStore.loading);
 const error = computed(() => authStore.error);
 
 // Инициализация токена при монтировании компонента
-onMounted(() => {
-  authStore.initialize();
+onMounted(async () => {
+  await authStore.initialize();
 });
 </script>
 

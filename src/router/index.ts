@@ -16,27 +16,17 @@ const routes = [
     children: [
       {
         path: '',
-        redirect: '/tt'
+        redirect: 'issues'
       },
       {
-        path: 'tt',
-        component: () => import('@/views/SimplePage.vue'),
-        children: [
-          {
-            path: '',
-            redirect: '/tt/issues'
-          },
-          {
-            path: 'issues',
-            name: 'issues',
-            component: () => import('@/views/IssuesPage.vue'),
-          },
-          {
-            path: 'issue/:id',
-            name: 'issue',
-            component: () => import('@/views/IssuePage.vue'),
-          },
-        ]
+        path: 'issues',
+        name: 'issues',
+        component: () => import('@/views/IssuesPage.vue'),
+      },
+      {
+        path: 'issue/:id',
+        name: 'issue',
+        component: () => import('@/views/IssuePage.vue'),
       },
       {
         path: 'settings',
@@ -74,15 +64,13 @@ router.beforeEach(async (to, from, next) => {
   const usersStore = useUsersStore();
 
   try {
-    if (to.path.startsWith('/tt')) {
-      if (!ttStore.meta)
-        await ttStore.load();
-      if (usersStore.users.length === 0)
-        await usersStore.load();
-    }
-    next();
+    if (!ttStore.meta)
+      await ttStore.load();
+    if (usersStore.users.length === 0)
+      await usersStore.load();
   } catch (error) {
     console.warn(error);
+  } finally {
     next();
   }
 });

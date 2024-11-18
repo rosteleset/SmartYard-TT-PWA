@@ -64,6 +64,8 @@ router.beforeEach(async (to, from, next) => {
   const usersStore = useUsersStore();
 
   try {
+    if (to.path.startsWith('/login'))
+      return
     if (!ttStore.meta)
       await ttStore.load();
     if (usersStore.users.length === 0)

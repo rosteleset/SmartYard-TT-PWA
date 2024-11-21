@@ -11,6 +11,13 @@ const useSettingsStore = defineStore('config', () => {
     const installPromptEvent = ref<Event | null>(null);
 
     const init = async () => {
+        if ('Notification' in window && navigator.serviceWorker) {
+            Notification.requestPermission().then((permission) => {
+                if (permission === 'granted') {
+                    // Разрешение получено, ничего дополнительно делать не нужно
+                }
+            });
+        }
         window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
         await Promise.all([

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, provide } from 'vue';
 import { IonIcon, IonLabel, IonPage, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, ScrollCustomEvent } from '@ionic/vue';
 import { cog, list } from "ionicons/icons";
+import { ref } from 'vue';
 
 const tabs = [
-    { name: "tt", icon: list },
-    { name: "settings", icon: cog }
+    { name: "tt", href: '/', icon: list },
+    { name: "settings", href: '/settings', icon: cog }
 ];
 
 const triggerPoint = 40
@@ -36,7 +36,7 @@ const handleScroll = (event: ScrollCustomEvent) => {
         <IonTabs>
             <IonRouterOutlet scrollEvents @ionScroll="handleScroll" />
             <IonTabBar :class="showTabBar ? 'visible' : 'hidden'" slot="bottom" translucent>
-                <IonTabButton v-for="tab in tabs" :key="tab.name" :tab="tab.name" :href="`/${tab.name}`">
+                <IonTabButton v-for="tab in tabs" :key="tab.name" :tab="tab.name" :href="tab.href">
                     <IonIcon :icon="tab.icon" />
                     <IonLabel>{{ $t(`${tab.name}-page`) }}</IonLabel>
                 </IonTabButton>

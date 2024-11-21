@@ -24,7 +24,7 @@
   "errors": {
     "noCredentials": "No accounting data",
     "accessDenied": "Access denied",
-    "tokenNotFound": "Token",
+    "tokenNotFound": "Token expired",
     "noToken": "Token is not specified",
     "userNotFound": "User is not found",
     "permissionDenied": "Access denied",

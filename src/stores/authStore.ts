@@ -19,7 +19,7 @@ export const useAuthStore = defineStore('auth', () => {
             .then(response => {
                 token.value = response.token;
                 Preferences.set({ key: 'token', value: response.token });
-                router.push('/');
+                router.replace('/');
                 api.GET('/user/whoAmI')
                     .then(userResponse => user.value = userResponse.user);
             })

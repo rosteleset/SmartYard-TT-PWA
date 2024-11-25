@@ -42,5 +42,6 @@ const fields = computed(() => Object.keys(projection).map(key => {
 }
 .content {
     padding: 0;
+    padding-bottom: 8px;
 }
 </style>

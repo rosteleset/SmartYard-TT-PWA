@@ -11,7 +11,7 @@ const routes = [
   },
   {
     path: '/',
-    component: () => import('@/views/TabWrapper.vue'),
+    component: () => import('@/views/SimplePage.vue'),
     meta: { requiresAuth: true },
     children: [
       {
@@ -37,10 +37,14 @@ const routes = [
   },
 ];
 
+
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
 });
+
+
 
 // init hook
 router.beforeEach(async (to, from, next) => {
@@ -76,5 +80,6 @@ router.beforeEach(async (to, from, next) => {
     next();
   }
 });
+
 
 export default router;

@@ -4,7 +4,7 @@ import { useActions } from '@/hooks/useActions';
 import useAlert from '@/hooks/useAlert';
 import useCdr from '@/hooks/useCdr';
 import { useTtStore } from '@/stores/ttStore';
-import { ActionSheetButton, IonActionSheet, IonContent, IonLabel, IonPage, IonProgressBar, IonRefresher, IonRefresherContent, IonSegment, IonSegmentButton, IonToolbar, RefresherCustomEvent } from '@ionic/vue';
+import { ActionSheetButton, IonActionSheet, IonContent, IonLabel, IonPage, IonProgressBar, IonRefresher, IonRefresherContent, IonSegment, IonSegmentButton, IonSegmentContent, IonSegmentView, IonToolbar, RefresherCustomEvent } from '@ionic/vue';
 import { computed, defineAsyncComponent, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
@@ -51,6 +51,39 @@ const handleRefresh = (event?: RefresherCustomEvent) => {
         .then(() => event?.target.complete())
 }
 
+const tabs = computed(() => {
+    const arr = [
+        {
+            name: 'info',
+            component: IssueInfo
+        }
+    ]
+    if (issue.value?.issue.attachments && Object.keys(issue.value.issue.attachments).length > 0)
+        arr.push({
+            name: 'attachments',
+            component: IssueAttachments
+        })
+
+    if (issue.value?.issue.comments && Object.keys(issue.value.issue.comments).length > 0)
+        arr.push({
+            name: 'comments',
+            component: IssueComments
+        })
+
+    if (issue.value && hasCdr(issue.value?.issue))
+        arr.push({
+            name: 'cdr',
+            component: IssueCdr
+        })
+
+    if (issue.value?.issue.attachments && Object.keys(issue.value.issue.attachments).length > 0)
+        arr.push({
+            name: 'journal',
+            component: IssueJournal
+        })
+    return arr
+})
+
 onMounted(loadIssue)
 onUnmounted(() => tt.issue = undefined)
 watch(() => route.params['id'], loadIssue)
@@ -61,23 +94,9 @@ watch(() => route.params['id'], loadIssue)
     <IonPage>
         <PageHeader :label="issue?.issue.issueId || id" defaultHref="/" @actions="isActionsOpen = true">
             <IonToolbar>
-                <IonSegment v-model="segment" :scrollable="true">
-                    <IonSegmentButton value="info">
-                        <IonLabel>{{ $t('info') }}</IonLabel>
-                    </IonSegmentButton>
-                    <IonSegmentButton v-if="issue?.issue.attachments && Object.keys(issue.issue.attachments).length > 0"
-                        value="attachments">
-                        <IonLabel>{{ $t('attachments') }}</IonLabel>
-                    </IonSegmentButton>
-                    <IonSegmentButton v-if="issue?.issue.comments && Object.keys(issue.issue.comments).length > 0"
-                        value="comments">
-                        <IonLabel>{{ $t('comments') }}</IonLabel>
-                    </IonSegmentButton>
-                    <IonSegmentButton v-if="issue && hasCdr(issue?.issue)" value="cdr">
-                        <IonLabel>{{ $t('cdr') }}</IonLabel>
-                    </IonSegmentButton>
-                    <IonSegmentButton v-if="issue?.showJournal" value="journal">
-                        <IonLabel>{{ $t('journal.main') }}</IonLabel>
+                <IonSegment v-if="issue" :scrollable="true" @touchstart.stop @touchmove.stop @touchend.stop>
+                    <IonSegmentButton v-for="tab in tabs" :contentId="tab.name">
+                        <IonLabel>{{ $t(tab.name) }}</IonLabel>
                     </IonSegmentButton>
                 </IonSegment>
                 <IonProgressBar v-if="loading" type="indeterminate"></IonProgressBar>
@@ -87,11 +106,12 @@ watch(() => route.params['id'], loadIssue)
             <IonRefresher slot="fixed" @ionRefresh="handleRefresh($event)">
                 <IonRefresherContent />
             </IonRefresher>
-            <IssueInfo v-if="issue && segment === 'info'" :issue="issue" />
-            <IssueAttachments v-if="issue && segment === 'attachments'" :issue="issue" />
-            <IssueComments v-if="issue && segment === 'comments'" :issue="issue" />
-            <IssueCdr v-if="issue && segment === 'cdr'" :issue="issue" />
-            <IssueJournal v-if="issue && segment === 'journal'" :issue="issue" />
+
+            <IonSegmentView>
+                <IonSegmentContent v-for="tab in tabs" :id="tab.name">
+                    <component v-if="issue" :is="tab.component" :issue="issue" />
+                </IonSegmentContent>
+            </IonSegmentView>
         </IonContent>
         <IonActionSheet class="custom-actions" :is-open="isActionsOpen" :header="$t('actions')" :buttons="buttons"
             @didDismiss="isActionsOpen = false" />

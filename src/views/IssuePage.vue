@@ -119,6 +119,16 @@ watch(() => route.params['id'], loadIssue)
 </template>
 
 <style scoped>
+.custom-actions {
+    --height: 90vh;
+    
+}
+
+.custom-actions:deep(.action-sheet-title) {
+    font-weight: bold;
+    color: var(--ion-color-primary);
+}
+
 .custom-actions:deep(.action-sheet-button.action-sheet-separator) {
     min-height: 1px;
     padding: 0;

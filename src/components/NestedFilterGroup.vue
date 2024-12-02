@@ -24,7 +24,8 @@ const handleSelect = (filter: FilterWithLabel) => {
     <template v-if="group.children?.length > 0">
         <IonAccordion v-for="children in group.children" :key="children.label" :value="children.label">
             <IonItem slot="header">
-                <IonLabel :class="`neasted-${depth}`">{{ children.label }}</IonLabel>
+                <IonLabel :style="{ '--depth': depth }" :class="`neasted neasted-depth-${depth} neasted-parent`">{{
+                    children.label }}</IonLabel>
             </IonItem>
             <div slot="content">
                 <NestedFilterGroup :group="children" :depth="depth + 1" @select="handleSelect" />
@@ -34,13 +35,19 @@ const handleSelect = (filter: FilterWithLabel) => {
     <template v-if="group.filters?.length > 0">
         <IonItem v-for="filter in filterFilters(group.filters)" :key="filter.label" :value="filter"
             :color="tt.filter?.filter === filter.filter ? 'primary' : ''" @click="emits('select', filter)" button>
-            <IonLabel :style="{ '--depth': depth }" class="neasted">{{ filter.label }}</IonLabel>
+            <IonLabel :style="{ '--depth': depth }" :class="`neasted neasted-depth-${depth}`">{{ filter.label }}
+            </IonLabel>
         </IonItem>
     </template>
 </template>
 
 <style scoped>
 .neasted {
-    padding-left: calc(var(--depth, 0) * 5px);
+    padding-left: calc(var(--depth, 0) * 10px);
+}
+
+.neasted-parent {
+    font-weight: bold;
+
 }
 </style>

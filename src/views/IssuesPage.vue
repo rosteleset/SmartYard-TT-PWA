@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import IssuesFilters from '@/components/IssuesFilters.vue';
+import VirtualScroller from '@/components/VirtualScroller.vue';
 import useAlert from '@/hooks/useAlert';
 import useModal from '@/hooks/useModal';
 import { useTtStore } from '@/stores/ttStore';
@@ -7,12 +8,10 @@ import {
     InfiniteScrollCustomEvent,
     IonButton,
     IonButtons,
-    IonContent,
     IonHeader,
     IonIcon,
     IonInfiniteScroll,
     IonInfiniteScrollContent,
-    IonList,
     IonMenuButton,
     IonPage,
     IonProgressBar,
@@ -48,14 +47,24 @@ const search = ref(currentRoute.value.query.search as string || '');
 const loading = ref(false);
 
 const showSearchBar = ref(true);
+const threshold = 500;
 
 const onScroll = (event: ScrollCustomEvent) => {
     const { scrollTop, deltaY: delta } = event.detail;
 
-    if (scrollTop < 56)
+    if (scrollTop === 0)
         showSearchBar.value = true;
-    else
+
+
+    if (delta > 0) {
+        // Скролл вниз
         showSearchBar.value = false;
+    } else {
+        // Скролл вверх
+        if (Math.abs(delta) > threshold)
+            showSearchBar.value = true;
+    }
+
 };
 
 const load = async (event?: InfiniteScrollCustomEvent) => {
@@ -111,6 +120,11 @@ const handleCreate = () => {
     openModal(IssueCreate);
 };
 
+const itemKey = (item: any) => {
+    return item.id;
+}
+
+
 watch(
     [() => tt.project, () => tt.filter, () => tt.sortBy],
     () => handleRefresh()
@@ -142,18 +156,21 @@ onMounted(load);
                 </IonToolbar>
                 <IonProgressBar v-if="loading" type="indeterminate" />
             </IonHeader>
-            <IonContent scrollEvents @ionScroll="onScroll">
-                <IonRefresher slot="fixed" @ionRefresh="handleRefresh($event)">
-                    <IonRefresherContent />
-                </IonRefresher>
-                <IonList v-if="issues">
-                    <IssueListItem v-for="issue in issues" :key="issue.id" :issue="issue" :projection="projection"
-                        @click="handleOpen(issue)" />
-                </IonList>
-                <IonInfiniteScroll v-if="skip < count" @ionInfinite="load">
-                    <IonInfiniteScrollContent />
-                </IonInfiniteScroll>
-            </IonContent>
+            <VirtualScroller v-if="issues.length > 0" :items="issues" :itemKey="itemKey" @onIonScroll="onScroll">
+                <template #header>
+                    <IonRefresher slot="fixed" @ionRefresh="handleRefresh($event)">
+                        <IonRefresherContent />
+                    </IonRefresher>
+                </template>
+                <template #default="{ item }">
+                    <IssueListItem :issue="item" :projection="projection" @click="handleOpen(item)" />
+                </template>
+                <template #footer>
+                    <IonInfiniteScroll v-if="skip < count" @ionInfinite="load">
+                        <IonInfiniteScrollContent />
+                    </IonInfiniteScroll>
+                </template>
+            </VirtualScroller>
         </IonPage>
     </IonPage>
 </template>

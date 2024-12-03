@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import { IonPage, useIonRouter } from '@ionic/vue';
+import { onMounted } from 'vue';
+
+const router = useIonRouter()
+
+onMounted(()=>{
+  router.push('/issues')
+})
 
 </script>
 <template>
   <IonPage>
-    <IonHeader>
-      <IonToolbar>
-        <IonTitle>Home</IonTitle>
-      </IonToolbar>
-    </IonHeader>
-
-    <IonContent class="ion-padding">
-    </IonContent>
   </IonPage>
 </template>
 

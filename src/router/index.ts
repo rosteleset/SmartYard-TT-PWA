@@ -16,7 +16,8 @@ const routes = [
     children: [
       {
         path: '',
-        redirect: 'issues'
+        component: () => import('@/views/HomePage.vue'),
+        // redirect: 'issues'
       },
       {
         path: 'issues',
@@ -77,6 +78,20 @@ router.beforeEach(async (to, from, next) => {
   } catch (error) {
     console.warn(error);
   } finally {
+    next();
+  }
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.path === '/' && from.path === '/issues') {
+    if (confirm('Вы хотите выйти из приложения?')) {
+      next()
+      router.back()
+    } else {
+      next(false)
+      router.push(from.fullPath);
+    }
+  } else {
     next();
   }
 });

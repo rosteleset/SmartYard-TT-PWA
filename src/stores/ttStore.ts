@@ -1,13 +1,14 @@
 import api from "@/utils/api";
 import { Preferences } from "@capacitor/preferences";
+import { useIonRouter } from "@ionic/vue";
 import { defineStore } from "pinia";
 import { ref, watch } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { LocationQuery, useRoute, useRouter } from "vue-router";
 
 export const useTtStore = defineStore('tt', () => {
 
     const route = useRoute();
-    const { push } = useRouter()
+    const { push } = useIonRouter()
 
     // state
     const meta = ref<Meta>()
@@ -18,28 +19,32 @@ export const useTtStore = defineStore('tt', () => {
     const issue = ref<IssueData>()
 
     // actions
-    const load = async () => {
+    const load = async (query: LocationQuery) => {
+
         return api.GET('tt/tt')
-            .then(res => {
+            .then(async (res) => {
+                console.log(query.project && typeof query.project === 'string');
+
                 meta.value = res.meta
-                if (route.query.project && typeof route.query.project === 'string')
-                    project.value = getProjectByAcronym(route.query.project)
-                else
-                    Preferences.get({ key: 'lastProject' }).
-                        then(({ value }) => {
-                            if (value)
-                                project.value = getProjectByAcronym(value)
-                        })
+                if (query.project && typeof query.project === 'string')
+                    project.value = getProjectByAcronym(query.project)
+                else {
+                    const { value } = await Preferences.get({ key: 'lastProject' })
 
-                if (route.query.filter && typeof route.query.filter === 'string')
-                    filter.value = getFilterWithLabel(route.query.filter)
-                else
-                    Preferences.get({ key: 'lastFilter' }).
-                        then(({ value }) => {
-                            if (value)
-                                filter.value = getFilterWithLabel(value)
-                        })
+                    if (value)
+                        project.value = getProjectByAcronym(value)
 
+                }
+
+                if (query.filter && typeof query.filter === 'string')
+                    filter.value = getFilterWithLabel(query.filter)
+                else {
+                    const { value } = await Preferences.get({ key: 'lastFilter' })
+
+                    if (value)
+                        filter.value = getFilterWithLabel(value)
+
+                }
                 Preferences.get({ key: 'lastSort' }).
                     then(({ value }) => {
                         if (value)
@@ -167,8 +172,8 @@ export const useTtStore = defineStore('tt', () => {
         const json = JSON.stringify(nextSortBy);
         if (json !== JSON.stringify(prevSortBy)) {
             Preferences.set({ key: 'lastSort', value: json });
-        }        
-        
+        }
+
         if (route.name === 'issues')
             push({ query: newQuery });
     });

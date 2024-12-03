@@ -45,7 +45,33 @@ const router = createRouter({
   routes,
 });
 
+router.beforeEach((to, from, next) => {
+  if (to.hash && to.path === '/') {
+    const hash = to.hash.substring(1); // Удаляем ведущий '#'
+    const params = new URLSearchParams(hash);
+    const issueId = params.get('issue');
+    const filter = params.get('filter');
+    const search = params.get('search');
+    // const skip = params.get('skip');
+    // const limit = params.get('limit');
 
+    if (issueId) {
+      // Перенаправляем на /issue/:id без сохранения параметров запроса
+      next({ 
+        name: 'issue', 
+        params: { id: issueId },
+      });
+    } else {
+      // Перенаправляем на /issues с сохранением параметров запроса
+      next({ 
+        name: 'issues', 
+        query: { filter, search }
+      });
+    }
+  } else {
+    next();
+  }
+});
 
 // init hook
 router.beforeEach(async (to, from, next) => {
@@ -72,7 +98,7 @@ router.beforeEach(async (to, from, next) => {
     if (to.path.startsWith('/login'))
       return
     if (!ttStore.meta)
-      await ttStore.load();
+      await ttStore.load(to.query);
     if (usersStore.users.length === 0)
       await usersStore.load();
   } catch (error) {

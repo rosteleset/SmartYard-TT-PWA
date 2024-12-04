@@ -42,7 +42,7 @@ const issues = ref<Issue[]>([]);
 const projection = ref<Record<string, number>>({});
 const count = ref<number>(0);
 const limit = ref<number>(20);
-const skip = ref<number>(0);
+const skip = ref<number>(Number(currentRoute.value.query.skip) || 0);
 const search = ref(currentRoute.value.query.search as string || '');
 const loading = ref(false);
 
@@ -130,6 +130,7 @@ watch(
     () => handleRefresh()
 );
 
+
 onMounted(load);
 </script>
 
@@ -185,5 +186,8 @@ onMounted(load);
 
 .search-toolbar.hidden {
     max-height: 0;
+}
+.ion-activatable {
+    margin-bottom:0;
 }
 </style>

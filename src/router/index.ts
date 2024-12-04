@@ -52,20 +52,19 @@ router.beforeEach((to, from, next) => {
     const issueId = params.get('issue');
     const filter = params.get('filter');
     const search = params.get('search');
-    // const skip = params.get('skip');
-    // const limit = params.get('limit');
+    const skip = params.get('skip');
 
     if (issueId) {
       // Перенаправляем на /issue/:id без сохранения параметров запроса
-      next({ 
-        name: 'issue', 
+      next({
+        name: 'issue',
         params: { id: issueId },
       });
     } else {
       // Перенаправляем на /issues с сохранением параметров запроса
-      next({ 
-        name: 'issues', 
-        query: { filter, search }
+      next({
+        name: 'issues',
+        query: { filter, search, skip }
       });
     }
   } else {

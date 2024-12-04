@@ -30,6 +30,12 @@
     "permissionDenied": "Access denied",
     "notAcceptable": "Not acceptable"
   },
+  "notFound": {
+    "title": "Page Not Found",
+    "error": "Error 404",
+    "message": "Sorry, the page you are looking for does not exist.",
+    "buttonText": "Go back to Home"
+  },
   "ok": "Ok",
   "project-not-selected": "Project not selected",
   "login": "Login",

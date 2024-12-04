@@ -102,17 +102,17 @@ watch(() => route.params['id'], loadIssue)
                 <IonProgressBar v-if="loading" type="indeterminate"></IonProgressBar>
             </IonToolbar>
         </PageHeader>
-            
-            <IonSegmentView>
-                <IonSegmentContent v-for="tab in tabs" :id="tab.name">
-                    <IonContent>
-                        <IonRefresher slot="fixed" @ionRefresh="handleRefresh($event)">
-                    <IonRefresherContent />
-                </IonRefresher>
+
+        <IonSegmentView>
+            <IonSegmentContent v-for="tab in tabs" :id="tab.name">
+                <IonContent>
+                    <IonRefresher slot="fixed" @ionRefresh="handleRefresh($event)">
+                        <IonRefresherContent />
+                    </IonRefresher>
                     <component v-if="issue" :is="tab.component" :issue="issue" />
-                    </IonContent>
-                </IonSegmentContent>
-            </IonSegmentView>
+                </IonContent>
+            </IonSegmentContent>
+        </IonSegmentView>
         <IonActionSheet class="custom-actions" :is-open="isActionsOpen" :header="$t('actions')" :buttons="buttons"
             @didDismiss="isActionsOpen = false" />
     </IonPage>
@@ -121,7 +121,7 @@ watch(() => route.params['id'], loadIssue)
 <style scoped>
 .custom-actions {
     --height: 90vh;
-    
+
 }
 
 .custom-actions:deep(.action-sheet-title) {

@@ -36,6 +36,11 @@ const routes = [
       }
     ]
   },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import('@/views/NotFoundPage.vue'),
+  },
 ];
 
 
@@ -47,6 +52,8 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.hash && to.path === '/') {
+    console.log(to.hash);
+
     const hash = to.hash.substring(1); // Удаляем ведущий '#'
     const params = new URLSearchParams(hash);
     const issueId = params.get('issue');
@@ -60,12 +67,14 @@ router.beforeEach((to, from, next) => {
         name: 'issue',
         params: { id: issueId },
       });
-    } else {
+    } else if (filter || search) {
       // Перенаправляем на /issues с сохранением параметров запроса
       next({
         name: 'issues',
         query: { filter, search, skip }
       });
+    } else {
+      next('/not-found');
     }
   } else {
     next();

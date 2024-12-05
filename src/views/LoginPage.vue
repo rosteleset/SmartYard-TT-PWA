@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { useAuthStore } from '@/stores/authStore';
-import { IonButton, IonCheckbox, IonContent, IonHeader, IonInput, IonItem, IonPage, IonProgressBar, IonText, IonTitle, IonToolbar } from '@ionic/vue';
-import { computed, onMounted, ref } from 'vue';
+import { IonButton, IonCheckbox, IonContent, IonHeader, IonInput, IonItem, IonPage, IonProgressBar, IonText, IonTitle, IonToolbar, useIonRouter } from '@ionic/vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const authStore = useAuthStore();
+const router = useIonRouter();
 
 const login = ref('');
 const password = ref('');
@@ -16,10 +18,10 @@ const handleLogin = () => {
 const loading = computed(() => authStore.loading);
 const error = computed(() => authStore.error);
 
-// Инициализация токена при монтировании компонента
-onMounted(async () => {
-  await authStore.initialize();
-});
+onMounted(()=>{
+  if (authStore.user !== null)
+   router.replace('/')
+})
 </script>
 
 <template>
@@ -31,7 +33,7 @@ onMounted(async () => {
       </IonToolbar>
     </IonHeader>
 
-    <IonContent class="ion-padding">
+    <IonContent v-if="!authStore.token && !authStore.loading" class="ion-padding">
       <form @submit.prevent="handleLogin">
         <IonItem>
           <IonInput :label="$t('login')" label-placement="floating" autocomplete="username" v-model="login"></IonInput>

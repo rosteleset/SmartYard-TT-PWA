@@ -19,7 +19,8 @@ export const useAuthStore = defineStore('auth', () => {
             .then(response => {
                 token.value = response.token;
                 Preferences.set({ key: 'token', value: response.token });
-                router.replace('/');
+                const redirectPath = router.currentRoute.value.query.redirect || '/issues';
+                router.replace(redirectPath as string);
                 api.GET('/user/whoAmI')
                     .then(userResponse => user.value = userResponse.user);
             })
@@ -55,7 +56,7 @@ export const useAuthStore = defineStore('auth', () => {
         if (storedToken) {
             token.value = storedToken;
             loading.value = true;
-            api.GET('/user/whoAmI')
+            await api.GET('/user/whoAmI')
                 .then(_user => user.value = _user.user)
                 .catch(_error => error.value = _error.message)
                 .finally(() => loading.value = false)

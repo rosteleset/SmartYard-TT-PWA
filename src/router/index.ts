@@ -7,6 +7,7 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 const routes = [
   {
     path: '/login',
+    name: 'login',
     component: () => import('@/views/LoginPage.vue'),
   },
   {
@@ -91,7 +92,7 @@ router.beforeEach(async (to, from, next) => {
   if (!authStore.user)
     await authStore.initialize();
   if (to.meta.requiresAuth && !authStore.token) {
-    next('/login');
+    next({ name: 'login', query: { redirect: to.fullPath } });
   } else {
     next();
   }
@@ -103,7 +104,7 @@ router.beforeEach(async (to, from, next) => {
   const usersStore = useUsersStore();
 
   try {
-    if (to.path.startsWith('/login'))
+    if (to.name === 'login')
       return
     if (!ttStore.meta)
       await ttStore.load(to.query);

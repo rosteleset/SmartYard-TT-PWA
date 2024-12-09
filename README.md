@@ -30,8 +30,8 @@ This project is a mobile and web application—a client for a task tracker integ
 1. **Clone the repository:**
 
    ```bash
-   git clone <URL to your repository>
-   cd tt
+   git clone https://github.com/rosteleset/SmartYard-TT-PWA.git
+   cd SmartYard-TT-PWA
    ```
 
 2. **Install dependencies:**

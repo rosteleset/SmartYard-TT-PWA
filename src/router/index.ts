@@ -118,7 +118,7 @@ router.beforeEach(async (to, from, next) => {
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.path === '/' && from.path === '/issues') {
+  if (to.path === '/' && from.name === 'issues') {
     if (confirm('Вы хотите выйти из приложения?')) {
       next()
       router.back()

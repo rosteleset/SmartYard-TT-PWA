@@ -1,6 +1,11 @@
+import linkifyHtml from "linkify-html";
+
 function convertLinks(text: string) {
-    const urlPattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#%?=~_|!:,.;]*[-A-Z0-9+&@#%=~_|])/gi;
-    return text.replace(urlPattern, '<a href="$1" target="_blank">$1</a>');
+    const options = {
+        defaultProtocol: "https",
+        target: "_blank",
+    };
+    return linkifyHtml(text, options);
 }
 
 export default convertLinks;

@@ -116,5 +116,6 @@
   "yes": "да",
   "no": "нет",
   "projects": "Projects",
-  "search": "Search"
+  "search": "Search",
+  "exit-message": "Do you want to exit the application?"
 }

@@ -67,7 +67,3 @@ if (import.meta.env.DEV) {
     const navigationRoute = new NavigationRoute(handler);
     registerRoute(navigationRoute);
 }
-
-
-
-

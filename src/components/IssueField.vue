@@ -4,6 +4,7 @@ import useMap from "@/hooks/useMap";
 import useViewers from "@/hooks/useViewers";
 import { useTtStore } from "@/stores/ttStore";
 import { useUsersStore } from "@/stores/usersStore";
+import convertLinks from "@/utils/convertLinks";
 import escapeHTML from "@/utils/escapeHTML";
 import { IonItem, IonLabel, IonText, useIonRouter } from "@ionic/vue";
 import dayjs from "dayjs";
@@ -216,7 +217,7 @@ const setText = () => {
                         text.value = value
                 default:
                     text.value = Array.isArray(value) ? escapeHTML(value.join(', ')) : escapeHTML(value)
-                    break;
+                    break;                
             }
     } catch (e) {
         console.warn(e);

@@ -3,7 +3,7 @@ import { IonButton, IonButtons, IonContent, IonHeader, IonTitle, IonToolbar, mod
 import { LMap, LMarker, LTileLayer } from "@vue-leaflet/vue-leaflet";
 import L, { Map, PointExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { onMounted, ref } from "vue";
+import { nextTick, onMounted, ref } from "vue";
 import { LMarkerClusterGroup } from 'vue-leaflet-markercluster';
 
 
@@ -37,7 +37,14 @@ const getCenter = (): PointExpression => {
 
 const cancel = () => modalController.dismiss(null, 'cancel');
 
-onMounted(() => {
+const onReady = async (mapInstance: Map) => {
+  // wait open modal animation
+  setTimeout(() => {
+    mapInstance.invalidateSize();
+  }, 100);
+};
+
+onMounted(async () => {
   if (!globalThis.L)
     globalThis.L = L;
 })
@@ -54,7 +61,7 @@ onMounted(() => {
     </IonToolbar>
   </IonHeader>
   <IonContent>
-    <LMap ref="map" v-model:zoom="zoom" :center="getCenter()" :useGlobalLeaflet="true"
+    <LMap ref="map" v-model:zoom="zoom" :center="getCenter()" :useGlobalLeaflet="true" @ready="onReady"
       :options="{ attributionControl: false }" :crs="CRS" style="z-index: 10">
       <LTileLayer :url="TILE_SERVER" />
       <LMarkerClusterGroup :showCoverageOnHover="false">

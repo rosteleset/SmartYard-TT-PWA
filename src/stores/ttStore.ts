@@ -143,6 +143,10 @@ export const useTtStore = defineStore('tt', () => {
         return api.POST('tt/file', { issueId: issue.value?.issue.issueId, attachments: [attachment] })
     }
 
+    const addAttachments = (attachments: any[]) => {
+        return api.POST('tt/file', { issueId: issue.value?.issue.issueId, attachments: attachments })
+    }
+
     const doAction = async ({ action, set, issueId }: { action: string, set?: any, issueId?: string }) => {
 
         return api.PUT(`tt/action/${issueId || issue.value?.issue.issueId}`, {
@@ -196,6 +200,7 @@ export const useTtStore = defineStore('tt', () => {
         addComment,
         editComment,
         addAttachment,
+        addAttachments,
         doAction
     }
 })

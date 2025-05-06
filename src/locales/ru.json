@@ -90,6 +90,7 @@
   "saAddFile": "Приложить файл(ы)",
   "saAddSingleFile": "Приложить файл",
   "saAddSingleFileQuiet": "Приложить файл",
+  "saAddMultipleFilesQuiet": "Приложить файл(ы)",
   "saDelete": "Удалить задачу",
   "saWatch": "Наблюдать / перестать наблюдать",
   "saAssignToMe": "Забрать себе",
@@ -118,5 +119,4 @@
   "projects": "Проекты",
   "search": "Поиск",
   "exit-message": "Вы хотите выйти из приложения?"
-
 }

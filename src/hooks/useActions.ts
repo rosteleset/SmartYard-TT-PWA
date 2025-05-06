@@ -17,6 +17,7 @@ export const useActions = () => {
         "saAddFile",
         "saAddSingleFile",
         "saAddSingleFileQuiet",
+        "saAddMultipleFilesQuiet",
         "saAssignToMe",
         "saWatch",
         "saDelete",
@@ -90,6 +91,40 @@ export const useActions = () => {
             case "saAddFile":
             case "saAddSingleFile":
                 openModal(IssueAddFile).then(() => null)
+                break;
+            case "saAddMultipleFilesQuiet":
+                const issueId = Array.isArray(issue)
+                    ? issue[0]
+                    : issue || tt.issue?.issue.issueId;
+
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.multiple = true;
+                fileInput.style.display = 'none';
+
+                fileInput.addEventListener('change', async () => {
+                    if (!fileInput.files) return;
+                    const filesArray = Array.from(fileInput.files);
+
+                    try {
+                        await api.POST('tt/file', {
+                            issueId,
+                            attachments: filesArray
+                        });
+                        await tt.updateIssue();
+                    } catch (e: any) {
+                        presentAlert({
+                            header: t('something-went-wrong'),
+                            message: e.message,
+                            buttons: [t('ok')],
+                        });
+                    } finally {
+                        document.body.removeChild(fileInput);
+                    }
+                });
+
+                document.body.appendChild(fileInput);
+                fileInput.click();
                 break;
             case "saAssignToMe":
                 presentAlert({

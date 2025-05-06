@@ -12,7 +12,7 @@ const password = ref('');
 const rememberMe = ref(false);
 
 const handleLogin = () => {
-  authStore.login(login.value, password.value, rememberMe.value);
+  authStore.login(login.value.trim(), password.value.trim(), rememberMe.value);
 };
 
 const loading = computed(() => authStore.loading);

@@ -120,7 +120,7 @@ watch(() => route.params['id'], loadIssue)
 
 <style scoped>
 .custom-actions {
-    --height: 90vh;
+    --height: 80%;
 
 }
 

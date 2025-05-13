@@ -8,6 +8,7 @@ import api from "@/utils/api";
 import { ActionSheetButton } from "@ionic/vue";
 import { useI18n } from "vue-i18n";
 import useAlert from "./useAlert";
+import { useAttachments } from "./useAttachments";
 
 
 
@@ -30,6 +31,7 @@ export const useActions = () => {
     const auth = useAuthStore()
     const { presentAlert } = useAlert()
     const { openModal } = useModal()
+    const { pickFiles } = useAttachments()
 
     const ff = (template: any) => {
         const result: Record<string, any> = {}
@@ -97,34 +99,13 @@ export const useActions = () => {
                     ? issue[0]
                     : issue || tt.issue?.issue.issueId;
 
-                const fileInput = document.createElement('input');
-                fileInput.type = 'file';
-                fileInput.multiple = true;
-                fileInput.style.display = 'none';
-
-                fileInput.addEventListener('change', async () => {
-                    if (!fileInput.files) return;
-                    const filesArray = Array.from(fileInput.files);
-
-                    try {
-                        await api.POST('tt/file', {
-                            issueId,
-                            attachments: filesArray
-                        });
-                        await tt.updateIssue();
-                    } catch (e: any) {
-                        presentAlert({
-                            header: t('something-went-wrong'),
-                            message: e.message,
-                            buttons: [t('ok')],
-                        });
-                    } finally {
-                        document.body.removeChild(fileInput);
-                    }
-                });
-
-                document.body.appendChild(fileInput);
-                fileInput.click();
+                pickFiles(null, tt.project?.maxFileSize || null)
+                    .then(files => tt.addAttachments(files.map(f => f.data)))
+                    .then(tt.updateIssue)
+                    .catch(e => presentAlert({
+                        header: t('something-went-wrong'),
+                        message: e.message
+                    }))
                 break;
             case "saAssignToMe":
                 presentAlert({

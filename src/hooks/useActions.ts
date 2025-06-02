@@ -171,16 +171,14 @@ export const useActions = () => {
                                     tt.doAction({ action: name, issueId: issue })
                             else {
                                 fields = ff(res.template)
-                            }
-
-
-                            if (!withoutAccept)
                                 if (typeof res.template === 'string') {
                                     const issue = tt.issue
-                                    openModal(AssignForm, { issue, name }).then(() => null)
+                                    if (res.template === 'assign')
+                                        openModal(AssignForm, { issue, name }).then(() => null)
                                 }
                                 else
                                     openModal(IssueAction, { name, issue, _fields: fields }).then(() => null)
+                            }                                
 
                         })
                         .catch((error) => {

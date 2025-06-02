@@ -3,6 +3,7 @@ import IssueAddComment from "@/components/IssueAddComment.vue";
 import issueEditComment from "@/components/IssueEditComment.vue";
 import { useAuthStore } from "@/stores/authStore";
 import { useTtStore } from "@/stores/ttStore";
+import convertLinks from "@/utils/convertLinks";
 import {
     IonButton,
     IonCard,
@@ -57,8 +58,7 @@ const openModal = async (comment?: Comment, index?: number) => {
                 <IonIcon :icon="comment.private ? eyeOff : eye"></IonIcon>
             </IonCardTitle>
         </IonCardHeader>
-        <IonCardContent class="comment-body">
-            {{ comment.body }}
+        <IonCardContent class="comment-body" v-html="convertLinks(comment.body)">
         </IonCardContent>
         <IonButton v-if="getEditable(comment)" fill="clear" @click="openModal(comment, index)">
             {{ $t('edit') }}

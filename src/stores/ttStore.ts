@@ -33,7 +33,8 @@ export const useTtStore = defineStore('tt', () => {
 
                     if (value)
                         project.value = getProjectByAcronym(value)
-
+                    else 
+                        project.value = meta.value?.projects[0]
                 }
 
                 if (query.filter && typeof query.filter === 'string')
@@ -43,6 +44,8 @@ export const useTtStore = defineStore('tt', () => {
 
                     if (value)
                         filter.value = getFilterWithLabel(value)
+                    else
+                        filter.value = getFilterWithLabel('common_all')
 
                 }
                 Preferences.get({ key: 'lastSort' }).

@@ -34,3 +34,4 @@ npm-debug.log*
 /www
 .env
 package-lock.json
+src/custom/*.vue

@@ -9,8 +9,10 @@ import { ActionSheetButton } from "@ionic/vue";
 import { useI18n } from "vue-i18n";
 import useAlert from "./useAlert";
 import { useAttachments } from "./useAttachments";
+import { loadOptionalComponent } from '@/utils/loadOptionalComponent'
 
-
+// импорт кастомного компонента
+export const AssignForm = loadOptionalComponent('../custom/AssignForm.vue')
 
 export const useActions = () => {
     const specialActions = [
@@ -173,7 +175,12 @@ export const useActions = () => {
 
 
                             if (!withoutAccept)
-                                openModal(IssueAction, { name, issue, _fields: fields }).then(() => null)
+                                if (typeof res.template === 'string') {
+                                    const issue = tt.issue
+                                    openModal(AssignForm, { issue, name }).then(() => null)
+                                }
+                                else
+                                    openModal(IssueAction, { name, issue, _fields: fields }).then(() => null)
 
                         })
                         .catch((error) => {

@@ -2,7 +2,7 @@ interface User {
     defaultRoute: string;
     eMail: string | null;
     enabled: number;
-    groups: string[];
+    groups: Group[];
     login: string;
     notification: string;
     phone: string;

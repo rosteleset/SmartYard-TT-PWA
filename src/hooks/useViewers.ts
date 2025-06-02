@@ -10,6 +10,7 @@ import nl2br from "@/utils/nl2br";
 import parseFloatEx from "@/utils/parseFloatEx";
 import dayjs from "dayjs";
 import * as vue from "vue";
+import { useI18n } from "vue-i18n";
 
 
 // Интерфейс для функции getViewer
@@ -30,7 +31,7 @@ const useViewers = (): UseViewers => {
     const modals = useAlert()
     const map = useMap()
     const actions = useActions()
-
+    const { t } = useI18n()
 
     const getViewer = (code: string): GetViewer => {
         const utils = {
@@ -48,9 +49,9 @@ const useViewers = (): UseViewers => {
             nl2br,
             convertLinks
         }
-        const f = new Function('value', 'issue', 'field', 'target', 'filter', 'utils', code)
+        const f = new Function('value', 'issue', 'field', 'target', 'filter', 'i18n', 'utils', code)
 
-        return (value, issue, field, target) => f(value, issue, field, target, null, utils)
+        return (value, issue, field, target) => f(value, issue, field, target, null, t, utils)
     }
 
     return { getViewer }

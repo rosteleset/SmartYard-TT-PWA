@@ -3,6 +3,7 @@ import useAlert from "@/hooks/useAlert";
 import useMap from "@/hooks/useMap";
 import { useAuthStore } from "@/stores/authStore";
 import { useTtStore } from "@/stores/ttStore";
+import { useUsersStore } from "@/stores/usersStore";
 import api from "@/utils/api";
 import convertLinks from "@/utils/convertLinks";
 import escapeHTML from "@/utils/escapeHTML";
@@ -27,6 +28,7 @@ const useViewers = (): UseViewers => {
 
     const auth = useAuthStore()
     const tt = useTtStore()
+    const users = useUsersStore()
     const alerts = useAlert()
     const modals = useAlert()
     const map = useMap()
@@ -39,6 +41,7 @@ const useViewers = (): UseViewers => {
             api,
             auth,
             tt,
+            users,
             alerts,
             modals,
             map,

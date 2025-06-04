@@ -94,6 +94,7 @@
   "saWatch": "Watch / Unwatch",
   "saAssignToMe": "Assign to Me",
   "saCoordinate": "Coordinate",
+  "saLink":"Add link",
   "comment": "Comment",
   "optionalComment": "Comment",
   "commentPrivate": "For Employees Only",
@@ -118,5 +119,6 @@
   "no": "нет",
   "projects": "Projects",
   "search": "Search",
-  "exit-message": "Do you want to exit the application?"
+  "exit-message": "Do you want to exit the application?",
+  "nothing-found": "Nothing found"
 }

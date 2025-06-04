@@ -33,7 +33,7 @@ export const useTtStore = defineStore('tt', () => {
 
                     if (value)
                         project.value = getProjectByAcronym(value)
-                    else 
+                    else
                         project.value = meta.value?.projects[0]
                 }
 
@@ -94,7 +94,8 @@ export const useTtStore = defineStore('tt', () => {
                 params[`sort[${sortBy.value.target}]`] = sortBy.value.direction.toString()
             }
             if (search) {
-                params.filter = '#search'
+                if (!params.filter)
+                    params.filter = '#search'
                 params.search = search
             }
             const res = await api.GET('tt/issues', params)

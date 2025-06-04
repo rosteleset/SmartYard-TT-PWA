@@ -10,6 +10,7 @@ import { useI18n } from "vue-i18n";
 import useAlert from "./useAlert";
 import { useAttachments } from "./useAttachments";
 import { loadOptionalComponent } from '@/utils/loadOptionalComponent'
+import IssueLink from "@/components/IssueLink.vue";
 
 // импорт кастомного компонента
 export const AssignForm = loadOptionalComponent('../custom/AssignForm.vue')
@@ -141,16 +142,33 @@ export const useActions = () => {
                 tt.doAction({ action: 'watch' })
                 break;
             case "saDelete":
-                if (Array.isArray(issue))
-                    for (const i of issue) {
-                        tt.deleteIssue(i)
-                    }
-                else
-                    tt.deleteIssue(issue)
+                presentAlert({
+                    header: t('confirmation'),
+                    buttons: [
+                        {
+                            text: t('cancel'),
+                            role: 'cancel'
+                        },
+                        {
+                            text: t('saDelete'),
+                            handler: () => {
+                                if (Array.isArray(issue)) {
+                                    for (const i of issue) {
+                                        tt.deleteIssue(i)
+                                    }
+                                } else {
+                                    tt.deleteIssue(issue)
+                                }
+                            }
+                        }
+                    ]
+                });
+                break;
+            case "saLink":
+                openModal(IssueLink).then(() => null)
                 break;
             case "saSubIssue":
             case "saCoordinate":
-            case "saLink":
                 break;
 
             default:
@@ -178,7 +196,7 @@ export const useActions = () => {
                                 }
                                 else
                                     openModal(IssueAction, { name, issue, _fields: fields }).then(() => null)
-                            }                                
+                            }
 
                         })
                         .catch((error) => {

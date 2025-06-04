@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import debounce from '@/utils/debounce';
 import { IonChip, IonIcon, IonInput, IonItem, IonLabel, IonList } from '@ionic/vue';
 import { closeCircle } from 'ionicons/icons';
 import { ref } from 'vue';
@@ -19,19 +20,6 @@ const selectedText = ref('');
 const selectedItems = ref<Suggestion[]>([]);
 const showSuggestions = ref(false);
 const filteredSuggestions = ref<Suggestion[]>([]);
-
-// Функция debounce
-const debounce = (func: (...args: any[]) => void, delay: number) => {
-    let timeoutId: NodeJS.Timeout | null = null;
-    return (...args: any[]) => {
-        if (timeoutId) {
-            clearTimeout(timeoutId);
-        }
-        timeoutId = setTimeout(() => {
-            func(...args);
-        }, delay);
-    };
-};
 
 // Дебаунсированная функция для обработки ввода
 const debouncedOnInput = debounce(() => {

@@ -75,18 +75,18 @@ export const useTtStore = defineStore('tt', () => {
         return { ...{ label: label || _filter.filter }, ..._filter }
     }
 
-    const getIssues = async ({ project: _project = project.value?.acronym, filter: _filter = filter.value?.filter, limit, skip, search }: { limit: number, skip: number, project?: string, filter?: string, search?: string }): Promise<DataStructure> => {
+    const getIssues = async ({ project: _project = project.value?.acronym, filter: _filter, limit, skip, search }: { limit: number, skip: number, project?: string, filter?: string, search?: string }): Promise<DataStructure> => {
 
         if (!_project)
             return Promise.reject('Project not selected')
 
-        if (!_filter && !search)
+        if (!_filter && !filter.value?.filter && !search)
             return Promise.reject('Filter not selected')
 
         try {
             const params: Record<string, string | undefined> = {
                 project: _project,
-                filter: _filter,
+                filter: _filter || filter.value?.filter,
                 skip: skip.toString(),
                 limit: limit.toString(),
             }
@@ -94,7 +94,7 @@ export const useTtStore = defineStore('tt', () => {
                 params[`sort[${sortBy.value.target}]`] = sortBy.value.direction.toString()
             }
             if (search) {
-                if (!params.filter)
+                if (!_filter)
                     params.filter = '#search'
                 params.search = search
             }

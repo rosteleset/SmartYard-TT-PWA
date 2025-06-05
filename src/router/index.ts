@@ -17,8 +17,8 @@ const routes = [
     children: [
       {
         path: '',
-        component: () => import('@/views/HomePage.vue'),
-        // redirect: 'issues'
+        // component: () => import('@/views/HomePage.vue'),
+        redirect: {name: 'issues'},
       },
       {
         path: 'issues',
@@ -117,19 +117,19 @@ router.beforeEach(async (to, from, next) => {
   }
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.path === '/' && from.name === 'issues') {
-    if (confirm('Вы хотите выйти из приложения?')) {
-      next()
-      router.back()
-    } else {
-      next(false)
-      router.push(from.fullPath);
-    }
-  } else {
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   if (to.path === '/' && from.name === 'issues') {
+//     if (confirm('Вы хотите выйти из приложения?')) {
+//       next()
+//       router.back()
+//     } else {
+//       next(false)
+//       router.push(from.fullPath);
+//     }
+//   } else {
+//     next();
+//   }
+// });
 
 
 export default router;

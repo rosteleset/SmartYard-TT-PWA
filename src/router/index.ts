@@ -17,8 +17,8 @@ const routes = [
     children: [
       {
         path: '',
-        // component: () => import('@/views/HomePage.vue'),
-        redirect: {name: 'issues'},
+        component: () => import('@/views/HomePage.vue'),
+        // redirect: {name: 'issues'},
       },
       {
         path: 'issues',
@@ -49,37 +49,6 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
-});
-
-router.beforeEach((to, from, next) => {
-  if (to.hash && to.path === '/') {
-    console.log(to.hash);
-
-    const hash = to.hash.substring(1); // Удаляем ведущий '#'
-    const params = new URLSearchParams(hash);
-    const issueId = params.get('issue');
-    const filter = params.get('filter');
-    const search = params.get('search');
-    const skip = params.get('skip');
-
-    if (issueId) {
-      // Перенаправляем на /issue/:id без сохранения параметров запроса
-      next({
-        name: 'issue',
-        params: { id: issueId },
-      });
-    } else if (filter || search) {
-      // Перенаправляем на /issues с сохранением параметров запроса
-      next({
-        name: 'issues',
-        query: { filter, search, skip }
-      });
-    } else {
-      next('/not-found');
-    }
-  } else {
-    next();
-  }
 });
 
 // init hook
@@ -116,20 +85,6 @@ router.beforeEach(async (to, from, next) => {
     next();
   }
 });
-
-// router.beforeEach((to, from, next) => {
-//   if (to.path === '/' && from.name === 'issues') {
-//     if (confirm('Вы хотите выйти из приложения?')) {
-//       next()
-//       router.back()
-//     } else {
-//       next(false)
-//       router.push(from.fullPath);
-//     }
-//   } else {
-//     next();
-//   }
-// });
 
 
 export default router;

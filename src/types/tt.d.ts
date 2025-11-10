@@ -3,7 +3,6 @@ interface Meta {
     workflows: Workflows;
     workflowLibs: string[];
     filters: Filters;
-    filtersExt: FiltersExt;
     statuses: Status[];
     resolutions: Resolution[];
     customFields: CustomField[];
@@ -65,14 +64,10 @@ interface Catalog {
 }
 
 interface Filters {
-    [key: string]: string;
+    [key: string]: Filter;
 }
 
-interface FiltersExt {
-    [key: string]: FilterExt;
-}
-
-interface FilterExt {
+interface Filter {
     name: string;
     shortName: string | null;
     sort: string | null;

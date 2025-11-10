@@ -13,7 +13,7 @@ const isOpen = ref(false);
 const projections = computed(() => {
     return Object.keys(tt.projection)
         .filter(p => {
-            if (tt.filter && tt.meta?.filtersExt[tt.filter?.filter].hide?.includes(p))
+            if (tt.filter && tt.meta?.filters[tt.filter?.filter].hide?.includes(p))
                 return false
             if (p.substring(0, 4) === "_cf_" && tt.meta?.customFields.find(cf => cf.field === p.substring(4))?.type === 'virtual')
                 return false
@@ -34,7 +34,6 @@ const handler = (projection: string) => {
 
 const dismiss = () => {
     isOpen.value = false
-    
 }
 </script>
 

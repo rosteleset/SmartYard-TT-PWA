@@ -68,7 +68,7 @@ export const useTtStore = defineStore('tt', () => {
         if (!currentProject)
             throw new Error('Project not found')
         const _filter = currentProject.filters.find(f => f.filter === filter)
-        const label = meta.value?.filters[filter.toString()]
+        const label = meta.value?.filters[filter.toString()].name
 
         if (!_filter)
             throw new Error('Filter not found')

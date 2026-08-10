@@ -1,5 +1,6 @@
 import type {
     FlatEntranceModel,
+    RbtCamera,
     RbtDeviceListItem,
     RbtDomophone,
     RbtFlat,
@@ -26,10 +27,10 @@ export function isUnavailable(item: RbtDeviceListItem): boolean {
     return String(item.status?.status || 'unknown').toLowerCase() !== 'ok';
 }
 
-export function formatDateTime(value?: number): string {
+export function formatDateTime(value?: number | string): string {
     if (!value)
         return '—';
-    const date = new Date(value * 1000);
+    const date = typeof value === 'number' ? new Date(value * 1000) : new Date(value);
     if (Number.isNaN(date.getTime()))
         return '—';
     return new Intl.DateTimeFormat(undefined, {
@@ -39,6 +40,38 @@ export function formatDateTime(value?: number): string {
         hour: '2-digit',
         minute: '2-digit',
     }).format(date);
+}
+
+export function cameraStreamName(camera: RbtCamera): string {
+    const configured = camera.ext?.sesameDvr?.streamName;
+    if (configured)
+        return configured;
+
+    try {
+        const path = new URL(camera.dvrStream || '').pathname.replace(/^\/+|\/+$/g, '');
+        return path ? decodeURIComponent(path.split('/').pop() || '') : '';
+    } catch {
+        return '';
+    }
+}
+
+export function cameraPlayerUrl(camera: RbtCamera): string {
+    if (!camera.dvrStream)
+        return '';
+
+    try {
+        const url = new URL(camera.dvrStream);
+        const streamPath = url.pathname.replace(/\/+$/, '');
+        if (!streamPath)
+            return '';
+        if (!streamPath.endsWith('/embed.html'))
+            url.pathname = `${streamPath}/embed.html`;
+        url.searchParams.set('dvr', 'true');
+        url.hash = '';
+        return url.toString();
+    } catch {
+        return '';
+    }
 }
 
 export function formatSubscriberName(subscriber: RbtSubscriber): string {

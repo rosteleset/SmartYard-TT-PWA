@@ -1,6 +1,9 @@
-import type { RbtDomophone, RbtFlat, RbtHouse, RbtSubscriber } from '@/types/operations';
+import type { RbtCamera, RbtDomophone, RbtFlat, RbtHouse, RbtSubscriber } from '@/types/operations';
+import { issueTemplateModels } from '@/utils/issues';
 import {
   buildSubscriberFlatsPatch,
+  cameraPlayerUrl,
+  cameraStreamName,
   domophonePayload,
   flatEntranceModels,
   normalizeRfid,
@@ -57,5 +60,43 @@ describe('RBT operations helpers', () => {
     } as RbtHouse;
     const result = flatEntranceModels(flat, house, [{ domophoneId: 3, name: 'Panel' } as RbtDomophone]);
     expect(result[0]).toMatchObject({ entranceName: 'Entrance 1', doorId: 4, domophoneId: 3 });
+  });
+
+  test('builds a SesameDVR embed URL without dropping the playback token', () => {
+    const camera = {
+      cameraId: 7,
+      dvrStream: 'https://dvr.example.test/cam-10-0-0-7?token=secret',
+    } as RbtCamera;
+    const player = new URL(cameraPlayerUrl(camera));
+
+    expect(player.pathname).toBe('/cam-10-0-0-7/embed.html');
+    expect(player.searchParams.get('token')).toBe('secret');
+    expect(player.searchParams.get('dvr')).toBe('true');
+  });
+
+  test('prefers the configured technical stream name', () => {
+    const camera = {
+      cameraId: 7,
+      dvrStream: 'https://dvr.example.test/fallback',
+      ext: { sesameDvr: { streamName: 'configured-name' } },
+    } as RbtCamera;
+
+    expect(cameraStreamName(camera)).toBe('configured-name');
+  });
+
+  test('prefills supported issue template fields with device context', () => {
+    expect(issueTemplateModels({
+      first: 'project',
+      second: 'subject',
+      third: 'description',
+      fourth: '_cf_priority',
+    }, {
+      subject: 'Camera #7',
+      description: 'Model and address',
+    })).toEqual({
+      subject: 'Camera #7',
+      description: 'Model and address',
+      _cf_priority: '',
+    });
   });
 });

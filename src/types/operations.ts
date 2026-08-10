@@ -3,13 +3,40 @@ export interface RbtStatus {
     message?: string;
 }
 
+export interface RbtSesameDvrSettings {
+    streamName?: string;
+    displayName?: string;
+    retentionDays?: string;
+    autoManage?: boolean;
+    lastSyncAt?: string;
+    lastSyncError?: string | null;
+    [key: string]: unknown;
+}
+
 export interface RbtCamera {
     cameraId: number;
+    enabled?: number;
     name?: string;
     model?: string;
     ip?: string;
     url?: string;
+    stream?: string;
     dvrStream?: string;
+    timezone?: string;
+    lat?: number | string;
+    lon?: number | string;
+    frs?: string;
+    frsMode?: number;
+    common?: number;
+    comments?: string;
+    sound?: number;
+    monitoring?: number;
+    webrtc?: number;
+    tree?: string;
+    ext?: {
+        sesameDvr?: RbtSesameDvrSettings;
+        [key: string]: unknown;
+    };
     status?: RbtStatus;
     [key: string]: unknown;
 }

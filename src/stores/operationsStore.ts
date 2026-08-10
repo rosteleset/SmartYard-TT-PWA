@@ -186,11 +186,41 @@ export const useOperationsStore = defineStore('operations', () => {
         });
     }
 
-    async function toggleAlwaysOpen(domophone: RbtDomophone) {
+    async function updateDomophone(domophone: RbtDomophone, overrides: Partial<RbtDomophone>) {
         await api.PUT(`houses/domophone/${domophone.domophoneId}`, domophonePayload(domophone, {
-            locksAreOpen: domophone.locksAreOpen ? 0 : 1,
+            ...overrides,
         }));
         await Promise.all([loadDevices(), refreshFlat()]);
+    }
+
+    async function toggleAlwaysOpen(domophone: RbtDomophone) {
+        await updateDomophone(domophone, {
+            locksAreOpen: domophone.locksAreOpen ? 0 : 1,
+        });
+    }
+
+    async function toggleDomophoneEnabled(domophone: RbtDomophone) {
+        await updateDomophone(domophone, {
+            enabled: domophone.enabled ? 0 : 1,
+        });
+    }
+
+    async function toggleDomophoneMonitoring(domophone: RbtDomophone) {
+        await updateDomophone(domophone, {
+            monitoring: domophone.monitoring ? 0 : 1,
+        });
+    }
+
+    async function autoconfigureDomophone(domophoneId: number) {
+        await api.POST(`houses/autoconfigure/${domophoneId}`, {
+            object: 'domophone',
+            firstTime: 0,
+        });
+    }
+
+    async function getCameraSnapshot(cameraId: number): Promise<string> {
+        const response = await api.GET(`cameras/camshot/${cameraId}`, { _refresh: '1' });
+        return response?.shot || '';
     }
 
     async function saveKey(value: KeyFormValue) {
@@ -298,6 +328,10 @@ export const useOperationsStore = defineStore('operations', () => {
         disableOpenCode,
         openDoor,
         toggleAlwaysOpen,
+        toggleDomophoneEnabled,
+        toggleDomophoneMonitoring,
+        autoconfigureDomophone,
+        getCameraSnapshot,
         saveKey,
         removeKey,
         saveSubscriber,

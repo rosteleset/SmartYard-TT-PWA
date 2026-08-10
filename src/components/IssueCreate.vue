@@ -3,6 +3,7 @@
 import { useTtStore } from "@/stores/ttStore";
 import api from "@/utils/api";
 import getCatalogsByWorkflow from "@/utils/getCatalogsByWorkflow";
+import { issueTemplateModels } from "@/utils/issues";
 import {
   alertController,
   IonButton,
@@ -23,6 +24,11 @@ import IssueInput from "./IssueInput.vue";
 
 // Определяем тип для модели
 type Models = Record<string, any>;
+
+const props = defineProps<{
+  initialSubject?: string;
+  initialDescription?: string;
+}>();
 
 const tt = useTtStore()
 const { t } = useI18n()
@@ -71,10 +77,9 @@ watch(catalog, () => {
   })
     .then(res => {
       blocked.value = true
-      const fields = res.template.fields
-      Object.keys(res.template.fields).forEach(key => {
-        if (!['project', 'workflow', 'catalog'].includes(fields[key]))
-          models.value[fields[key]] = ''; // Инициализируем пустой строкой или другим значением по умолчанию
+      models.value = issueTemplateModels(res.template.fields, {
+        subject: props.initialSubject || '',
+        description: props.initialDescription || '',
       });
     })
 })

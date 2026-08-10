@@ -7,6 +7,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 const { tt } = vi.hoisted(() => ({
   tt: {
+    availableProjects: [] as Project[],
     filter: undefined as FilterWithLabel | undefined,
     getFilterWithLabel: vi.fn(),
     meta: undefined as Meta | undefined,
@@ -25,6 +26,7 @@ vi.mock('vue-i18n', () => ({
 }));
 
 beforeEach(() => {
+  tt.availableProjects = [];
   tt.filter = undefined;
   tt.getFilterWithLabel.mockReset();
   tt.meta = undefined;
@@ -106,4 +108,23 @@ test('applies a project only after its modal has closed', async () => {
 
   await modal.vm.$emit('didDismiss');
   expect(tt.project).toEqual(nextProject);
+});
+
+test('renders only available projects in the project selector', async () => {
+  const hiddenProject = { projectId: 1, project: 'Mobile' } as Project;
+  const availableProject = { projectId: 2, project: 'Field Service Demo' } as Project;
+  tt.meta = { projects: [hiddenProject, availableProject] } as Meta;
+  tt.availableProjects = [availableProject];
+
+  const wrapper = shallowMount(SelectProject, {
+    global: {
+      mocks: { $t: (key: string) => key },
+      renderStubDefaultSlot: true,
+    },
+  });
+
+  await wrapper.findComponent(IonInput).vm.$emit('click');
+
+  expect(wrapper.text()).toContain('Field Service Demo');
+  expect(wrapper.text()).not.toContain('Mobile');
 });

@@ -56,7 +56,7 @@ const applySelection = () => {
         </IonHeader>
         <IonContent>
             <IonList>
-                <IonItem v-for="(project, key) in tt.meta?.projects" :key="key" button @click="handler(project)">
+                <IonItem v-for="project in tt.availableProjects" :key="project.projectId" button @click="handler(project)">
                     <IonLabel>{{ project.project }}</IonLabel>
                 </IonItem>
             </IonList>

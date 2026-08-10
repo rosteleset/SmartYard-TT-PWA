@@ -1,9 +1,10 @@
 import api from "@/utils/api";
+import { availableIssueProjects } from "@/utils/issues";
 import { Preferences } from "@capacitor/preferences";
 import { useIonRouter } from "@ionic/vue";
 import { defineStore } from "pinia";
-import { ref, watch } from "vue";
-import { LocationQuery, useRoute, useRouter } from "vue-router";
+import { computed, ref, watch } from "vue";
+import { LocationQuery, useRoute } from "vue-router";
 
 export const useTtStore = defineStore('tt', () => {
 
@@ -18,24 +19,25 @@ export const useTtStore = defineStore('tt', () => {
     const sortBy = ref<{ target: string, direction: number }>()
     const issue = ref<IssueData>()
 
+    const availableProjects = computed(() =>
+        availableIssueProjects(meta.value?.projects, meta.value?.workflows)
+    )
+
+    const findAvailableProjectByAcronym = (acronym: string | undefined): Project | undefined =>
+        availableProjects.value.find(project => project.acronym === acronym)
+
     // actions
     const load = async (query: LocationQuery) => {
 
         return api.GET('tt/tt')
             .then(async (res) => {
-                console.log(query.project && typeof query.project === 'string');
-
                 meta.value = res.meta
-                if (query.project && typeof query.project === 'string')
-                    project.value = getProjectByAcronym(query.project)
-                else {
-                    const { value } = await Preferences.get({ key: 'lastProject' })
+                const requestedProject = typeof query.project === 'string' ? query.project : undefined
+                const { value: lastProject } = await Preferences.get({ key: 'lastProject' })
 
-                    if (value)
-                        project.value = getProjectByAcronym(value)
-                    else
-                        project.value = meta.value?.projects[0]
-                }
+                project.value = findAvailableProjectByAcronym(requestedProject)
+                    || findAvailableProjectByAcronym(lastProject || undefined)
+                    || availableProjects.value[0]
 
                 if (query.filter && typeof query.filter === 'string')
                     filter.value = getFilterWithLabel(query.filter)
@@ -194,6 +196,7 @@ export const useTtStore = defineStore('tt', () => {
         projection,
         sortBy,
         issue,
+        availableProjects,
         load,
         getProjectByAcronym,
         getFilterWithLabel,

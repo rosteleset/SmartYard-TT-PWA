@@ -8,6 +8,7 @@ import { useUsersStore } from '@/stores/usersStore';
 import type { RbtCamera, RbtDeviceListItem, RbtDomophone } from '@/types/operations';
 import {
     cameraPlayerUrl,
+    cameraPreviewUrl,
     cameraStreamName,
     formatDateTime,
     isUnavailable,
@@ -146,30 +147,59 @@ function dismissDevice() {
 }
 
 async function loadCameraSnapshot(showFailure = false) {
-    const cameraId = selectedCamera.value?.cameraId;
+    const camera = selectedCamera.value;
+    const cameraId = camera?.cameraId;
     if (!cameraId)
         return;
 
     const request = ++snapshotRequest;
     snapshotLoading.value = true;
     snapshotError.value = false;
+    let loadError: unknown;
+    let shot = '';
     try {
-        const shot = await operations.getCameraSnapshot(Number(cameraId));
-        if (request !== snapshotRequest || Number(selectedCamera.value?.cameraId) !== Number(cameraId))
-            return;
-        snapshotUrl.value = shot ? `data:image/jpeg;base64,${shot}` : '';
-        snapshotError.value = !shot;
+        shot = await operations.getCameraSnapshot(Number(cameraId));
     } catch (error) {
-        if (request !== snapshotRequest)
-            return;
-        snapshotUrl.value = '';
-        snapshotError.value = true;
-        if (showFailure)
-            await failure(error);
-    } finally {
-        if (request === snapshotRequest)
-            snapshotLoading.value = false;
+        loadError = error;
     }
+
+    if (request !== snapshotRequest || Number(selectedCamera.value?.cameraId) !== Number(cameraId))
+        return;
+
+    if (shot) {
+        snapshotUrl.value = shot ? `data:image/jpeg;base64,${shot}` : '';
+        snapshotLoading.value = false;
+        return;
+    }
+
+    const preview = cameraPreviewUrl(camera);
+    if (preview) {
+        const url = new URL(preview);
+        url.searchParams.set('_', String(Date.now()));
+        snapshotUrl.value = url.toString();
+        return;
+    }
+
+    snapshotUrl.value = '';
+    snapshotError.value = true;
+    snapshotLoading.value = false;
+    if (showFailure && loadError)
+        await failure(loadError);
+}
+
+function snapshotImageLoaded(event: Event) {
+    if ((event.currentTarget as HTMLImageElement).getAttribute('src') !== snapshotUrl.value)
+        return;
+    snapshotLoading.value = false;
+    snapshotError.value = false;
+}
+
+function snapshotImageFailed(event: Event) {
+    if ((event.currentTarget as HTMLImageElement).getAttribute('src') !== snapshotUrl.value)
+        return;
+    snapshotUrl.value = '';
+    snapshotLoading.value = false;
+    snapshotError.value = true;
 }
 
 async function refreshSelected() {
@@ -370,7 +400,13 @@ onMounted(load);
             <IonContent v-if="selected">
                 <section v-if="selectedCamera" class="camera-preview">
                     <div class="camera-frame">
-                        <img v-if="snapshotUrl" :src="snapshotUrl" :alt="selected.title">
+                        <img
+                            v-if="snapshotUrl"
+                            :src="snapshotUrl"
+                            :alt="selected.title"
+                            @load="snapshotImageLoaded"
+                            @error="snapshotImageFailed"
+                        >
                         <IonSpinner v-else-if="snapshotLoading" />
                         <div v-else class="camera-placeholder">
                             <IonIcon :icon="videocam" />

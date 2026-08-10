@@ -55,6 +55,25 @@ export function cameraStreamName(camera: RbtCamera): string {
     }
 }
 
+export function cameraPreviewUrl(camera: RbtCamera): string {
+    if (!camera.dvrStream)
+        return '';
+
+    try {
+        const url = new URL(camera.dvrStream);
+        const streamPath = url.pathname
+            .replace(/\/(?:embed\.html|preview\.jpg)$/, '')
+            .replace(/\/+$/, '');
+        if (!streamPath)
+            return '';
+        url.pathname = `${streamPath}/preview.jpg`;
+        url.hash = '';
+        return url.toString();
+    } catch {
+        return '';
+    }
+}
+
 export function cameraPlayerUrl(camera: RbtCamera): string {
     if (!camera.dvrStream)
         return '';

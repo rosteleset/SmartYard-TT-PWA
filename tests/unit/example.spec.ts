@@ -3,6 +3,7 @@ import { issueTemplateModels } from '@/utils/issues';
 import {
   buildSubscriberFlatsPatch,
   cameraPlayerUrl,
+  cameraPreviewUrl,
   cameraStreamName,
   domophonePayload,
   flatEntranceModels,
@@ -72,6 +73,17 @@ describe('RBT operations helpers', () => {
     expect(player.pathname).toBe('/cam-10-0-0-7/embed.html');
     expect(player.searchParams.get('token')).toBe('secret');
     expect(player.searchParams.get('dvr')).toBe('true');
+  });
+
+  test('builds a SesameDVR preview URL without dropping the playback token', () => {
+    const camera = {
+      cameraId: 7,
+      dvrStream: 'https://dvr.example.test/cam-10-0-0-7?token=secret',
+    } as RbtCamera;
+    const preview = new URL(cameraPreviewUrl(camera));
+
+    expect(preview.pathname).toBe('/cam-10-0-0-7/preview.jpg');
+    expect(preview.searchParams.get('token')).toBe('secret');
   });
 
   test('prefers the configured technical stream name', () => {

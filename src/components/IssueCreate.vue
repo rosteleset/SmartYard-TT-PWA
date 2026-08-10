@@ -3,7 +3,11 @@
 import { useTtStore } from "@/stores/ttStore";
 import api from "@/utils/api";
 import getCatalogsByWorkflow from "@/utils/getCatalogsByWorkflow";
-import { issueTemplateModels } from "@/utils/issues";
+import {
+  availableIssueProjects,
+  availableIssueWorkflows,
+  issueTemplateModels,
+} from "@/utils/issues";
 import {
   alertController,
   IonButton,
@@ -34,16 +38,41 @@ const tt = useTtStore()
 const { t } = useI18n()
 const router = useRouter()
 
-const project = ref(tt.project || tt.meta?.projects[0])
+const availableProjects = computed(() =>
+  availableIssueProjects(tt.meta?.projects, tt.meta?.workflows)
+)
+const project = ref<Project>()
 const workflow = ref<string>()
 const catalog = ref<string>()
 const blocked = ref(false)
 const models = ref<Models>({});
+const workflowKeys = computed(() =>
+  availableIssueWorkflows(project.value, tt.meta?.workflows)
+)
 
 const catalogs = computed(() => {
   const selectedWorkflow = workflow.value ? tt.meta?.workflows[workflow.value] : undefined;
   return selectedWorkflow ? getCatalogsByWorkflow(selectedWorkflow) : [];
 })
+
+watch(project, (nextProject, previousProject) => {
+  if (nextProject?.projectId === previousProject?.projectId)
+    return;
+  workflow.value = undefined
+  catalog.value = undefined
+  models.value = {}
+  blocked.value = false
+})
+
+watch(availableProjects, projects => {
+  const current = projects.find(item => item.projectId === project.value?.projectId)
+  if (current) {
+    project.value = current
+    return
+  }
+
+  project.value = projects.find(item => item.projectId === tt.project?.projectId) || projects[0]
+}, { immediate: true })
 
 // const fields = ref()
 
@@ -103,7 +132,9 @@ watch(catalog, () => {
       </IonButtons>
       <IonTitle>{{ $t('createIssue') }}</IonTitle>
       <IonButtons slot="end">
-        <IonButton @click="confirm" :strong="true">{{ $t('save') }}</IonButton>
+        <IonButton @click="confirm" :strong="true" :disabled="!project || !workflow || !catalog">
+          {{ $t('save') }}
+        </IonButton>
       </IonButtons>
     </IonToolbar>
   </IonHeader>
@@ -111,7 +142,7 @@ watch(catalog, () => {
     <IonItem>
       <IonSelect interface="popover" label-placement="floating" :label="$t(`project`)" v-model="project"
         :disabled="blocked">
-        <IonSelectOption v-for="variant in tt.meta?.projects" :value="variant" :key="variant.projectId">
+        <IonSelectOption v-for="variant in availableProjects" :value="variant" :key="variant.projectId">
           {{
             variant.project
           }}
@@ -122,7 +153,7 @@ watch(catalog, () => {
     <IonItem>
       <IonSelect interface="popover" label-placement="floating" :label="$t(`workflow`)" v-model="workflow"
         :disabled="blocked">
-        <IonSelectOption v-for="key in project?.workflows" :value="key" :key="key">
+        <IonSelectOption v-for="key in workflowKeys" :value="key" :key="key">
           {{
             tt.meta?.workflows[key]?.name || key
           }}

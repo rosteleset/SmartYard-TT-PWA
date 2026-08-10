@@ -1,5 +1,9 @@
 import type { RbtCamera, RbtDomophone, RbtFlat, RbtHouse, RbtSubscriber } from '@/types/operations';
-import { issueTemplateModels } from '@/utils/issues';
+import {
+  availableIssueProjects,
+  availableIssueWorkflows,
+  issueTemplateModels,
+} from '@/utils/issues';
 import {
   buildSubscriberFlatsPatch,
   cameraPlayerUrl,
@@ -110,5 +114,28 @@ describe('RBT operations helpers', () => {
       description: 'Model and address',
       _cf_priority: '',
     });
+  });
+
+  test('hides issue projects and workflows missing from available metadata', () => {
+    const workflows = {
+      available: { name: 'Available', catalog: { General: { 0: 'General issue' } } },
+      empty: { name: 'Empty', catalog: {} },
+    } as Workflows;
+    const unavailableProject = {
+      projectId: 1,
+      project: 'Unavailable',
+      workflows: ['missing', 'empty'],
+    } as Project;
+    const availableProject = {
+      projectId: 2,
+      project: 'Available',
+      workflows: ['missing', 'empty', 'available'],
+    } as Project;
+
+    expect(availableIssueProjects(
+      [unavailableProject, availableProject],
+      workflows,
+    )).toEqual([availableProject]);
+    expect(availableIssueWorkflows(availableProject, workflows)).toEqual(['available']);
   });
 });

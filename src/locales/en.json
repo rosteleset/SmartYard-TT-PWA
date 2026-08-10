@@ -30,6 +30,99 @@
     "permissionDenied": "Access denied",
     "notAcceptable": "Not acceptable"
   },
+  "operations": {
+    "common": {
+      "id": "ID",
+      "model": "Model",
+      "address": "Address",
+      "add": "Add"
+    },
+    "status": {
+      "unknown": "Unknown"
+    },
+    "devices": {
+      "title": "Devices",
+      "search": "Name, ID, IP or URL",
+      "all": "All",
+      "domophones": "Intercoms",
+      "cameras": "Cameras",
+      "problems": "Problems",
+      "camera": "Camera",
+      "domophone": "Intercom",
+      "empty": "No devices found",
+      "updated": "Intercom settings updated"
+    },
+    "houses": {
+      "title": "Apartments",
+      "search": "Find a house by address",
+      "house": "House",
+      "flats": "Apartments",
+      "entrances": "Entrances",
+      "hint": "Enter at least three address characters",
+      "notFound": "No matching address found"
+    },
+    "flats": {
+      "flat": "Apartment",
+      "floor": "Floor",
+      "blocked": "Blocked",
+      "openCode": "Access code",
+      "lastOpened": "Last opened",
+      "sip": "SIP",
+      "block": "Block",
+      "unblock": "Unblock",
+      "generateCode": "New code",
+      "disableCode": "Disable code",
+      "confirmBlock": "Change the administrative block for this apartment?",
+      "confirmGenerateCode": "Generate a new access code?",
+      "confirmDisableCode": "Disable the current access code?",
+      "blockUpdated": "Apartment block updated",
+      "codeGenerated": "New access code created",
+      "codeDisabled": "Access code disabled"
+    },
+    "domophones": {
+      "flatTitle": "Apartment intercoms",
+      "door": "door",
+      "open": "Open door",
+      "opened": "Door command sent",
+      "enableAlwaysOpen": "Enable free passage",
+      "disableAlwaysOpen": "Disable free passage",
+      "confirmOpen": "Send the door open command?",
+      "confirmAlwaysOpen": "Change free passage mode?",
+      "empty": "No intercoms are linked to this apartment"
+    },
+    "keys": {
+      "title": "Keys",
+      "add": "Add key",
+      "id": "Key ID",
+      "comment": "Comment",
+      "lastSeen": "Last used",
+      "empty": "This apartment has no keys",
+      "saved": "Key saved",
+      "removed": "Key removed",
+      "confirmRemove": "Remove this key from the apartment?"
+    },
+    "subscribers": {
+      "title": "Users",
+      "add": "Add user",
+      "edit": "Edit user",
+      "mobile": "Phone number",
+      "last": "Last name",
+      "name": "First name",
+      "patronymic": "Middle name",
+      "role": "Role",
+      "owner": "Owner",
+      "resident": "Resident",
+      "empty": "This apartment has no users",
+      "saved": "User saved",
+      "removed": "User removed from the apartment",
+      "confirmRemove": "Remove this user from the apartment?"
+    },
+    "errors": {
+      "invalidKey": "Check the key ID",
+      "mobileRequired": "Enter a phone number",
+      "invalidResponse": "The server returned an invalid response"
+    }
+  },
   "notFound": {
     "title": "Page Not Found",
     "error": "Error 404",
@@ -43,6 +136,8 @@
   "remember-me": "Remember me",
   "tt-page": "TT",
   "settings-page": "Settings",
+  "devices-page": "Devices",
+  "houses-page": "Apartments",
   "select-files": "Select files",
   "take-a-photo": "Take a photo",
   "something-went-wrong": "Something went wrong",
@@ -115,8 +210,8 @@
   "cdr": "Calls",
   "install": "Install",
   "install-instructions": "To install the app on iOS, open the \"Share\" menu in Safari and select \"Add to Home Screen.\"",
-  "yes": "да",
-  "no": "нет",
+  "yes": "yes",
+  "no": "no",
   "projects": "Projects",
   "search": "Search",
   "exit-message": "Do you want to exit the application?",

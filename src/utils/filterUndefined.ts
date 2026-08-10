@@ -1,7 +1,7 @@
-const filterUndefined = (obj: Record<string, string | undefined>): Record<string, string> => {
+const filterUndefined = <T extends Record<string, unknown>>(obj: T): Partial<T> => {
     return Object.fromEntries(
-        Object.entries(obj).filter(([, value]) => value !== undefined) as [string, string][]
-    );
+        Object.entries(obj).filter(([, value]) => value !== undefined)
+    ) as Partial<T>;
 };
 
 export default filterUndefined

@@ -11,7 +11,7 @@ const { field, label } = defineProps<{
     multiple?: boolean
 }>()
 
-const items = defineModel<PhotoData[]>({ default: [] });
+const items = defineModel<PhotoData[]>({ required: true });
 
 const { takePhoto } = useAttachments();
 

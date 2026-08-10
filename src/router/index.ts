@@ -12,23 +12,44 @@ const routes = [
   },
   {
     path: '/',
-    component: () => import('@/views/SimplePage.vue'),
+    component: () => import('@/views/TabWrapper.vue'),
     meta: { requiresAuth: true },
     children: [
       {
         path: '',
-        component: () => import('@/views/HomePage.vue'),
-        // redirect: {name: 'issues'},
+        redirect: { name: 'issues' },
       },
       {
         path: 'issues',
         name: 'issues',
         component: () => import('@/views/IssuesPage.vue'),
+        meta: { requiresTt: true },
       },
       {
         path: 'issue/:id',
         name: 'issue',
         component: () => import('@/views/IssuePage.vue'),
+        meta: { requiresTt: true },
+      },
+      {
+        path: 'devices',
+        name: 'devices',
+        component: () => import('@/views/DevicesPage.vue'),
+      },
+      {
+        path: 'houses',
+        name: 'houses',
+        component: () => import('@/views/HousesPage.vue'),
+      },
+      {
+        path: 'house/:id',
+        name: 'house',
+        component: () => import('@/views/HousePage.vue'),
+      },
+      {
+        path: 'flat/:id',
+        name: 'flat',
+        component: () => import('@/views/FlatPage.vue'),
       },
       {
         path: 'settings',
@@ -73,7 +94,7 @@ router.beforeEach(async (to, from, next) => {
   const usersStore = useUsersStore();
 
   try {
-    if (to.name === 'login')
+    if (to.name === 'login' || !to.matched.some(record => record.meta.requiresTt))
       return
     if (!ttStore.meta)
       await ttStore.load(to.query);

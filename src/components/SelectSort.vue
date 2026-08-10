@@ -10,6 +10,10 @@ const { t } = useI18n()
 
 const isOpen = ref(false);
 
+const open = () => {
+    isOpen.value = true
+}
+
 const projections = computed(() => {
     return Object.keys(tt.projection)
         .filter(p => {
@@ -38,8 +42,15 @@ const dismiss = () => {
 </script>
 
 <template>
-    <IonInput :label="$t('sortBy')" labelPlacement="floating" @ionFocus="isOpen = true"
-        :value="tt.sortBy?.target ? projections[tt.sortBy?.target]:''" readonly />
+    <IonInput
+        :label="$t('sortBy')"
+        labelPlacement="floating"
+        :value="tt.sortBy?.target ? projections[tt.sortBy?.target]:''"
+        readonly
+        @click="open"
+        @keydown.enter.prevent="open"
+        @keydown.space.prevent="open"
+    />
 
     <IonModal :is-open="isOpen" @willDismiss="dismiss">
         <IonHeader>

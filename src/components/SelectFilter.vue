@@ -23,6 +23,10 @@ const grouped = computed(() =>
     tt.project ? buildNestedGroups(tt.project.filters.map(filter => tt.getFilterWithLabel(filter.filter))) : null
 )
 
+const open = () => {
+    isOpen.value = true
+}
+
 function buildNestedGroups(filters: FilterWithLabel[]): GroupedFilters {
     const res: GroupedFilters = {
         label: 'root',
@@ -78,8 +82,15 @@ const dismiss = () => {
 </script>
 
 <template>
-    <IonInput :label="$t('filter')" labelPlacement="floating" ed @ionFocus="isOpen = true" :value="tt.filter?.label"
-        readonly>
+    <IonInput
+        :label="$t('filter')"
+        labelPlacement="floating"
+        :value="tt.filter?.label"
+        readonly
+        @click="open"
+        @keydown.enter.prevent="open"
+        @keydown.space.prevent="open"
+    >
     </IonInput>
     <IonModal :is-open="isOpen" @willDismiss="dismiss">
         <IonHeader>

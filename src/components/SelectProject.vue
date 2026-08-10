@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { useTtStore } from '@/stores/ttStore';
-import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonModal, IonTitle, IonToolbar } from '@ionic/vue';
-import { arrowDown, arrowUp } from 'ionicons/icons';
+import { IonButton, IonButtons, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonModal, IonTitle, IonToolbar } from '@ionic/vue';
 import { computed, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
 
 const tt = useTtStore()
 
 const isOpen = ref(false);
 
 const project = computed(() => tt.project)
+
+const open = () => {
+    isOpen.value = true
+}
 
 const handler = (project: Project) => {
     tt.project = project
@@ -23,8 +25,15 @@ const dismiss = () => {
 </script>
 
 <template>
-    <IonInput :label="$t('project')" labelPlacement="floating" @ionFocus="isOpen = true" :value="project?.project"
-        readonly />
+    <IonInput
+        :label="$t('project')"
+        labelPlacement="floating"
+        :value="project?.project"
+        readonly
+        @click="open"
+        @keydown.enter.prevent="open"
+        @keydown.space.prevent="open"
+    />
 
     <IonModal :is-open="isOpen" @willDismiss="dismiss">
         <IonHeader>

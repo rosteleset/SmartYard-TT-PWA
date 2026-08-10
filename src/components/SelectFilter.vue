@@ -18,6 +18,7 @@ import NestedFilterGroup from "./NestedFilterGroup.vue";
 const tt = useTtStore()
 
 const isOpen = ref(false);
+const pendingFilter = ref<FilterWithLabel>();
 
 const grouped = computed(() =>
     tt.project ? buildNestedGroups(tt.project.filters.map(filter => tt.getFilterWithLabel(filter.filter))) : null
@@ -71,12 +72,21 @@ function buildNestedGroups(filters: FilterWithLabel[]): GroupedFilters {
 }
 
 const handleSelect = (filter: FilterWithLabel) => {
-    tt.filter = filter
+    pendingFilter.value = filter
     dismiss()
 }
 
 const dismiss = () => {
     isOpen.value = false
+}
+
+const applySelection = () => {
+    if (!pendingFilter.value)
+        return
+
+    const filter = pendingFilter.value
+    pendingFilter.value = undefined
+    tt.filter = filter
 }
 
 </script>
@@ -92,7 +102,7 @@ const dismiss = () => {
         @keydown.space.prevent="open"
     >
     </IonInput>
-    <IonModal :is-open="isOpen" @willDismiss="dismiss">
+    <IonModal :is-open="isOpen" @willDismiss="dismiss" @didDismiss="applySelection">
         <IonHeader>
             <IonToolbar>
                 <IonTitle>{{ $t('filters') }}</IonTitle>

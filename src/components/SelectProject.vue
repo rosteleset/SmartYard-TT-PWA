@@ -6,6 +6,7 @@ import { computed, ref } from 'vue';
 const tt = useTtStore()
 
 const isOpen = ref(false);
+const pendingProject = ref<Project>();
 
 const project = computed(() => tt.project)
 
@@ -14,12 +15,21 @@ const open = () => {
 }
 
 const handler = (project: Project) => {
-    tt.project = project
+    pendingProject.value = project
     dismiss()
 }
 
 const dismiss = () => {
     isOpen.value = false
+}
+
+const applySelection = () => {
+    if (!pendingProject.value)
+        return
+
+    const project = pendingProject.value
+    pendingProject.value = undefined
+    tt.project = project
 }
 
 </script>
@@ -35,7 +45,7 @@ const dismiss = () => {
         @keydown.space.prevent="open"
     />
 
-    <IonModal :is-open="isOpen" @willDismiss="dismiss">
+    <IonModal :is-open="isOpen" @willDismiss="dismiss" @didDismiss="applySelection">
         <IonHeader>
             <IonToolbar>
                 <IonTitle>{{ $t('projects') }}</IonTitle>

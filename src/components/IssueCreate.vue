@@ -40,7 +40,10 @@ const catalog = ref<string>()
 const blocked = ref(false)
 const models = ref<Models>({});
 
-const catalogs = computed(() => tt.meta && workflow.value ? getCatalogsByWorkflow(tt.meta?.workflows[workflow.value]) : [])
+const catalogs = computed(() => {
+  const selectedWorkflow = workflow.value ? tt.meta?.workflows[workflow.value] : undefined;
+  return selectedWorkflow ? getCatalogsByWorkflow(selectedWorkflow) : [];
+})
 
 // const fields = ref()
 
@@ -121,7 +124,7 @@ watch(catalog, () => {
         :disabled="blocked">
         <IonSelectOption v-for="key in project?.workflows" :value="key" :key="key">
           {{
-            tt.meta?.workflows[key].name
+            tt.meta?.workflows[key]?.name || key
           }}
         </IonSelectOption>
       </IonSelect>
